@@ -19,7 +19,7 @@
 #include "helpers.h"
 
 //#include "games/auth.h"
-//#include "games/games.h"
+#include "games/games.h"
 
 
 int main(int argc, char *argv[])
@@ -58,7 +58,8 @@ int main(int argc, char *argv[])
 //	memset(name, 0x00, sizeof(name));
 
 
-	while (selected >= 0){
+	while (selected >= 0)
+	{
 		selected = lcdmenu("MENU PRINCIPALE", menu, sizeof(menu) / 25, selected);
 		switch (selected)
 		{
@@ -79,8 +80,7 @@ int main(int argc, char *argv[])
 			case 7:
 				break;
 			case 8:
-				break;
-			case 9:
+				GetNetwork();
 				break;
 			default:
 				break;

@@ -305,3 +305,13 @@ int lcdmenu(const char *pszTitle, const char menu[][25], unsigned int count, int
 	retval = select;
 	return retval;
 }
+
+
+// Beep (330)
+void Beep(unsigned int frequency, unsigned int keepms)
+{
+	beep((unsigned int)frequency, (unsigned int)keepms);
+	return;
+}
+
+

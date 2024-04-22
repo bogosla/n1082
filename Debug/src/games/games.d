@@ -1,4 +1,5 @@
-src/helpers.d src/helpers.o: ../src/helpers.c ../src/helpers.h \
+src/games/games.d src/games/games.o: ../src/games/games.c \
+  ../src/games/games.h ../src/games/../helpers.h \
   C:/src/NEW8210/sdk8210/include/convert.h \
   C:/src/NEW8210/sdk8210/include/wnet.h \
   C:/src/NEW8210/sdk8210/include/posapi.h \
@@ -31,10 +32,12 @@ src/helpers.d src/helpers.o: ../src/helpers.c ../src/helpers.h \
   C:/src/NEW8210/sdk8210/include/curl/easy.h \
   C:/src/NEW8210/sdk8210/include/curl/multi.h \
   C:/src/NEW8210/sdk8210/include/curl/curl.h \
-  C:/src/NEW8210/sdk8210/include/curl/typecheck-gcc.h ../src/cJSON.h \
-  ../src/constants.h
+  C:/src/NEW8210/sdk8210/include/curl/typecheck-gcc.h \
+  ../src/games/../cJSON.h ../src/games/../constants.h
 
-../src/helpers.h:
+../src/games/games.h:
+
+../src/games/../helpers.h:
 
 C:/src/NEW8210/sdk8210/include/convert.h:
 
@@ -108,6 +111,6 @@ C:/src/NEW8210/sdk8210/include/curl/curl.h:
 
 C:/src/NEW8210/sdk8210/include/curl/typecheck-gcc.h:
 
-../src/cJSON.h:
+../src/games/../cJSON.h:
 
-../src/constants.h:
+../src/games/../constants.h:

@@ -18,18 +18,24 @@
 					<folderInfo id="cdt.managedbuild.config.gnu.cross.exe.debug.144369980." name="/" resourcePath="">
 						<toolChain id="cdt.managedbuild.toolchain.gnu.cross.exe.debug.1674176349" name="Cross GCC" superClass="cdt.managedbuild.toolchain.gnu.cross.exe.debug">
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.targetPlatform.gnu.cross.37886884" isAbstract="false" osList="all" superClass="cdt.managedbuild.targetPlatform.gnu.cross"/>
-							<builder buildPath="${workspace_loc:/MCNEW_POS}/Debug" id="cdt.managedbuild.builder.gnu.cross.943562409" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="cdt.managedbuild.builder.gnu.cross"/>
+							<builder buildPath="${workspace_loc:/MCNEW_POS}/Debug" id="cdt.managedbuild.builder.gnu.cross.943562409" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="cdt.managedbuild.builder.gnu.cross">
+								<outputEntries>
+									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="Debug"/>
+									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="Release"/>
+								</outputEntries>
+							</builder>
 							<tool command="arm-unknown-linux-gnu-gcc" id="cdt.managedbuild.tool.gnu.cross.c.compiler.1825752224" name="Cross GCC Compiler" superClass="cdt.managedbuild.tool.gnu.cross.c.compiler">
 								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.option.optimization.level.2124236397" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" useByScannerDiscovery="false" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.debugging.level.804847409" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.c.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.dialect.std.853545079" name="Language standard" superClass="gnu.c.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.c.compiler.dialect.default" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.include.paths.1652907037" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;C:\src\NEW8210\sdk8210\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\glibc-oabi-toolchain-arm-generic\arm-unknown-linux-gnu\sys-root\usr\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\src\NEW8210\sdk8210\include\directfb&quot;"/>
-									<listOptionValue builtIn="false" value="C:\glibc-oabi-toolchain-arm-generic\lib\gcc\arm-unknown-linux-gnu\4.3.4\include"/>
-									<listOptionValue builtIn="false" value="&quot;C:\src\NEW8210\fribidi\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\src\NEW8210\seos\include&quot;"/>
+									<listOptionValue builtIn="false" value="../glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu/include/c++/4.3.4"/>
+									<listOptionValue builtIn="false" value="C:/src/NEW8210/sdk8210/include"/>
+									<listOptionValue builtIn="false" value="C:/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu/sys-root/usr/include"/>
+									<listOptionValue builtIn="false" value="C:/src/NEW8210/sdk8210/include/directfb"/>
+									<listOptionValue builtIn="false" value="C:/glibc-oabi-toolchain-arm-generic/lib/gcc/arm-unknown-linux-gnu/4.3.4/include"/>
+									<listOptionValue builtIn="false" value="C:/src/NEW8210/fribidi/include"/>
+									<listOptionValue builtIn="false" value="C:/src/NEW8210/seos/include"/>
 								</option>
 								<option id="gnu.c.compiler.option.misc.other.684161749" name="Other flags" superClass="gnu.c.compiler.option.misc.other" useByScannerDiscovery="false" value="--sysroot=&quot;C:\glibc-oabi-toolchain-arm-generic\arm-unknown-linux-gnu\sys-root/&quot; -Wundef -Wstrict-prototypes -Werror-implicit-function-declaration -Wdeclaration-after-statement -fsigned-char -marm -mapcs -mno-sched-prolog -mabi=apcs-gnu -mlittle-endian -mno-thumb-interwork -msoft-float -c" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1752362060" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
@@ -70,6 +76,16 @@
 							<tool id="cdt.managedbuild.tool.gnu.cross.cpp.linker.2038698037" name="Cross G++ Linker" superClass="cdt.managedbuild.tool.gnu.cross.cpp.linker"/>
 							<tool id="cdt.managedbuild.tool.gnu.cross.archiver.1994484396" name="Cross GCC Archiver" superClass="cdt.managedbuild.tool.gnu.cross.archiver"/>
 							<tool command="arm-unknown-linux-gnu-gcc" id="cdt.managedbuild.tool.gnu.cross.assembler.2146212313" name="Cross GCC Assembler" superClass="cdt.managedbuild.tool.gnu.cross.assembler">
+								<option id="gnu.both.asm.option.include.paths.762514782" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="../glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu/include/c++/4.3.4"/>
+									<listOptionValue builtIn="false" value="&quot;C:/Users/James DESTINE/workspace/MCNEW_POS/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu/include/c++/4.3.4&quot;"/>
+									<listOptionValue builtIn="false" value="C:/src/NEW8210/sdk8210/include"/>
+									<listOptionValue builtIn="false" value="C:/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu/sys-root/usr/include"/>
+									<listOptionValue builtIn="false" value="C:/src/NEW8210/sdk8210/include/directfb"/>
+									<listOptionValue builtIn="false" value="C:/glibc-oabi-toolchain-arm-generic/lib/gcc/arm-unknown-linux-gnu/4.3.4/include"/>
+									<listOptionValue builtIn="false" value="C:/src/NEW8210/fribidi/include"/>
+									<listOptionValue builtIn="false" value="C:/src/NEW8210/seos/include"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1748480705" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
 						</toolChain>

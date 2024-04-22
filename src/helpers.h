@@ -54,4 +54,6 @@ int lcdmenu(const char *pszTitle, const char menu[][25], unsigned int count, int
 
 int drawpicture(int x, int y, int w, int h, const char *filename, IDirectFBSurface *target);
 
+
+void Beep(unsigned int frequency, unsigned int keepms);
 #endif /* HELPERS_H_ */
