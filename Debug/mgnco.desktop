@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Version=1.0.0
+Name=MgnCo
+Comment= (c) James DESTINE
+Icon=/home/user0/mgnco/icon.png
+Exec=/home/user0/mgnco/MCNEW_POS
+Path=/home/user0/mgnco
+Terminal=false
