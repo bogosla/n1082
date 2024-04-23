@@ -11,6 +11,70 @@
 static int current_y = 1; // Global position y
 
 
+// Write to file
+int write_to_file(const char* file, const char* contents)
+{
+	FILE *fp;
+	fp = fopen(file, "w");
+	if (fp == NULL)
+	{
+		puts("I/O ERROR COULD NOT OPEN FILE");
+		return -1;
+	}
+	else
+	{
+		fprintf(fp, "%s", contents);
+		fclose(fp);
+        return 0;
+	}
+}
+
+// Read from file
+int read_from_file(const char* file, char** buffer)
+{
+    INT32 fhandle = 0;
+    UINT8 *DataBuf = NULL;
+    INT32 Len;
+    INT32 success;
+
+    fhandle = fileOpen(file, O_RDWR);
+    if (fhandle == -1)
+    {
+        puts("I/O ERROR INVALID FILE HANDLE");
+        return -1;
+    }
+
+    Len = fileSize(file);
+    DataBuf = (UINT8*)malloc(Len);
+    if (DataBuf == NULL)
+    {
+        fileClose(fhandle);
+        return -1;  // Return error code indicating memory allocation failure
+    }
+
+    success = fileRead(fhandle, DataBuf, Len);
+    if (success >= 0)
+    {
+        *buffer = (char*)malloc(success + 1);  // Allocate memory for the buffer (+1 for null-terminator)
+        if (*buffer == NULL)
+        {
+            free(DataBuf);
+            fileClose(fhandle);
+            return -1;  // Return error code indicating memory allocation failure
+        }
+        memcpy(*buffer, DataBuf, success);
+        (*buffer)[success] = '\0';  // Null-terminate the buffer
+        fileClose(fhandle);
+        free(DataBuf);
+        return 0;
+    }
+
+    free(DataBuf);
+    fileClose(fhandle);
+    return -1;
+}
+
+
 // get length of a string
 int string_len(const char *text)
 {
@@ -70,7 +134,7 @@ void lcd_header(LCD_ALG alg, const char *pszFmt)
     int status_bar_height, width, height, font_height;
     main_surface = lcdGetSurface();
     lcdSetFont(FONT_ROBOTO, "UTF-8", 0,  18, 0);
-    status_bar_height = sys_get_status_bar_height();
+    status_bar_height = sys_get_status_bar_height() + 1;
     main_surface->GetSize(main_surface, &width, &height);
     main_surface->GetFont(main_surface, &font);
     font->GetHeight(font, &font_height);
@@ -80,7 +144,7 @@ void lcd_header(LCD_ALG alg, const char *pszFmt)
     main_surface->SetColor(main_surface, colorWhite.r, colorWhite.g, colorWhite.b, colorWhite.a);
     lcdprintfex(ALG_CENTER, (status_bar_height - font_height) / 2 + 2, pszFmt);
     main_surface->SetColor(main_surface, colorBlack.r, colorBlack.g, colorBlack.b, colorBlack.a);
-	current_y = current_y + 3;
+	current_y = current_y + 1;
     lcdSetFont(FONT_ROBOTO, "UTF-8", 0, 16, 0);
 
 }
@@ -135,6 +199,79 @@ void lcd_draw_rectangle(unsigned int x, unsigned int y, unsigned int width, unsi
 		else
 			main_surface->DrawRectangle(main_surface, x, y, width, height);
 	}
+}
+
+
+int lcdprintfon(LCD_ALG alg, IDirectFBSurface *main_surface, int width, int height, int current_y, const char * pszFmt,...)
+{
+	int font_height;
+	IDirectFB *dfb = NULL;
+	IDirectFBSurface *sub_surface = NULL;
+	IDirectFBSurface *store_surface = NULL;
+
+	DFBRectangle rect;
+	DFBSurfaceDescription surfdesc;
+	IDirectFBFont *font = NULL;
+
+	char textbuf[2048];
+	const char *utf8text;
+	const char *pnewline = NULL;
+	int str_length, temp_width;
+
+	va_list arg;
+	dfb = dfb_get_directfb();
+	va_start(arg, pszFmt);
+	vsnprintf(textbuf, sizeof(textbuf), pszFmt, arg);
+	va_end (arg);
+
+	main_surface->GetFont(main_surface, &font);
+	font->GetHeight(font, &font_height);
+	main_surface->GetSize(main_surface, &width, &height);
+
+	if (current_y + font_height > height)
+	{
+		rect.x = 0;
+		rect.y = current_y + font_height - height;
+		rect.w = width;
+		rect.h = current_y - rect.y;
+		main_surface->GetSubSurface (main_surface, &rect, &sub_surface);
+
+		surfdesc.flags = DSDESC_CAPS | DSDESC_WIDTH | DSDESC_HEIGHT;
+		surfdesc.caps  = DSCAPS_SYSTEMONLY;
+		surfdesc.width = width;
+		surfdesc.height= height;
+
+		dfb->CreateSurface(dfb, &surfdesc, &store_surface);
+		store_surface->SetBlittingFlags(store_surface, DSBLIT_BLEND_ALPHACHANNEL);
+		store_surface->Blit(store_surface, sub_surface, NULL, 0, 0);
+		lcdclean();
+
+		main_surface->SetBlittingFlags(main_surface, DSBLIT_BLEND_ALPHACHANNEL);
+		rect.y = 0;
+		main_surface->Blit(main_surface, store_surface, &rect, 0, 0);
+
+		store_surface->Release(store_surface);
+		sub_surface->Release(sub_surface);
+		current_y = rect.h;
+	}
+
+	font->GetStringBreak(font, textbuf, strlen(textbuf), width - 3, &temp_width, &str_length, &pnewline);
+	utf8text = string_covert(textbuf, str_length);
+
+	if (ALG_CENTER == alg)
+		main_surface->DrawString(main_surface, utf8text, string_len(utf8text), width / 2 - string_len(utf8text) / 2, current_y, DSTF_TOPCENTER);
+	else if (ALG_LEFT == alg)
+		main_surface->DrawString(main_surface, utf8text, string_len(utf8text), 3, current_y, DSTF_TOPLEFT);
+	else
+		main_surface->DrawString(main_surface, utf8text, string_len(utf8text), width - 3, current_y, DSTF_TOPRIGHT);
+
+	current_y = current_y + font_height;
+	// current_y = current_y + font_height;
+
+	if (NULL != pnewline)
+		current_y += lcdprintfon(alg, main_surface, width, height, current_y, pnewline);
+
+	return current_y;
 }
 
 
@@ -205,7 +342,7 @@ void lcdprintf(LCD_ALG alg, const char * pszFmt,...)
 	else
 		main_surface->DrawString(main_surface, utf8text, string_len(utf8text), width - 3, current_y, DSTF_TOPRIGHT);
 
-	current_y = current_y + font_height + 1;
+	current_y = current_y + font_height;
 	// current_y = current_y + font_height;
 
 	if (NULL != pnewline)
@@ -254,7 +391,7 @@ int lcdmenu(const char *pszTitle, const char menu[][25], unsigned int count, int
 		{
 			lcdclean();
 			lcd_header(ALG_LEFT, pszTitle);
-			max_lines = 8; // (screen_height - current_y - 1) / font_height;
+			max_lines = 6; // (screen_height - current_y - 1) / font_height;
 			istart = (select / max_lines) * max_lines;
 
 			for (i = 0;  i < max_lines; i++)
@@ -263,7 +400,7 @@ int lcdmenu(const char *pszTitle, const char menu[][25], unsigned int count, int
 				{
 					if (istart + i == select)
 					{
-						main_surface->SetColor(main_surface, colorSecondary.r, colorSecondary.g, colorSecondary.b, colorSecondary.a);
+						main_surface->SetColor(main_surface, colorPrimary.r, colorPrimary.g, colorPrimary.b, colorPrimary.a);
 						lcd_draw_rectangle(0, current_y - 1, screen_width - 44, font_height + 1, 1);
 						main_surface->SetColor(main_surface, colorWhite.r, colorWhite.g, colorWhite.b, colorWhite.a);
 						lcdprintf(ALG_LEFT, menu[istart + i]);
@@ -307,6 +444,385 @@ int lcdmenu(const char *pszTitle, const char menu[][25], unsigned int count, int
 }
 
 
+
+int lcdmenu_tirage(const char *pszTitle, const Tirage *menu, unsigned int count, int select, int *id, const Tirage *selectedTirage, int sizeSelected)
+{	
+	IDirectFBSurface *main_surface = NULL;
+	int running, key, retval = -1, beenSelect = -1;
+	int screen_width, screen_height, font_height;
+	unsigned int i, hasSelect;
+	unsigned int max_lines = 0;
+	unsigned int istart = 0;
+
+	main_surface = lcdGetSurface();
+	font_height = lcdGetFontHeight();
+	lcdGetSize(&screen_width, &screen_height);
+
+	if (select < 0)
+		select = 0;
+	if (count <= 0)
+		select = -1;
+	else
+	{
+		running = 1;
+		while (running == 1)
+		{
+			lcdclean();
+			lcd_header(ALG_CENTER, pszTitle);
+			// max_lines = (screen_height - current_y - 1) / font_height;
+			max_lines = 6;
+			istart = (select / max_lines) * max_lines; 
+
+			for (i = 0;  i < max_lines; i++)
+			{
+				
+				if (istart + i < count)
+				{
+					beenSelect = hasInfoTirageByName(selectedTirage, sizeSelected, menu[istart + i].name);
+					if (beenSelect >= 0)
+						main_surface->SetColor(main_surface, colorWarning.r, colorWarning.g, colorWarning.b, colorWarning.a);
+					else
+						main_surface->SetColor(main_surface, colorBlack.r, colorBlack.g, colorBlack.b, colorBlack.a);
+					
+					if (istart + i == select)
+					{
+						main_surface->SetColor(main_surface, colorLight.r, colorLight.g, colorLight.b, colorLight.a);
+						lcd_draw_rectangle(1, current_y -1, screen_width -1, font_height +1, 1);
+						if (beenSelect >= 0)
+							main_surface->SetColor(main_surface, colorWarning.r, colorWarning.g, colorWarning.b, colorWarning.a);
+						else
+							main_surface->SetColor(main_surface, colorBlack.r, colorBlack.g, colorBlack.b, colorBlack.a);
+					
+						lcdprintf(ALG_LEFT, "%d. %s", istart + i + 1,  menu[istart + i].name);		
+						main_surface->SetColor(main_surface, colorBlack.r, colorBlack.g, colorBlack.b, colorBlack.a);	
+						*id = istart + i;
+					}
+					else {
+						lcdprintf(ALG_LEFT, "%d. %s", istart + i + 1,  menu[istart + i].name);			
+					}
+				}
+				else
+					break;
+			}
+			lcdFlip();	
+	LOOP:
+			key = kbGetKeyMs(10 * 1000);
+			switch(key)
+			{
+				case KEY_UP:
+					select--;
+					if (select < 0)
+					{
+						select = count -1;
+					}
+					running = 0;
+					break;
+				case KEY_DOWN:
+					select++;
+					if (select >= count)
+					{
+						select = 0;
+					}
+					running = 0;
+					break;
+				case KEY_CANCEL:
+					select = -1;
+					running = 0;
+					break;
+				case KEY_FN:
+					select = 14;
+					running = 0;
+					break;
+				case KEY_ENTER:
+					select = 15;
+					running = 0;
+					break;
+				default:
+					goto LOOP;
+			}
+		}
+	}
+	retval = select;
+	lcdclean();
+	return retval;
+}
+
+
+
+static char* getFirstTwoChars(const char* string)
+{
+    int length = strlen(string);
+    int resultLength = 0;
+    int i = 0;
+    while (i < length)
+    {
+        while (i < length && isspace(string[i]))
+            i++;
+        if (i < length && isalpha(string[i]))
+            resultLength++;
+        i++;
+        while (i < length && !isspace(string[i]))
+            i++;
+        if (i < length && isalpha(string[i]))
+            resultLength++;
+        i++;
+    }
+
+    // Allocate memory for the resulting string
+    char* result = (char *)malloc((resultLength + 1) * sizeof(char));
+    if (result != NULL)
+    {
+        int resultIndex = 0;
+        i = 0;
+        while (i < length)
+        {
+            while (i < length && isspace(string[i]))
+                i++;
+
+            if (i < length && isalpha(string[i]))
+                result[resultIndex++] = string[i];
+            i++;
+            while (i < length && !isspace(string[i]))
+                i++;
+            if (i < length && isalpha(string[i]))
+                result[resultIndex++] = string[i];
+            i++;
+        }
+        result[resultIndex] = '\0'; // Null
+    }
+    return result;
+}
+
+
+
+void bouleItemPrintf(const BouleItem *item, const char *tip, int icount)
+{
+	int width, height;
+	int font_height;
+	IDirectFB *dfb = NULL;
+	IDirectFBSurface *main_surface = NULL;
+	IDirectFBSurface *sub_surface = NULL;
+	IDirectFBSurface *store_surface = NULL;
+	DFBRectangle rect;
+	DFBSurfaceDescription surfdesc;
+	IDirectFBFont *font = NULL;
+	int istart;
+	char countStr[12];
+
+	dfb = dfb_get_directfb();
+	main_surface = lcdGetSurface();
+	memset(countStr, 0x00, sizeof(countStr));
+	lcdSetFont(FONT_ROBOTO, "UTF-8", 0,  16, 0);
+	main_surface->GetFont(main_surface, &font);
+	font->GetHeight(font, &font_height);	
+	main_surface->GetSize(main_surface, &width, &height);
+	height = height - (font_height);
+
+	if (current_y + font_height > height)
+	{
+		rect.x = 0;
+		rect.y = current_y + font_height - height;
+		rect.w = width;
+		rect.h = current_y - rect.y;
+		main_surface->GetSubSurface (main_surface, &rect, &sub_surface);
+		
+		surfdesc.flags = DSDESC_CAPS | DSDESC_WIDTH | DSDESC_HEIGHT;
+		surfdesc.caps  = DSCAPS_SYSTEMONLY;
+		surfdesc.width = width;
+		surfdesc.height= height;
+
+		dfb->CreateSurface(dfb, &surfdesc, &store_surface);
+		store_surface->SetBlittingFlags(store_surface, DSBLIT_BLEND_ALPHACHANNEL);
+		store_surface->Blit(store_surface, sub_surface, NULL, 0, 0);
+		lcdclean();
+		main_surface->SetBlittingFlags(main_surface, DSBLIT_BLEND_ALPHACHANNEL);
+		rect.y = 0;
+		main_surface->Blit(main_surface, store_surface, &rect, 0, 0);
+		store_surface->Release(store_surface);
+		sub_surface->Release(sub_surface);
+		current_y = rect.h;   
+	}
+
+	istart = (width - 12) / 4;
+	sprintf(countStr, "%d", icount);
+	main_surface->SetColor(main_surface, colorGrey.r, colorGrey.g, colorGrey.b, colorGrey.a);
+	main_surface->DrawString(main_surface, countStr, -1, 1, current_y, DSTF_TOPLEFT);
+	main_surface->SetColor(main_surface, colorBlack.r, colorBlack.g, colorBlack.b, colorBlack.a);
+
+	if (strlen(item->boul) >= 4 && strcmp(item->lotto, "MA") != 0)
+		sprintf(countStr, "%s(%s)", item->boul, item->option);
+	else
+		sprintf(countStr, "%s", item->boul);
+
+	main_surface->DrawString(main_surface, countStr, -1, 22, current_y, DSTF_TOPLEFT);
+	main_surface->DrawString(main_surface, getFirstTwoChars(tip), -1, 31 + (istart), current_y, DSTF_TOPCENTER );
+	main_surface->DrawString(main_surface, item->pri, -1, 31 + (istart * 2) + 2, current_y, DSTF_TOPLEFT);		
+	main_surface->DrawString(main_surface, item->lotto, -1, 38 + (istart * 3), current_y, DSTF_TOPLEFT);		
+
+	current_y = current_y + font_height;
+}
+
+
+
+int editableList(const BouleItem items[], unsigned int count, int select, const char *tip, int *s, Tirage *tirages, int sizeTirage)
+{
+	int retval = -1;
+	int key;
+	unsigned int i;
+	int running = 1, myi;
+	char dateStr[125];
+	struct tm *timeinfo;
+	time_t rawtime;
+	
+	IDirectFBSurface *main_surface = NULL;
+	IDirectFBFont * font = NULL;
+	unsigned int max_lines = 0;
+	unsigned int istart = 0;
+	double total = 0.0;
+	int screen_width, screen_height, font_height, wstart, status_bar_height = 0, y_bottom_text = 0;
+	memset(dateStr, 0x00, sizeof(dateStr));
+	main_surface = lcdGetSurface();
+
+	lcdSetFont(FONT_ROBOTO, "UTF-8", 0,  16, 0);
+	status_bar_height = sys_get_status_bar_height() + 1;
+
+	main_surface->GetSize(main_surface, &screen_width, &screen_height);
+	main_surface->GetFont(main_surface, &font);
+	font->GetHeight(font, &font_height);
+
+	if (sizeTirage > 1)
+		screen_height = (screen_height - (font_height * 2));
+	else
+		screen_height = (screen_height - font_height);
+	wstart = (screen_width - 12) / 4;
+
+	if (sizeTirage > 0)
+		tip = tirages[0].name;
+
+	if (select < 0)
+		select = 0;
+	running = 1;
+	while (running == 1)
+		{
+			time(&rawtime);
+			timeinfo = localtime(&rawtime);
+			total = 0;
+			lcdSetFont(FONT_ROBOTO, "UTF-8", 0,  18, 0);
+			font->GetHeight(font, &font_height);
+			lcdclean();
+			main_surface->SetColor(main_surface, colorPrimary.r, colorPrimary.g, colorPrimary.b, colorPrimary.a);
+			main_surface->FillRectangle(main_surface, 0, 0, screen_width, status_bar_height);
+			main_surface->SetColor(main_surface, colorWhite.r, colorWhite.g, colorWhite.b, colorWhite.a);
+			main_surface->DrawString(main_surface, "BOULE", -1, 22, (28 - font_height) / 2, DSTF_TOPLEFT);
+			main_surface->DrawString(main_surface, "TIRAGE", -1, 30 + wstart, (28 - font_height) / 2, DSTF_TOPCENTER );
+			main_surface->DrawString(main_surface, "PRIX", -1, 29 + wstart * 2, (28 - font_height) / 2, DSTF_TOPLEFT);
+			main_surface->DrawString(main_surface, "JEU", -1, 29 + wstart * 3, (28 - font_height) / 2, DSTF_TOPLEFT);	
+			main_surface->SetColor(main_surface, colorBlack.r, colorBlack.g, colorBlack.b, colorBlack.a);
+			// lcdprintfex(ALG_CENTER, get_current_y() - (font_height / 3), "");
+			lcdSetFont(FONT_ROBOTO, "UTF-8", 0,  16, 0);
+
+			myi = 0;
+			while(myi < count)
+			{
+				total += atoi(items[myi].pri);
+				myi++;
+			}
+			
+			current_y = current_y + font_height + 2;
+			max_lines = (screen_height - current_y - 1) / font_height;
+			istart = (select / max_lines) * max_lines; 
+
+			for (i = 0;  i < max_lines; i++)
+			{
+				if (istart + i < count)
+				{
+					if (istart + i == select)
+					{
+						main_surface->SetColor(main_surface, colorLight.r, colorLight.g, colorLight.b, colorLight.a);
+						lcd_draw_rectangle(1, current_y - 1, screen_width - 1, font_height + 1, 1);
+						main_surface->SetColor(main_surface, colorBlack.r, colorBlack.g, colorBlack.b, colorBlack.a);
+						bouleItemPrintf(&items[istart + i], tip, istart + i + 1);
+					}
+					else {
+						bouleItemPrintf(&items[istart + i], tip, istart + i + 1);
+					}
+				}
+				else
+					break;
+			}
+			int ii = 0;
+			if (sizeTirage > 1)
+			{
+				ii = 1;
+				while (ii < sizeTirage && ii <= 8)
+				{
+					main_surface->DrawString(main_surface, getFirstTwoChars(tirages[ii].name), -1, 22 + ((ii - 1) * 37), screen_height, DSTF_TOPCENTER );
+					ii ++;	
+				}
+				y_bottom_text = screen_height + font_height;
+			} else
+				y_bottom_text = screen_height;
+			
+			sprintf(dateStr, "%02d:%02d:%02d, %02d-%02d-%4d",timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec, timeinfo->tm_mday, timeinfo->tm_mon+1, timeinfo->tm_year+1900);
+			lcdSetFont(FONT_ROBOTO, "UTF-8", 0,  14, 0);
+			lcdprintfex(ALG_LEFT, y_bottom_text, dateStr);
+			main_surface->SetColor(main_surface, colorInfo.r, colorInfo.g, colorInfo.b, colorInfo.a);
+			lcdSetFont(FONT_ROBOTO, "UTF-8", 0,  16, 0);
+			lcdprintfex(ALG_RIGHT, y_bottom_text, "TT: %.2f HT", total);
+			main_surface->SetColor(main_surface, colorBlack.r, colorBlack.g, colorBlack.b, colorBlack.a);
+			lcdSetFont(FONT_ROBOTO, "UTF-8", 0,  16, 0);
+			lcdFlip();	
+	LOOP:
+			key = kbGetKeyMs(1 * 1000);
+			switch(key)
+			{
+				case KEY_UP:
+					select--;
+					if (select < 0)
+					{
+						select = 0;
+					}
+					break;
+				case KEY_DOWN:
+					select++;
+					if (select >= count)
+					{
+						select = count - 1;
+					}
+					break;
+				case KEY_CANCEL:
+					select = -1;
+					running = 0;
+					break;
+				case KEY_TIMEOUT:
+					break;
+				case KEY_ENTER:
+					*s = select;
+					select = 10;
+					running = 0;
+					break;
+				case KEY_FN:
+					*s = select;
+					select = 11;
+					running = 0;
+					break;
+				case 0x08:
+					*s = select;
+					select = 12;
+					running = 0;
+					break;
+				default:
+					goto LOOP;
+			}
+		}
+	retval = select;
+	lcdclean();
+	return retval;
+}
+
+
+
+
 // Beep (330)
 void Beep(unsigned int frequency, unsigned int keepms)
 {
@@ -315,3 +831,90 @@ void Beep(unsigned int frequency, unsigned int keepms)
 }
 
 
+
+void freeItems(Tirage* array, int size)
+{
+	int i = 0;
+    if (array == NULL)
+        return;
+    while (i < size)
+    {
+        free(array[i].name);
+		i++;
+    }
+    free(array);
+}
+
+
+int deleteInfoTirageByName(Tirage *array, int size, const char *name)
+{
+    int i = 0, y = 0;
+    while (i < size)
+    {
+        if (strcmp(array[i].name, name) == 0 )
+		{
+			free(array[i].name);
+			y = i;
+			while (y < size - 1) {
+				array[y] = array[y + 1];
+				y++;
+			}
+			return size - 1;
+		}
+        i++;
+    }
+    return -1;
+}
+
+
+int hasInfoTirageByName(Tirage *array, int size, const char *name)
+{
+    int i = 0;
+    while (i < size)
+    {
+        if (strcmp(array[i].name, name) == 0 )
+            return i;
+        i++;
+    }
+    return -1;
+}
+
+
+void addItem(Tirage** array, int* size, int id, const char* name)
+{
+    Tirage* newArray = NULL;
+    *size += 1;
+
+    // Reallocate memory for the array of structures
+    newArray = realloc(*array, *size * sizeof(Tirage));
+
+    if (newArray != NULL)
+    {
+        *array = newArray;
+        // Initialize the new item
+        (*array)[*size - 1].id = id;
+        (*array)[*size - 1].name = malloc(strlen(name) + 1);
+        strcpy((*array)[*size - 1].name, name);
+    }
+    else
+    {
+        printf("Memory allocation failed.\n");
+    }
+}
+
+
+int deleteInfoTirageByIndex(Tirage* list, int index, int size) 
+{
+	int i = 0;
+    if (index < 0 || index >= size) {
+        printf("Invalid index.\n");
+        return -1;
+    }
+    i = (int)index;
+    free(list[i].name);
+    while (i < size - 1) {
+        list[i] = list[i + 1];
+        i++;
+    }
+    return size - 1;
+}

@@ -32,7 +32,7 @@ src/helpers.d src/helpers.o: ../src/helpers.c ../src/helpers.h \
   C:/src/NEW8210/sdk8210/include/curl/multi.h \
   C:/src/NEW8210/sdk8210/include/curl/curl.h \
   C:/src/NEW8210/sdk8210/include/curl/typecheck-gcc.h ../src/cJSON.h \
-  ../src/constants.h
+  ../src/constants.h ../src/lkd.h
 
 ../src/helpers.h:
 
@@ -111,3 +111,5 @@ C:/src/NEW8210/sdk8210/include/curl/typecheck-gcc.h:
 ../src/cJSON.h:
 
 ../src/constants.h:
+
+../src/lkd.h:

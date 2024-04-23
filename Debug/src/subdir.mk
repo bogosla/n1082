@@ -8,6 +8,7 @@ C_SRCS += \
 ../src/cJSON.c \
 ../src/constants.c \
 ../src/helpers.c \
+../src/lkd.c \
 ../src/print.c 
 
 OBJS += \
@@ -15,6 +16,7 @@ OBJS += \
 ./src/cJSON.o \
 ./src/constants.o \
 ./src/helpers.o \
+./src/lkd.o \
 ./src/print.o 
 
 C_DEPS += \
@@ -22,6 +24,7 @@ C_DEPS += \
 ./src/cJSON.d \
 ./src/constants.d \
 ./src/helpers.d \
+./src/lkd.d \
 ./src/print.d 
 
 

@@ -20,6 +20,7 @@
 
 //#include "games/auth.h"
 #include "games/games.h"
+#include "print.h"
 
 
 int main(int argc, char *argv[])
@@ -34,8 +35,7 @@ int main(int argc, char *argv[])
 		"5. NUMEROS GAGNANTS",
 		"6. FICHES GAGNANTES",
 		"7. CONFIGURATION",
-		"8. TEST IMPRIMANTE",
-		"9. NETWORK"
+		"8. TEST IMPRIMANTE"
 	};
 
     application_init(&argc, &argv);
@@ -56,6 +56,51 @@ int main(int argc, char *argv[])
 //	char name[96];
 //	int retType = 0;
 //	memset(name, 0x00, sizeof(name));
+const char *C = "[\n"
+    "    {\n"
+    "        \"code\": \"GG_MD\",\n"
+    "        \"name\": \"Georgia Soir\",\n"
+    "        \"status\": true,\n"
+    "        \"start_time\": \"05:00:00\",\n"
+    "        \"end_time\": \"18:45:00\"\n"
+    "    },\n"
+    "    {\n"
+    "        \"code\": \"GG_MT\",\n"
+    "        \"name\": \"Georgia Matin\",\n"
+    "        \"status\": false,\n"
+    "        \"start_time\": \"05:00:00\",\n"
+    "        \"end_time\": \"12:25:00\"\n"
+    "    },\n"
+    "    {\n"
+    "        \"code\": \"FL_S\",\n"
+    "        \"name\": \"Florida Soir\",\n"
+    "        \"status\": true,\n"
+    "        \"start_time\": \"05:00:00\",\n"
+    "        \"end_time\": \"21:25:00\"\n"
+    "    },\n"
+    "    {\n"
+    "        \"code\": \"FL_M\",\n"
+    "        \"name\": \"Florida Midi\",\n"
+    "        \"status\": false,\n"
+    "        \"start_time\": \"05:00:00\",\n"
+    "        \"end_time\": \"13:25:00\"\n"
+    "    },\n"
+    "    {\n"
+    "        \"code\": \"NY_S\",\n"
+    "        \"name\": \"New York Soir\",\n"
+    "        \"status\": true,\n"
+    "        \"start_time\": \"05:00:00\",\n"
+    "        \"end_time\": \"22:25:00\"\n"
+    "    },\n"
+    "    {\n"
+    "        \"code\": \"NY_M\",\n"
+    "        \"name\": \"New York Midi\",\n"
+    "        \"status\": false,\n"
+    "        \"start_time\": \"05:00:00\",\n"
+    "        \"end_time\": \"14:25:00\"\n"
+    "    }\n"
+    "]";
+	write_to_file(TIRAGES_FILE, C);
 
 
 	while (selected >= 0)
@@ -64,6 +109,7 @@ int main(int argc, char *argv[])
 		switch (selected)
 		{
 			case 0:
+				postFiches(NULL);
 				break;
 			case 1:
 				break;
@@ -76,11 +122,10 @@ int main(int argc, char *argv[])
 			case 5:
 				break;
 			case 6:
+				getConfiguration();
 				break;
 			case 7:
-				break;
-			case 8:
-				GetNetwork();
+				TestPrinter();
 				break;
 			default:
 				break;

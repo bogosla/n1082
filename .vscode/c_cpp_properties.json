@@ -5,13 +5,37 @@
       "includePath": [
         "${workspaceFolder}/**"
       ],
+      "defines": [
+        "_DEBUG",
+        "UNICODE",
+        "_UNICODE"
+      ],
       "compilerPath": "C:/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu/bin/gcc.exe",
       "cStandard": "${default}",
       "cppStandard": "${default}",
-      "intelliSenseMode": "windows-gcc-arm64",
-      "compilerArgs": [
-        ""
-      ]
+      "intelliSenseMode": "windows-gcc-arm64"
+    },
+    {
+      "name": "POSNEW",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "C:/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu/include/c++/4.3.4",
+        "C:/src/NEW8210/sdk8210/include",
+        "C:/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu/sys-root/usr/include",
+        "C:/src/NEW8210/sdk8210/include/directfb",
+        "C:/glibc-oabi-toolchain-arm-generic/lib/gcc/arm-unknown-linux-gnu/4.3.4/include",
+        "C:/src/NEW8210/fribidi/include",
+        "C:/src/NEW8210/seos/include"
+      ],
+      "defines": [
+        "_DEBUG",
+        "UNICODE",
+        "_UNICODE"
+      ],
+      "compilerPath": "C:\\glibc-oabi-toolchain-arm-generic\\bin\\arm-unknown-linux-gnu-gcc-4.3.4",
+      "cStandard": "c99",
+      "cppStandard": "c++11",
+      "intelliSenseMode": "linux-gcc-arm"
     }
   ],
   "version": 4
