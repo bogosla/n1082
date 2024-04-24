@@ -17,6 +17,15 @@ void getConfiguration(void)
 	IDirectFBFont *font = NULL;
 	DFBRectangle rect;
 
+	char *bufferUser = NULL;
+	cJSON *json;
+
+	cJSON *mariage_gratuit;
+	cJSON *delete_fiche_min;
+	cJSON *companyName;
+	cJSON *first_name;
+	cJSON *id;
+
 	int status = 0, running = 1, key = 0, curY = 0, speedScroll = 12;
 	unsigned int percent = 0;
 	char imei[15];
@@ -59,20 +68,33 @@ void getConfiguration(void)
 	rect.w = wscreen;
 	rect.h = hscreen;
 
+	read_from_file(USERNAME_FILE, &bufferUser);
+	json = cJSON_Parse(bufferUser);
+
+
 
 	if (status == 0)
 	{
 		percent = battery_info.percent;
 	}
-
-	lcdprintfon(ALG_LEFT, content_surface, wscreen, hscreen, 1, "Company : %s", "XXX");
-	lcdprintfon(ALG_LEFT, content_surface, wscreen, hscreen, ch, "Vendor  : %s", "Ricardo FUCK");
-	lcdprintfon(ALG_LEFT, content_surface, wscreen, hscreen, ch * 2, "Bank       : %s", "11334");
-	lcdprintfon(ALG_LEFT, content_surface, wscreen, hscreen, ch * 3, "MA Free  : %s", "YEs");
-	lcdprintfon(ALG_LEFT, content_surface, wscreen, hscreen, ch * 4, "Del Time : %d", 12);
-	lcdprintfon(ALG_LEFT, content_surface, wscreen, hscreen, ch * 5, "Serial N0: %s", imei);
-	lcdprintfon(ALG_LEFT, content_surface, wscreen, hscreen, ch * 6, "Battery   : %d%%", percent);
 	
+	if (json != NULL)
+	{
+		mariage_gratuit = cJSON_GetObjectItemCaseSensitive(json, "mariage_free");
+		delete_fiche_min = cJSON_GetObjectItemCaseSensitive(json, "delete_ticket_min");	
+		companyName = cJSON_GetObjectItemCaseSensitive(json, "bank_name");		
+		id = cJSON_GetObjectItemCaseSensitive(json, "id");	
+		first_name = cJSON_GetObjectItemCaseSensitive(json, "first_name");	
+
+		lcdprintfon(ALG_LEFT, content_surface, wscreen, hscreen, 1, "Company : %s", companyName->valuestring);
+		lcdprintfon(ALG_LEFT, content_surface, wscreen, hscreen, ch, "Vendor  : %s", first_name->valuestring);
+		lcdprintfon(ALG_LEFT, content_surface, wscreen, hscreen, ch * 2, "Bank       : %s", id->valueint);
+		lcdprintfon(ALG_LEFT, content_surface, wscreen, hscreen, ch * 3, "MA Free  : %s", cJSON_IsTrue(mariage_gratuit)? "Oui" : "Non");
+		lcdprintfon(ALG_LEFT, content_surface, wscreen, hscreen, ch * 4, "Del Time : %d", delete_fiche_min->valueint);
+		lcdprintfon(ALG_LEFT, content_surface, wscreen, hscreen, ch * 5, "Serial N0: %s", imei);
+		lcdprintfon(ALG_LEFT, content_surface, wscreen, hscreen, ch * 6, "Battery   : %d%%", percent);
+	}
+
 
 	main_surface->Blit(main_surface, content_surface, &rect, 0, curY);
 
@@ -104,6 +126,16 @@ void getConfiguration(void)
 		lcd_header(ALG_CENTER, "CONFIGURATION");
 		main_surface->Blit(main_surface, content_surface, &rect, 0, curY);
 		lcdFlip();
+	}
+
+	if (bufferUser != NULL) {
+		free(bufferUser);
+		bufferUser = NULL;
+	}
+
+	if (json != NULL) {
+		cJSON_Delete(json);
+		json = NULL;
 	}
 	return;
 }

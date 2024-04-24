@@ -5,24 +5,30 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../src/MCNEW_POS.c \
+../src/auth.c \
 ../src/cJSON.c \
 ../src/constants.c \
+../src/gui.c \
 ../src/helpers.c \
 ../src/lkd.c \
 ../src/print.c 
 
 OBJS += \
 ./src/MCNEW_POS.o \
+./src/auth.o \
 ./src/cJSON.o \
 ./src/constants.o \
+./src/gui.o \
 ./src/helpers.o \
 ./src/lkd.o \
 ./src/print.o 
 
 C_DEPS += \
 ./src/MCNEW_POS.d \
+./src/auth.d \
 ./src/cJSON.d \
 ./src/constants.d \
+./src/gui.d \
 ./src/helpers.d \
 ./src/lkd.d \
 ./src/print.d 

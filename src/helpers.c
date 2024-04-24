@@ -11,6 +11,277 @@
 static int current_y = 1; // Global position y
 
 
+
+int check_connection(void)
+{
+	int32_t iRet;
+	int width, height;
+	int font_height, toggle = 0;
+	lcdGetSize(&width, &height);
+	font_height = lcdGetFontHeight();
+	lcdclean();
+	lcdprintfex(ALG_CENTER, height / 2 - font_height, "Attendez...");
+	lcdFlip();
+
+	iRet = PPPCheck(PPP_DEV_GPRS);
+	if(iRet==0)
+		return 0; //connected
+
+	iRet = WnetInit(20000);
+	if(0 != iRet)
+	{
+		return -1;
+	}
+	//check SIM card
+	iRet = WnetCheckSim();
+	if(0 != iRet)
+	{
+		return -1;
+	}
+
+	// iRet = PPPLogin(PPP_DEV_GPRS, "natcom", "", "", 0, 45);
+	iRet = PPPLogin(PPP_DEV_GPRS, "natcom", "card", "card", 0, 65000);
+	if(iRet != NET_OK)
+	{
+		return -1;
+	}
+
+	while(1)
+	{
+		lcdclean();
+		toggle += 1;
+		if (toggle == 1)
+			lcdprintfex(ALG_CENTER, height / 2 - font_height, "Attendez.  ");
+		else if (toggle == 2)
+			lcdprintfex(ALG_CENTER, height / 2 - font_height, "Attendez.. ");
+		else if (toggle == 3)
+			lcdprintfex(ALG_CENTER, height / 2 - font_height, "Attendez...");
+
+		toggle %= 3;
+		lcdFlip();
+		iRet = PPPCheck(PPP_DEV_CDMA);
+		if(iRet != -NET_ERR_LINKOPENING)
+			break;
+		sysDelayMs(250);
+	}
+	return 0;
+}
+
+
+static size_t write_function_callback(void *data, size_t size, size_t nmemb, void *clientp)
+{
+	size_t realsize = size * nmemb;
+	Memory *mem = (Memory *)clientp;
+
+	char *ptr = realloc(mem->response, mem->size + realsize + 1);
+	if(ptr == NULL)
+		return 0;  /* out of memory! */
+
+	mem->response = ptr;
+	memcpy(&(mem->response[mem->size]), data, realsize);
+	mem->size += realsize;
+	mem->response[mem->size] = 0;
+	return realsize;
+}
+
+// Make a GET request and return JSON data
+int make_get_request(const char *url, long *status_code, char **buffer, const char *token)
+{
+	CURL *curl_handle;
+	CURLcode res;
+    struct curl_slist *headers = NULL;
+	int retValue = 0;
+	char ttk[250];
+
+	Memory memory;
+
+	memory.response = malloc(1);  /* will be grown as needed by the realloc above */
+	memory.size = 0;
+
+	curl_handle = curl_easy_init();
+	check_connection();
+	/* init the curl session */
+	headers = curl_slist_append(headers, "Content-Type: application/json");
+	// Set token
+	if (token != NULL) {
+		memset(ttk, 0x00, sizeof(ttk));
+		sprintf(ttk, "Authorization: Token %s", token);
+		headers = curl_slist_append(headers, ttk);
+	}
+	curl_easy_setopt(curl_handle, CURLOPT_HTTPHEADER, headers);
+	/* specify URL to get */
+	curl_easy_setopt(curl_handle, CURLOPT_URL, url);
+	/* send all data to this function  */
+	curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, write_function_callback);
+	/* we pass our 'chunk' struct to the callback function */
+	curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&memory);
+	curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "new8210/1.0");
+	curl_easy_setopt(curl_handle, CURLOPT_VERBOSE, 1L);
+	curl_easy_setopt(curl_handle, CURLOPT_SSL_VERIFYPEER, 0);
+	/* get it! */
+	res = curl_easy_perform(curl_handle);
+	curl_easy_getinfo(curl_handle, CURLINFO_RESPONSE_CODE, status_code);
+	/* check for errors */
+	if(res != CURLE_OK)
+	{
+		lcdclean();
+		lcdprintf(ALG_LEFT, "NET ERROR: %s", curl_easy_strerror(res));
+		lcdFlip();
+		retValue = -1;
+	}
+	else{
+		int len = strlen(memory.response) + 1;
+		char* tempBuffer = realloc(*buffer, len + 1);
+		if (tempBuffer == NULL)
+		{
+			retValue = -1;
+			return retValue;
+		}
+		*buffer = tempBuffer;
+		memcpy(*buffer, memory.response, len);
+		retValue = 0;
+	}
+	/* cleanup curl stuff */
+	curl_slist_free_all(headers);
+	curl_easy_cleanup(curl_handle);
+	free(memory.response);
+	return retValue;
+}
+
+// Make a POST request with JSON data and return JSON response
+int make_post_request(const char *url, const char *data, long *status_code, char **buffer, const char *token)
+{
+    CURL *curl_handle;
+	CURLcode res;
+    struct curl_slist *headers = NULL;
+	int retValue = 0;
+	char ttk[250];
+	Memory memory;
+	memory.response = malloc(1);  /* will be grown as needed by the realloc above */
+	memory.size = 0;
+	curl_handle = curl_easy_init();
+
+	check_connection();
+	/* init the curl session */
+	headers = curl_slist_append(headers, "Content-Type: application/json");
+	if (token != NULL) {
+		memset(ttk, 0x00, sizeof(ttk));
+		sprintf(ttk, "Authorization: Token %s", token);
+		headers = curl_slist_append(headers, ttk);
+	}
+	/* specify URL to get */
+	curl_easy_setopt(curl_handle, CURLOPT_URL, url);
+        
+	curl_easy_setopt(curl_handle, CURLOPT_HTTPHEADER, headers);
+	/* Now specify the POST data */
+	curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDS, data);
+	/* send all data to this function  */
+	curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, write_function_callback);
+	/* we pass our 'chunk' struct to the callback function */
+	curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&memory);
+	// curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "new8210/1.0");
+	curl_easy_setopt(curl_handle, CURLOPT_VERBOSE, 1L);
+	curl_easy_setopt(curl_handle, CURLOPT_SSL_VERIFYPEER, 0);
+	/* get it! */
+	res = curl_easy_perform(curl_handle);
+	curl_easy_getinfo(curl_handle, CURLINFO_RESPONSE_CODE, status_code);
+	
+	if(res != CURLE_OK)
+	{
+		lcdclean();
+		lcdprintf(ALG_LEFT, "NET ERROR: %s", curl_easy_strerror(res));
+		lcdFlip();
+		retValue = -1;
+	}
+	else{
+		int len = strlen(memory.response) + 1;
+		char* tempBuffer = realloc(*buffer, len + 1);
+		if (tempBuffer == NULL)
+		{
+			retValue = -1;
+			return retValue;
+		}
+		*buffer = tempBuffer;
+		memcpy(*buffer, memory.response, len);
+		retValue = 0;
+	}
+	/* cleanup curl stuff */
+    curl_slist_free_all(headers);
+	curl_easy_cleanup(curl_handle);
+	free(memory.response);
+	return retValue;
+}
+
+
+// Make a POST request with JSON data and return JSON response
+int make_http_request(const char *url, const char *data, long *status_code, char **buffer, const char *token, const char *verb)
+{
+    CURL *curl_handle;
+	CURLcode res;
+    struct curl_slist *headers = NULL;
+	int retValue = 0;
+	char ttk[250];
+	Memory memory;
+	memory.response = malloc(1);
+	memory.size = 0;
+	curl_handle = curl_easy_init();
+
+	check_connection();
+	/* init the curl session */
+	headers = curl_slist_append(headers, "Content-Type: application/json");
+	if (token != NULL) {
+		memset(ttk, 0x00, sizeof(ttk));
+		sprintf(ttk, "Authorization: Token %s", token);
+		headers = curl_slist_append(headers, ttk);
+	}
+	/* specify URL to get */
+	curl_easy_setopt(curl_handle, CURLOPT_URL, url);
+        
+	curl_easy_setopt(curl_handle, CURLOPT_HTTPHEADER, headers);
+	// Set the request type to PUT
+    curl_easy_setopt(curl_handle, CURLOPT_CUSTOMREQUEST, verb);
+	/* Now specify the POST data */
+	curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDS, data);
+	/* send all data to this function  */
+	curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, write_function_callback);
+	/* we pass our 'chunk' struct to the callback function */
+	if (buffer != NULL)
+		curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&memory);
+	// curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "new8210/1.0");
+	curl_easy_setopt(curl_handle, CURLOPT_VERBOSE, 1L);
+	curl_easy_setopt(curl_handle, CURLOPT_SSL_VERIFYPEER, 0);
+	/* get it! */
+	res = curl_easy_perform(curl_handle);
+	curl_easy_getinfo(curl_handle, CURLINFO_RESPONSE_CODE, status_code);
+	
+	if(res != CURLE_OK)
+	{
+		lcdclean();
+		lcdprintf(ALG_LEFT, "NET ERROR: %s", curl_easy_strerror(res));
+		lcdFlip();
+		retValue = -1;
+	}
+	else{
+		int len = strlen(memory.response) + 1;
+		char* tempBuffer = realloc(*buffer, len + 1);
+		if (tempBuffer == NULL)
+		{
+			retValue = -1;
+			return retValue;
+		}
+		*buffer = tempBuffer;
+		memcpy(*buffer, memory.response, len);
+		retValue = 0;
+	}
+	/* cleanup curl stuff */
+    curl_slist_free_all(headers);
+	curl_easy_cleanup(curl_handle);
+	free(memory.response);
+	return retValue;
+}
+
+
+
 // Write to file
 int write_to_file(const char* file, const char* contents)
 {
@@ -917,4 +1188,23 @@ int deleteInfoTirageByIndex(Tirage* list, int index, int size)
         i++;
     }
     return size - 1;
+}
+
+
+
+int readServer(char ** data)
+{
+	int width, height, font_height;
+
+	int ret =  read_from_file(SERVER_FILE, data);
+	
+	if (ret != 0) {
+		lcdGetSize(&width, &height);
+		font_height = lcdGetFontHeight();
+		lcdclean();
+		lcdprintfex(ALG_CENTER, height / 2 - font_height, "No Server Found!");
+		lcdFlip();
+		kbGetKey();
+	}
+	return ret;
 }

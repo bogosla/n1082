@@ -4,6 +4,8 @@ Archive member included because of file (symbol)
                               ./src/helpers.o (__udivsi3)
 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
                               ./src/games/games.o (__divsi3)
+/usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_modsi3.o)
+                              ./src/gui.o (__modsi3)
 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
                               /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o) (__div0)
 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_addsubdf3.o)
@@ -30,9 +32,13 @@ Discarded input sections
  .note.GNU-stack
                 0x00000000        0x0 ./src/MCNEW_POS.o
  .note.GNU-stack
+                0x00000000        0x0 ./src/auth.o
+ .note.GNU-stack
                 0x00000000        0x0 ./src/cJSON.o
  .note.GNU-stack
                 0x00000000        0x0 ./src/constants.o
+ .note.GNU-stack
+                0x00000000        0x0 ./src/gui.o
  .note.GNU-stack
                 0x00000000        0x0 ./src/helpers.o
  .note.GNU-stack
@@ -43,6 +49,8 @@ Discarded input sections
                 0x00000000        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
  .note.GNU-stack
                 0x00000000        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
+ .note.GNU-stack
+                0x00000000        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_modsi3.o)
  .note.GNU-stack
                 0x00000000        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
  .note.GNU-stack
@@ -72,8 +80,10 @@ LOAD /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-roo
 LOAD /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
 LOAD ./src/games/games.o
 LOAD ./src/MCNEW_POS.o
+LOAD ./src/auth.o
 LOAD ./src/cJSON.o
 LOAD ./src/constants.o
+LOAD ./src/gui.o
 LOAD ./src/helpers.o
 LOAD ./src/lkd.o
 LOAD ./src/print.o
@@ -117,36 +127,36 @@ LOAD /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-roo
 .note.gnu.build-id
  *(.note.gnu.build-id)
 
-.hash           0x00008188      0x23c
+.hash           0x00008188      0x278
  *(.hash)
- .hash          0x00008188      0x23c /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
+ .hash          0x00008188      0x278 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
 
 .gnu.hash
  *(.gnu.hash)
 
-.dynsym         0x000083c4      0x4a0
+.dynsym         0x00008400      0x590
  *(.dynsym)
- .dynsym        0x000083c4      0x4a0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
+ .dynsym        0x00008400      0x590 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
 
-.dynstr         0x00008864      0x3d3
+.dynstr         0x00008990      0x4a5
  *(.dynstr)
- .dynstr        0x00008864      0x3d3 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
+ .dynstr        0x00008990      0x4a5 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
 
-.gnu.version    0x00008c38       0x94
+.gnu.version    0x00008e36       0xb2
  *(.gnu.version)
- .gnu.version   0x00008c38       0x94 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
+ .gnu.version   0x00008e36       0xb2 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
 
-.gnu.version_d  0x00008ccc        0x0
+.gnu.version_d  0x00008ee8        0x0
  *(.gnu.version_d)
  .gnu.version_d
                 0x00000000        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
 
-.gnu.version_r  0x00008ccc       0x40
+.gnu.version_r  0x00008ee8       0x40
  *(.gnu.version_r)
  .gnu.version_r
-                0x00008ccc       0x40 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
+                0x00008ee8       0x40 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
 
-.rel.dyn        0x00008d0c        0x8
+.rel.dyn        0x00008f28        0x8
  *(.rel.init)
  *(.rel.text .rel.text.* .rel.gnu.linkonce.t.*)
  *(.rel.fini)
@@ -158,7 +168,7 @@ LOAD /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-roo
  *(.rel.ctors)
  *(.rel.dtors)
  *(.rel.got)
- .rel.got       0x00008d0c        0x8 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
+ .rel.got       0x00008f28        0x8 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
  *(.rel.bss .rel.bss.* .rel.gnu.linkonce.b.*)
  .rel.bss       0x00000000        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
 
@@ -175,443 +185,485 @@ LOAD /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-roo
  *(.rela.got)
  *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
 
-.rel.plt        0x00008d14      0x1e8
+.rel.plt        0x00008f30      0x260
  *(.rel.plt)
- .rel.plt       0x00008d14      0x1e8 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
+ .rel.plt       0x00008f30      0x260 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
 
 .rela.plt
  *(.rela.plt)
 
-.init           0x00008efc       0x14
+.init           0x00009190       0x14
  *(.init)
- .init          0x00008efc        0x8 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
-                0x00008efc                _init
- .init          0x00008f04        0x4 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
- .init          0x00008f08        0x4 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
- .init          0x00008f0c        0x4 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
+ .init          0x00009190        0x8 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
+                0x00009190                _init
+ .init          0x00009198        0x4 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
+ .init          0x0000919c        0x4 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
+ .init          0x000091a0        0x4 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
 
-.plt            0x00008f10      0x2f0
+.plt            0x000091a4      0x3a4
  *(.plt)
- .plt           0x00008f10      0x2f0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
-                0x00008f24                fputs@@GLIBC_2.0
-                0x00008f30                abort@@GLIBC_2.0
-                0x00008f3c                sprintf@@GLIBC_2.0
-                0x00008f48                charset_convert
-                0x00008f54                kbFlush
-                0x00008f60                lcdGetSize
-                0x00008f78                fileExist
-                0x00008f84                realloc@@GLIBC_2.0
-                0x00008f90                lcdGetSurface
-                0x00008f9c                curl_global_cleanup
-                0x00008fa8                localtime@@GLIBC_2.0
-                0x00008fb4                strtod@@GLIBC_2.0
-                0x00008fc0                vsnprintf@@GLIBC_2.0
-                0x00008fcc                sysReadSN
-                0x00008fd8                prnInit
-                0x00008fe4                memset@@GLIBC_2.0
-                0x00008ff0                prnPrintf
-                0x00008ffc                fileSize
-                0x00009008                __libc_start_main@@GLIBC_2.0
-                0x00009014                lcdFlip
-                0x00009020                usleep@@GLIBC_2.0
-                0x0000902c                free@@GLIBC_2.0
-                0x00009038                sys_battery_info
-                0x00009044                beep
-                0x00009050                access@@GLIBC_2.0
-                0x0000905c                prnStart
-                0x00009068                __ctype_b_loc@@GLIBC_2.3
-                0x00009074                fclose@@GLIBC_2.1
-                0x00009080                application_exit
-                0x0000908c                fileRead
-                0x00009098                memcpy@@GLIBC_2.0
-                0x000090a4                strlen@@GLIBC_2.0
-                0x000090b0                fopen@@GLIBC_2.1
-                0x000090bc                lcdGetFontHeight
-                0x000090c8                kbGetKey
-                0x000090d4                strcpy@@GLIBC_2.0
-                0x000090e0                dfb_get_directfb
-                0x000090ec                lcdCls
-                0x000090f8                atoi@@GLIBC_2.0
-                0x00009104                sys_get_status_bar_height
-                0x00009110                kbGetKeyMs
-                0x0000911c                time@@GLIBC_2.0
-                0x00009128                malloc@@GLIBC_2.0
-                0x00009134                lcdSetFont
-                0x00009140                lcdSetFgColor
-                0x0000914c                prnStatus
-                0x00009158                fileOpen
-                0x00009164                dfb_create_font
-                0x00009170                lcdSetBgColor
-                0x0000917c                puts@@GLIBC_2.0
-                0x00009188                application_init
-                0x00009194                sscanf@@GLIBC_2.0
-                0x000091a0                strncmp@@GLIBC_2.0
-                0x000091ac                curl_global_init
-                0x000091b8                prnClose
-                0x000091c4                PPPLogout
-                0x000091d0                prnStep
-                0x000091dc                tolower@@GLIBC_2.0
-                0x000091e8                strcmp@@GLIBC_2.0
-                0x000091f4                fileClose
+ .plt           0x000091a4      0x3a4 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
+                0x000091b8                fputs@@GLIBC_2.0
+                0x000091c4                abort@@GLIBC_2.0
+                0x000091d0                sprintf@@GLIBC_2.0
+                0x000091dc                charset_convert
+                0x000091e8                curl_easy_getinfo
+                0x000091f4                kbFlush
+                0x00009200                curl_easy_setopt
+                0x0000920c                lcdGetSize
+                0x00009224                fileExist
+                0x00009230                realloc@@GLIBC_2.0
+                0x0000923c                lcdGetSurface
+                0x00009248                curl_global_cleanup
+                0x00009254                localtime@@GLIBC_2.0
+                0x00009260                strtod@@GLIBC_2.0
+                0x0000926c                vsnprintf@@GLIBC_2.0
+                0x00009278                sysReadSN
+                0x00009284                prnInit
+                0x00009290                memset@@GLIBC_2.0
+                0x0000929c                prnPrintf
+                0x000092a8                fileSize
+                0x000092b4                __libc_start_main@@GLIBC_2.0
+                0x000092c0                lcdFlip
+                0x000092cc                PPPCheck
+                0x000092d8                WnetInit
+                0x000092e4                curl_easy_init
+                0x000092f0                usleep@@GLIBC_2.0
+                0x000092fc                free@@GLIBC_2.0
+                0x00009308                sys_battery_info
+                0x00009314                beep
+                0x00009320                access@@GLIBC_2.0
+                0x0000932c                prnStart
+                0x00009338                __ctype_b_loc@@GLIBC_2.3
+                0x00009344                curl_slist_append
+                0x00009350                WnetCheckSim
+                0x0000935c                fclose@@GLIBC_2.1
+                0x00009368                application_exit
+                0x00009374                fileRead
+                0x00009380                curl_slist_free_all
+                0x0000938c                memcpy@@GLIBC_2.0
+                0x00009398                strlen@@GLIBC_2.0
+                0x000093a4                fopen@@GLIBC_2.1
+                0x000093b0                lcdGetFontHeight
+                0x000093bc                kbGetKey
+                0x000093c8                strcpy@@GLIBC_2.0
+                0x000093d4                dfb_get_directfb
+                0x000093e0                curl_easy_perform
+                0x000093ec                lcdCls
+                0x000093f8                atoi@@GLIBC_2.0
+                0x00009404                curl_easy_cleanup
+                0x00009410                sys_get_status_bar_height
+                0x0000941c                sysDelayMs
+                0x00009428                kbGetKeyMs
+                0x00009434                time@@GLIBC_2.0
+                0x00009440                strncat@@GLIBC_2.0
+                0x0000944c                malloc@@GLIBC_2.0
+                0x00009458                lcdSetFont
+                0x00009464                lcdSetFgColor
+                0x00009470                prnStatus
+                0x0000947c                fileOpen
+                0x00009488                memmove@@GLIBC_2.0
+                0x00009494                dfb_create_font
+                0x000094a0                lcdSetBgColor
+                0x000094ac                puts@@GLIBC_2.0
+                0x000094b8                PPPLogin
+                0x000094c4                application_init
+                0x000094d0                sscanf@@GLIBC_2.0
+                0x000094dc                strncmp@@GLIBC_2.0
+                0x000094e8                curl_global_init
+                0x000094f4                prnClose
+                0x00009500                PPPLogout
+                0x0000950c                prnStep
+                0x00009518                tolower@@GLIBC_2.0
+                0x00009524                strcmp@@GLIBC_2.0
+                0x00009530                curl_easy_strerror
+                0x0000953c                fileClose
 
-.text           0x00009200     0xc584
+.text           0x00009548     0xf1f4
  *(.text .stub .text.* .gnu.linkonce.t.*)
- .text          0x00009200       0x38 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crt1.o
-                0x00009200                _start
- .text          0x00009238       0x24 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
- .text          0x0000925c       0xb4 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
- .text          0x00009310      0xc5c ./src/games/games.o
-                0x00009a58                getTirageType
-                0x00009da8                postFiches
-                0x00009490                getConfiguration
- .text          0x00009f6c      0x89c ./src/MCNEW_POS.o
-                0x0000a0ec                main
- .text          0x0000a808     0x6314 ./src/cJSON.o
-                0x0000cb10                cJSON_PrintUnformatted
-                0x0000c6a4                cJSON_ParseWithOpts
-                0x00010558                cJSON_IsObject
-                0x0000f740                cJSON_CreateRaw
-                0x0000cadc                cJSON_Print
-                0x0000c8b8                cJSON_Parse
-                0x000104a8                cJSON_IsString
-                0x0000f380                cJSON_CreateTrue
-                0x0000ea9c                cJSON_AddNumberToObject
-                0x000103a0                cJSON_IsBool
-                0x00010ab4                cJSON_malloc
-                0x00010450                cJSON_IsNumber
-                0x0000e120                cJSON_GetArraySize
-                0x0000ee00                cJSON_DetachItemFromArray
-                0x00010348                cJSON_IsTrue
-                0x0000a838                cJSON_GetStringValue
-                0x0000f7dc                cJSON_CreateArray
-                0x0000eee8                cJSON_DetachItemFromObjectCaseSensitive
-                0x0000ff64                cJSON_Minify
-                0x0000f670                cJSON_CreateObjectReference
-                0x0000f3c8                cJSON_CreateFalse
-                0x0000eb28                cJSON_AddStringToObject
-                0x0000e920                cJSON_AddTrueToObject
-                0x0000ea18                cJSON_AddBoolToObject
-                0x0000fd38                cJSON_Duplicate
-                0x0000f2c8                cJSON_ReplaceItemInObject
-                0x0000ecac                cJSON_AddArrayToObject
-                0x0000a808                cJSON_GetErrorPtr
-                0x0000f338                cJSON_CreateNull
-                0x0000ee68                cJSON_DeleteItemFromArray
-                0x000103f8                cJSON_IsNull
-                0x0000e8a4                cJSON_AddNullToObject
-                0x0000f300                cJSON_ReplaceItemInObjectCaseSensitive
-                0x0000e3f4                cJSON_HasObjectItem
-                0x0000e5dc                cJSON_AddItemToArray
-                0x0000cb44                cJSON_PrintBuffered
-                0x00010298                cJSON_IsInvalid
-                0x0000e83c                cJSON_AddItemReferenceToObject
-                0x0000efa0                cJSON_InsertItemInArray
-                0x0000f068                cJSON_ReplaceItemViaPointer
-                0x00010500                cJSON_IsArray
-                0x0000e7ac                cJSON_AddItemToObjectCS
-                0x0000ebac                cJSON_AddRawToObject
-                0x0000abc8                cJSON_Delete
-                0x0000e768                cJSON_AddItemToObject
-                0x0000f188                cJSON_ReplaceItemInArray
-                0x0000f9a8                cJSON_CreateFloatArray
-                0x00010608                cJSON_Compare
-                0x0000f86c                cJSON_CreateIntArray
-                0x0000f608                cJSON_CreateStringReference
-                0x000105b0                cJSON_IsRaw
-                0x0000fc10                cJSON_CreateStringArray
-                0x0000e99c                cJSON_AddFalseToObject
-                0x0000eea0                cJSON_DetachItemFromObject
-                0x0000aa78                cJSON_InitHooks
-                0x0000e3bc                cJSON_GetObjectItemCaseSensitive
-                0x0000f410                cJSON_CreateBool
-                0x0000ef30                cJSON_DeleteItemFromObject
-                0x0000f56c                cJSON_CreateString
-                0x0000ec30                cJSON_AddObjectToObject
-                0x0000f6d8                cJSON_CreateArrayReference
-                0x0000b064                cJSON_SetNumberHelper
-                0x0000e238                cJSON_GetArrayItem
-                0x0000a888                cJSON_Version
-                0x00010aec                cJSON_free
-                0x0000f480                cJSON_CreateNumber
-                0x0000e384                cJSON_GetObjectItem
-                0x0000f824                cJSON_CreateObject
-                0x000102f0                cJSON_IsFalse
-                0x0000e7f0                cJSON_AddItemReferenceToArray
-                0x0000ed28                cJSON_DetachItemViaPointer
-                0x0000ef68                cJSON_DeleteItemFromObjectCaseSensitive
-                0x0000cc64                cJSON_PrintPreallocated
-                0x0000fae4                cJSON_CreateDoubleArray
- .text          0x00010b1c        0x0 ./src/constants.o
- .text          0x00010b1c     0x3600 ./src/helpers.o
-                0x00011418                lcd_draw_rectangle
-                0x00010c9c                write_to_file
-                0x00012c70                bouleItemPrintf
-                0x000122c0                lcdmenu_tirage
-                0x00013cf4                freeItems
-                0x00011298                drawpicture
-                0x00010ea8                string_len
-                0x00013e80                hasInfoTirageByName
-                0x00011018                get_current_y
-                0x000131c4                editableList
-                0x0001157c                lcdprintfon
-                0x00011e78                lcdprintfex
-                0x00010d1c                read_from_file
-                0x00014034                deleteInfoTirageByIndex
-                0x0001105c                lcd_header
-                0x00011a04                lcdprintf
-                0x00013d6c                deleteInfoTirageByName
-                0x00011038                lcdclean
-                0x00013f14                addItem
-                0x00013cc8                Beep
-                0x00010f0c                string_covert
-                0x00011eec                lcdmenu
- .text          0x0001411c      0x598 ./src/lkd.o
-                0x000143a8                getElement
-                0x00014490                addElement
-                0x0001436c                destroyList
-                0x000145c4                deleteByIndex
-                0x0001429c                createList
- .text          0x000146b4      0x328 ./src/print.o
-                0x00014834                TestPrinter
- .text          0x000149dc      0x110 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
-                0x000149dc                __udivsi3
-                0x000149dc                __aeabi_uidiv
-                0x00014ad4                __aeabi_uidivmod
- .text          0x00014aec      0x140 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
-                0x00014aec                __divsi3
-                0x00014c14                __aeabi_idivmod
-                0x00014aec                __aeabi_idiv
- .text          0x00014c2c        0x4 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
-                0x00014c2c                __div0
-                0x00014c2c                __aeabi_idiv0
-                0x00014c2c                __aeabi_ldiv0
- .text          0x00014c30      0x400 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_addsubdf3.o)
-                0x00014fb0                __floatundidf
-                0x00014f44                __floatsidf
-                0x00014f1c                __aeabi_ui2d
-                0x00014f44                __aeabi_i2d
-                0x00014f1c                __floatunsidf
-                0x00014c38                __subdf3
-                0x00014fc4                __floatdidf
-                0x00014c3c                __adddf3
-                0x00014fc4                __aeabi_l2d
-                0x00014f70                __aeabi_f2d
-                0x00014fb0                __aeabi_ul2d
-                0x00014c30                __aeabi_drsub
-                0x00014f70                __extendsfdf2
-                0x00014c3c                __aeabi_dadd
-                0x00014c38                __aeabi_dsub
- .text          0x00015030      0x52c /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_muldivdf3.o)
-                0x00015030                __muldf3
-                0x00015358                __divdf3
-                0x00015030                __aeabi_dmul
-                0x00015358                __aeabi_ddiv
- .text          0x0001555c      0x128 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_cmpdf2.o)
-                0x0001555c                __gtdf2
-                0x00015564                __ltdf2
-                0x0001560c                __aeabi_cdcmple
-                0x0001555c                __gedf2
-                0x00015670                __aeabi_dcmpgt
-                0x00015564                __ledf2
-                0x0001560c                __aeabi_cdcmpeq
-                0x00015620                __aeabi_dcmpeq
-                0x00015648                __aeabi_dcmple
-                0x0001565c                __aeabi_dcmpge
-                0x0001556c                __cmpdf2
-                0x00015634                __aeabi_dcmplt
-                0x0001556c                __nedf2
-                0x000155f0                __aeabi_cdrcmple
-                0x0001556c                __eqdf2
- .text          0x00015684       0x5c /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_fixdfsi.o)
-                0x00015684                __fixdfsi
-                0x00015684                __aeabi_d2iz
- .text          0x000156e0       0x70 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/libc_nonshared.a(elf-init.oS)
-                0x000156e0                __libc_csu_fini
-                0x000156e4                __libc_csu_init
- .text          0x00015750       0x34 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
- .text          0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
+ .text          0x00009548       0x38 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crt1.o
+                0x00009548                _start
+ .text          0x00009580       0x24 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
+ .text          0x000095a4       0xb4 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
+ .text          0x00009658      0xc5c ./src/games/games.o
+                0x00009da0                getTirageType
+                0x0000a0f0                postFiches
+                0x000097d8                getConfiguration
+ .text          0x0000a2b4      0x8a8 ./src/MCNEW_POS.o
+                0x0000a434                main
+ .text          0x0000ab5c      0x96c ./src/auth.o
+                0x0000acdc                postHandleLogin
+ .text          0x0000b4c8     0x6314 ./src/cJSON.o
+                0x0000d7d0                cJSON_PrintUnformatted
+                0x0000d364                cJSON_ParseWithOpts
+                0x00011218                cJSON_IsObject
+                0x00010400                cJSON_CreateRaw
+                0x0000d79c                cJSON_Print
+                0x0000d578                cJSON_Parse
+                0x00011168                cJSON_IsString
+                0x00010040                cJSON_CreateTrue
+                0x0000f75c                cJSON_AddNumberToObject
+                0x00011060                cJSON_IsBool
+                0x00011774                cJSON_malloc
+                0x00011110                cJSON_IsNumber
+                0x0000ede0                cJSON_GetArraySize
+                0x0000fac0                cJSON_DetachItemFromArray
+                0x00011008                cJSON_IsTrue
+                0x0000b4f8                cJSON_GetStringValue
+                0x0001049c                cJSON_CreateArray
+                0x0000fba8                cJSON_DetachItemFromObjectCaseSensitive
+                0x00010c24                cJSON_Minify
+                0x00010330                cJSON_CreateObjectReference
+                0x00010088                cJSON_CreateFalse
+                0x0000f7e8                cJSON_AddStringToObject
+                0x0000f5e0                cJSON_AddTrueToObject
+                0x0000f6d8                cJSON_AddBoolToObject
+                0x000109f8                cJSON_Duplicate
+                0x0000ff88                cJSON_ReplaceItemInObject
+                0x0000f96c                cJSON_AddArrayToObject
+                0x0000b4c8                cJSON_GetErrorPtr
+                0x0000fff8                cJSON_CreateNull
+                0x0000fb28                cJSON_DeleteItemFromArray
+                0x000110b8                cJSON_IsNull
+                0x0000f564                cJSON_AddNullToObject
+                0x0000ffc0                cJSON_ReplaceItemInObjectCaseSensitive
+                0x0000f0b4                cJSON_HasObjectItem
+                0x0000f29c                cJSON_AddItemToArray
+                0x0000d804                cJSON_PrintBuffered
+                0x00010f58                cJSON_IsInvalid
+                0x0000f4fc                cJSON_AddItemReferenceToObject
+                0x0000fc60                cJSON_InsertItemInArray
+                0x0000fd28                cJSON_ReplaceItemViaPointer
+                0x000111c0                cJSON_IsArray
+                0x0000f46c                cJSON_AddItemToObjectCS
+                0x0000f86c                cJSON_AddRawToObject
+                0x0000b888                cJSON_Delete
+                0x0000f428                cJSON_AddItemToObject
+                0x0000fe48                cJSON_ReplaceItemInArray
+                0x00010668                cJSON_CreateFloatArray
+                0x000112c8                cJSON_Compare
+                0x0001052c                cJSON_CreateIntArray
+                0x000102c8                cJSON_CreateStringReference
+                0x00011270                cJSON_IsRaw
+                0x000108d0                cJSON_CreateStringArray
+                0x0000f65c                cJSON_AddFalseToObject
+                0x0000fb60                cJSON_DetachItemFromObject
+                0x0000b738                cJSON_InitHooks
+                0x0000f07c                cJSON_GetObjectItemCaseSensitive
+                0x000100d0                cJSON_CreateBool
+                0x0000fbf0                cJSON_DeleteItemFromObject
+                0x0001022c                cJSON_CreateString
+                0x0000f8f0                cJSON_AddObjectToObject
+                0x00010398                cJSON_CreateArrayReference
+                0x0000bd24                cJSON_SetNumberHelper
+                0x0000eef8                cJSON_GetArrayItem
+                0x0000b548                cJSON_Version
+                0x000117ac                cJSON_free
+                0x00010140                cJSON_CreateNumber
+                0x0000f044                cJSON_GetObjectItem
+                0x000104e4                cJSON_CreateObject
+                0x00010fb0                cJSON_IsFalse
+                0x0000f4b0                cJSON_AddItemReferenceToArray
+                0x0000f9e8                cJSON_DetachItemViaPointer
+                0x0000fc28                cJSON_DeleteItemFromObjectCaseSensitive
+                0x0000d924                cJSON_PrintPreallocated
+                0x000107a4                cJSON_CreateDoubleArray
+ .text          0x000117dc        0x0 ./src/constants.o
+ .text          0x000117dc     0x154c ./src/gui.o
+                0x00012004                handleDDateInput
+                0x0001195c                renderDDate
+                0x000120d8                handleEntryInput
+                0x00011ce0                renderEntry
+ .text          0x00012d28     0x42c8 ./src/helpers.o
+                0x00014248                lcd_draw_rectangle
+                0x00013acc                write_to_file
+                0x000134e8                make_post_request
+                0x00013208                make_get_request
+                0x00015aa0                bouleItemPrintf
+                0x000150f0                lcdmenu_tirage
+                0x00016b24                freeItems
+                0x000140c8                drawpicture
+                0x00013cd8                string_len
+                0x00016f4c                readServer
+                0x00012ea8                check_connection
+                0x00016cb0                hasInfoTirageByName
+                0x00013e48                get_current_y
+                0x00015ff4                editableList
+                0x000143ac                lcdprintfon
+                0x00014ca8                lcdprintfex
+                0x000137c4                make_http_request
+                0x00013b4c                read_from_file
+                0x00016e64                deleteInfoTirageByIndex
+                0x00013e8c                lcd_header
+                0x00014834                lcdprintf
+                0x00016b9c                deleteInfoTirageByName
+                0x00013e68                lcdclean
+                0x00016d44                addItem
+                0x00016af8                Beep
+                0x00013d3c                string_covert
+                0x00014d1c                lcdmenu
+ .text          0x00016ff0      0x598 ./src/lkd.o
+                0x0001727c                getElement
+                0x00017364                addElement
+                0x00017240                destroyList
+                0x00017498                deleteByIndex
+                0x00017170                createList
+ .text          0x00017588      0x328 ./src/print.o
+                0x00017708                TestPrinter
+ .text          0x000178b0      0x110 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
+                0x000178b0                __udivsi3
+                0x000178b0                __aeabi_uidiv
+                0x000179a8                __aeabi_uidivmod
+ .text          0x000179c0      0x140 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
+                0x000179c0                __divsi3
+                0x00017ae8                __aeabi_idivmod
+                0x000179c0                __aeabi_idiv
+ .text          0x00017b00       0xe4 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_modsi3.o)
+                0x00017b00                __modsi3
+ .text          0x00017be4        0x4 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
+                0x00017be4                __div0
+                0x00017be4                __aeabi_idiv0
+                0x00017be4                __aeabi_ldiv0
+ .text          0x00017be8      0x400 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_addsubdf3.o)
+                0x00017f68                __floatundidf
+                0x00017efc                __floatsidf
+                0x00017ed4                __aeabi_ui2d
+                0x00017efc                __aeabi_i2d
+                0x00017ed4                __floatunsidf
+                0x00017bf0                __subdf3
+                0x00017f7c                __floatdidf
+                0x00017bf4                __adddf3
+                0x00017f7c                __aeabi_l2d
+                0x00017f28                __aeabi_f2d
+                0x00017f68                __aeabi_ul2d
+                0x00017be8                __aeabi_drsub
+                0x00017f28                __extendsfdf2
+                0x00017bf4                __aeabi_dadd
+                0x00017bf0                __aeabi_dsub
+ .text          0x00017fe8      0x52c /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_muldivdf3.o)
+                0x00017fe8                __muldf3
+                0x00018310                __divdf3
+                0x00017fe8                __aeabi_dmul
+                0x00018310                __aeabi_ddiv
+ .text          0x00018514      0x128 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_cmpdf2.o)
+                0x00018514                __gtdf2
+                0x0001851c                __ltdf2
+                0x000185c4                __aeabi_cdcmple
+                0x00018514                __gedf2
+                0x00018628                __aeabi_dcmpgt
+                0x0001851c                __ledf2
+                0x000185c4                __aeabi_cdcmpeq
+                0x000185d8                __aeabi_dcmpeq
+                0x00018600                __aeabi_dcmple
+                0x00018614                __aeabi_dcmpge
+                0x00018524                __cmpdf2
+                0x000185ec                __aeabi_dcmplt
+                0x00018524                __nedf2
+                0x000185a8                __aeabi_cdrcmple
+                0x00018524                __eqdf2
+ .text          0x0001863c       0x5c /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_fixdfsi.o)
+                0x0001863c                __fixdfsi
+                0x0001863c                __aeabi_d2iz
+ .text          0x00018698       0x70 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/libc_nonshared.a(elf-init.oS)
+                0x00018698                __libc_csu_fini
+                0x0001869c                __libc_csu_init
+ .text          0x00018708       0x34 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
+ .text          0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
  *(.gnu.warning)
  *(.glue_7t)
- .glue_7t       0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crt1.o
- .glue_7t       0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
- .glue_7t       0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
- .glue_7t       0x00015784        0x0 ./src/games/games.o
- .glue_7t       0x00015784        0x0 ./src/MCNEW_POS.o
- .glue_7t       0x00015784        0x0 ./src/cJSON.o
- .glue_7t       0x00015784        0x0 ./src/constants.o
- .glue_7t       0x00015784        0x0 ./src/helpers.o
- .glue_7t       0x00015784        0x0 ./src/lkd.o
- .glue_7t       0x00015784        0x0 ./src/print.o
- .glue_7t       0x00015784        0x0 C:\src\NEW8210\seos\lib/libseos.so
- .glue_7t       0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libcurl.so
- .glue_7t       0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libz.so
- .glue_7t       0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libpng.so
- .glue_7t       0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libpos.so
- .glue_7t       0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libfusion.so
- .glue_7t       0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libdirect.so
- .glue_7t       0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libdirectfb.so
- .glue_7t       0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libssl.so
- .glue_7t       0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libiccard.so
- .glue_7t       0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libnfc.so
- .glue_7t       0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libped.so
- .glue_7t       0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libemv.so
- .glue_7t       0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libcrypto.so
- .glue_7t       0x00015784        0x0 C:\src\NEW8210\fribidi\lib/libfribidi.so
- .glue_7t       0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
- .glue_7t       0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
- .glue_7t       0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
- .glue_7t       0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_addsubdf3.o)
- .glue_7t       0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_muldivdf3.o)
- .glue_7t       0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_cmpdf2.o)
- .glue_7t       0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_fixdfsi.o)
- .glue_7t       0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/libgcc_s.so
- .glue_7t       0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/libc.so.6
- .glue_7t       0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/libc_nonshared.a(elf-init.oS)
- .glue_7t       0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/ld-linux.so.2
- .glue_7t       0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/libgcc_s.so
- .glue_7t       0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
- .glue_7t       0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
+ .glue_7t       0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crt1.o
+ .glue_7t       0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
+ .glue_7t       0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
+ .glue_7t       0x0001873c        0x0 ./src/games/games.o
+ .glue_7t       0x0001873c        0x0 ./src/MCNEW_POS.o
+ .glue_7t       0x0001873c        0x0 ./src/auth.o
+ .glue_7t       0x0001873c        0x0 ./src/cJSON.o
+ .glue_7t       0x0001873c        0x0 ./src/constants.o
+ .glue_7t       0x0001873c        0x0 ./src/gui.o
+ .glue_7t       0x0001873c        0x0 ./src/helpers.o
+ .glue_7t       0x0001873c        0x0 ./src/lkd.o
+ .glue_7t       0x0001873c        0x0 ./src/print.o
+ .glue_7t       0x0001873c        0x0 C:\src\NEW8210\seos\lib/libseos.so
+ .glue_7t       0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libcurl.so
+ .glue_7t       0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libz.so
+ .glue_7t       0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libpng.so
+ .glue_7t       0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libpos.so
+ .glue_7t       0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libfusion.so
+ .glue_7t       0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libdirect.so
+ .glue_7t       0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libdirectfb.so
+ .glue_7t       0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libssl.so
+ .glue_7t       0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libiccard.so
+ .glue_7t       0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libnfc.so
+ .glue_7t       0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libped.so
+ .glue_7t       0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libemv.so
+ .glue_7t       0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libcrypto.so
+ .glue_7t       0x0001873c        0x0 C:\src\NEW8210\fribidi\lib/libfribidi.so
+ .glue_7t       0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
+ .glue_7t       0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
+ .glue_7t       0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_modsi3.o)
+ .glue_7t       0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
+ .glue_7t       0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_addsubdf3.o)
+ .glue_7t       0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_muldivdf3.o)
+ .glue_7t       0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_cmpdf2.o)
+ .glue_7t       0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_fixdfsi.o)
+ .glue_7t       0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/libgcc_s.so
+ .glue_7t       0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/libc.so.6
+ .glue_7t       0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/libc_nonshared.a(elf-init.oS)
+ .glue_7t       0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/ld-linux.so.2
+ .glue_7t       0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/libgcc_s.so
+ .glue_7t       0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
+ .glue_7t       0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
  *(.glue_7)
- .glue_7        0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crt1.o
- .glue_7        0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
- .glue_7        0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
- .glue_7        0x00015784        0x0 ./src/games/games.o
- .glue_7        0x00015784        0x0 ./src/MCNEW_POS.o
- .glue_7        0x00015784        0x0 ./src/cJSON.o
- .glue_7        0x00015784        0x0 ./src/constants.o
- .glue_7        0x00015784        0x0 ./src/helpers.o
- .glue_7        0x00015784        0x0 ./src/lkd.o
- .glue_7        0x00015784        0x0 ./src/print.o
- .glue_7        0x00015784        0x0 C:\src\NEW8210\seos\lib/libseos.so
- .glue_7        0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libcurl.so
- .glue_7        0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libz.so
- .glue_7        0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libpng.so
- .glue_7        0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libpos.so
- .glue_7        0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libfusion.so
- .glue_7        0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libdirect.so
- .glue_7        0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libdirectfb.so
- .glue_7        0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libssl.so
- .glue_7        0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libiccard.so
- .glue_7        0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libnfc.so
- .glue_7        0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libped.so
- .glue_7        0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libemv.so
- .glue_7        0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libcrypto.so
- .glue_7        0x00015784        0x0 C:\src\NEW8210\fribidi\lib/libfribidi.so
- .glue_7        0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
- .glue_7        0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
- .glue_7        0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
- .glue_7        0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_addsubdf3.o)
- .glue_7        0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_muldivdf3.o)
- .glue_7        0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_cmpdf2.o)
- .glue_7        0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_fixdfsi.o)
- .glue_7        0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/libgcc_s.so
- .glue_7        0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/libc.so.6
- .glue_7        0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/libc_nonshared.a(elf-init.oS)
- .glue_7        0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/ld-linux.so.2
- .glue_7        0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/libgcc_s.so
- .glue_7        0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
- .glue_7        0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
+ .glue_7        0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crt1.o
+ .glue_7        0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
+ .glue_7        0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
+ .glue_7        0x0001873c        0x0 ./src/games/games.o
+ .glue_7        0x0001873c        0x0 ./src/MCNEW_POS.o
+ .glue_7        0x0001873c        0x0 ./src/auth.o
+ .glue_7        0x0001873c        0x0 ./src/cJSON.o
+ .glue_7        0x0001873c        0x0 ./src/constants.o
+ .glue_7        0x0001873c        0x0 ./src/gui.o
+ .glue_7        0x0001873c        0x0 ./src/helpers.o
+ .glue_7        0x0001873c        0x0 ./src/lkd.o
+ .glue_7        0x0001873c        0x0 ./src/print.o
+ .glue_7        0x0001873c        0x0 C:\src\NEW8210\seos\lib/libseos.so
+ .glue_7        0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libcurl.so
+ .glue_7        0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libz.so
+ .glue_7        0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libpng.so
+ .glue_7        0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libpos.so
+ .glue_7        0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libfusion.so
+ .glue_7        0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libdirect.so
+ .glue_7        0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libdirectfb.so
+ .glue_7        0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libssl.so
+ .glue_7        0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libiccard.so
+ .glue_7        0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libnfc.so
+ .glue_7        0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libped.so
+ .glue_7        0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libemv.so
+ .glue_7        0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libcrypto.so
+ .glue_7        0x0001873c        0x0 C:\src\NEW8210\fribidi\lib/libfribidi.so
+ .glue_7        0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
+ .glue_7        0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
+ .glue_7        0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_modsi3.o)
+ .glue_7        0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
+ .glue_7        0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_addsubdf3.o)
+ .glue_7        0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_muldivdf3.o)
+ .glue_7        0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_cmpdf2.o)
+ .glue_7        0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_fixdfsi.o)
+ .glue_7        0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/libgcc_s.so
+ .glue_7        0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/libc.so.6
+ .glue_7        0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/libc_nonshared.a(elf-init.oS)
+ .glue_7        0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/ld-linux.so.2
+ .glue_7        0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/libgcc_s.so
+ .glue_7        0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
+ .glue_7        0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
  *(.vfp11_veneer)
- .vfp11_veneer  0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crt1.o
- .vfp11_veneer  0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
- .vfp11_veneer  0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
- .vfp11_veneer  0x00015784        0x0 ./src/games/games.o
- .vfp11_veneer  0x00015784        0x0 ./src/MCNEW_POS.o
- .vfp11_veneer  0x00015784        0x0 ./src/cJSON.o
- .vfp11_veneer  0x00015784        0x0 ./src/constants.o
- .vfp11_veneer  0x00015784        0x0 ./src/helpers.o
- .vfp11_veneer  0x00015784        0x0 ./src/lkd.o
- .vfp11_veneer  0x00015784        0x0 ./src/print.o
- .vfp11_veneer  0x00015784        0x0 C:\src\NEW8210\seos\lib/libseos.so
- .vfp11_veneer  0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libcurl.so
- .vfp11_veneer  0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libz.so
- .vfp11_veneer  0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libpng.so
- .vfp11_veneer  0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libpos.so
- .vfp11_veneer  0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libfusion.so
- .vfp11_veneer  0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libdirect.so
- .vfp11_veneer  0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libdirectfb.so
- .vfp11_veneer  0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libssl.so
- .vfp11_veneer  0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libiccard.so
- .vfp11_veneer  0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libnfc.so
- .vfp11_veneer  0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libped.so
- .vfp11_veneer  0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libemv.so
- .vfp11_veneer  0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libcrypto.so
- .vfp11_veneer  0x00015784        0x0 C:\src\NEW8210\fribidi\lib/libfribidi.so
- .vfp11_veneer  0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
- .vfp11_veneer  0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
- .vfp11_veneer  0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
- .vfp11_veneer  0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_addsubdf3.o)
- .vfp11_veneer  0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_muldivdf3.o)
- .vfp11_veneer  0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_cmpdf2.o)
- .vfp11_veneer  0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_fixdfsi.o)
- .vfp11_veneer  0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/libgcc_s.so
- .vfp11_veneer  0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/libc.so.6
- .vfp11_veneer  0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/libc_nonshared.a(elf-init.oS)
- .vfp11_veneer  0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/ld-linux.so.2
- .vfp11_veneer  0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/libgcc_s.so
- .vfp11_veneer  0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
- .vfp11_veneer  0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
+ .vfp11_veneer  0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crt1.o
+ .vfp11_veneer  0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
+ .vfp11_veneer  0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
+ .vfp11_veneer  0x0001873c        0x0 ./src/games/games.o
+ .vfp11_veneer  0x0001873c        0x0 ./src/MCNEW_POS.o
+ .vfp11_veneer  0x0001873c        0x0 ./src/auth.o
+ .vfp11_veneer  0x0001873c        0x0 ./src/cJSON.o
+ .vfp11_veneer  0x0001873c        0x0 ./src/constants.o
+ .vfp11_veneer  0x0001873c        0x0 ./src/gui.o
+ .vfp11_veneer  0x0001873c        0x0 ./src/helpers.o
+ .vfp11_veneer  0x0001873c        0x0 ./src/lkd.o
+ .vfp11_veneer  0x0001873c        0x0 ./src/print.o
+ .vfp11_veneer  0x0001873c        0x0 C:\src\NEW8210\seos\lib/libseos.so
+ .vfp11_veneer  0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libcurl.so
+ .vfp11_veneer  0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libz.so
+ .vfp11_veneer  0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libpng.so
+ .vfp11_veneer  0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libpos.so
+ .vfp11_veneer  0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libfusion.so
+ .vfp11_veneer  0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libdirect.so
+ .vfp11_veneer  0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libdirectfb.so
+ .vfp11_veneer  0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libssl.so
+ .vfp11_veneer  0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libiccard.so
+ .vfp11_veneer  0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libnfc.so
+ .vfp11_veneer  0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libped.so
+ .vfp11_veneer  0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libemv.so
+ .vfp11_veneer  0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libcrypto.so
+ .vfp11_veneer  0x0001873c        0x0 C:\src\NEW8210\fribidi\lib/libfribidi.so
+ .vfp11_veneer  0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
+ .vfp11_veneer  0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
+ .vfp11_veneer  0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_modsi3.o)
+ .vfp11_veneer  0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
+ .vfp11_veneer  0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_addsubdf3.o)
+ .vfp11_veneer  0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_muldivdf3.o)
+ .vfp11_veneer  0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_cmpdf2.o)
+ .vfp11_veneer  0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_fixdfsi.o)
+ .vfp11_veneer  0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/libgcc_s.so
+ .vfp11_veneer  0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/libc.so.6
+ .vfp11_veneer  0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/libc_nonshared.a(elf-init.oS)
+ .vfp11_veneer  0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/ld-linux.so.2
+ .vfp11_veneer  0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/libgcc_s.so
+ .vfp11_veneer  0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
+ .vfp11_veneer  0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
  *(.v4_bx)
- .v4_bx         0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crt1.o
- .v4_bx         0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
- .v4_bx         0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
- .v4_bx         0x00015784        0x0 ./src/games/games.o
- .v4_bx         0x00015784        0x0 ./src/MCNEW_POS.o
- .v4_bx         0x00015784        0x0 ./src/cJSON.o
- .v4_bx         0x00015784        0x0 ./src/constants.o
- .v4_bx         0x00015784        0x0 ./src/helpers.o
- .v4_bx         0x00015784        0x0 ./src/lkd.o
- .v4_bx         0x00015784        0x0 ./src/print.o
- .v4_bx         0x00015784        0x0 C:\src\NEW8210\seos\lib/libseos.so
- .v4_bx         0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libcurl.so
- .v4_bx         0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libz.so
- .v4_bx         0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libpng.so
- .v4_bx         0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libpos.so
- .v4_bx         0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libfusion.so
- .v4_bx         0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libdirect.so
- .v4_bx         0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libdirectfb.so
- .v4_bx         0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libssl.so
- .v4_bx         0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libiccard.so
- .v4_bx         0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libnfc.so
- .v4_bx         0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libped.so
- .v4_bx         0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libemv.so
- .v4_bx         0x00015784        0x0 C:\src\NEW8210\sdk8210\lib/libcrypto.so
- .v4_bx         0x00015784        0x0 C:\src\NEW8210\fribidi\lib/libfribidi.so
- .v4_bx         0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
- .v4_bx         0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
- .v4_bx         0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
- .v4_bx         0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_addsubdf3.o)
- .v4_bx         0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_muldivdf3.o)
- .v4_bx         0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_cmpdf2.o)
- .v4_bx         0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_fixdfsi.o)
- .v4_bx         0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/libgcc_s.so
- .v4_bx         0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/libc.so.6
- .v4_bx         0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/libc_nonshared.a(elf-init.oS)
- .v4_bx         0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/ld-linux.so.2
- .v4_bx         0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/libgcc_s.so
- .v4_bx         0x00015784        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
- .v4_bx         0x00015784        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
+ .v4_bx         0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crt1.o
+ .v4_bx         0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
+ .v4_bx         0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
+ .v4_bx         0x0001873c        0x0 ./src/games/games.o
+ .v4_bx         0x0001873c        0x0 ./src/MCNEW_POS.o
+ .v4_bx         0x0001873c        0x0 ./src/auth.o
+ .v4_bx         0x0001873c        0x0 ./src/cJSON.o
+ .v4_bx         0x0001873c        0x0 ./src/constants.o
+ .v4_bx         0x0001873c        0x0 ./src/gui.o
+ .v4_bx         0x0001873c        0x0 ./src/helpers.o
+ .v4_bx         0x0001873c        0x0 ./src/lkd.o
+ .v4_bx         0x0001873c        0x0 ./src/print.o
+ .v4_bx         0x0001873c        0x0 C:\src\NEW8210\seos\lib/libseos.so
+ .v4_bx         0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libcurl.so
+ .v4_bx         0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libz.so
+ .v4_bx         0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libpng.so
+ .v4_bx         0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libpos.so
+ .v4_bx         0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libfusion.so
+ .v4_bx         0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libdirect.so
+ .v4_bx         0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libdirectfb.so
+ .v4_bx         0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libssl.so
+ .v4_bx         0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libiccard.so
+ .v4_bx         0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libnfc.so
+ .v4_bx         0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libped.so
+ .v4_bx         0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libemv.so
+ .v4_bx         0x0001873c        0x0 C:\src\NEW8210\sdk8210\lib/libcrypto.so
+ .v4_bx         0x0001873c        0x0 C:\src\NEW8210\fribidi\lib/libfribidi.so
+ .v4_bx         0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
+ .v4_bx         0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
+ .v4_bx         0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_modsi3.o)
+ .v4_bx         0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
+ .v4_bx         0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_addsubdf3.o)
+ .v4_bx         0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_muldivdf3.o)
+ .v4_bx         0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_cmpdf2.o)
+ .v4_bx         0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_fixdfsi.o)
+ .v4_bx         0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/libgcc_s.so
+ .v4_bx         0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/libc.so.6
+ .v4_bx         0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/libc_nonshared.a(elf-init.oS)
+ .v4_bx         0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/ld-linux.so.2
+ .v4_bx         0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/lib/libgcc_s.so
+ .v4_bx         0x0001873c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
+ .v4_bx         0x0001873c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
 
-.fini           0x00015784        0xc
+.fini           0x0001873c        0xc
  *(.fini)
- .fini          0x00015784        0x4 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
-                0x00015784                _fini
- .fini          0x00015788        0x4 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
- .fini          0x0001578c        0x4 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
-                0x00015790                PROVIDE (__etext, .)
-                0x00015790                PROVIDE (_etext, .)
-                0x00015790                PROVIDE (etext, .)
+ .fini          0x0001873c        0x4 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
+                0x0001873c                _fini
+ .fini          0x00018740        0x4 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
+ .fini          0x00018744        0x4 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
+                0x00018748                PROVIDE (__etext, .)
+                0x00018748                PROVIDE (_etext, .)
+                0x00018748                PROVIDE (etext, .)
 
-.rodata         0x00015790      0xa08
+.rodata         0x00018748      0xbe8
  *(.rodata .rodata.* .gnu.linkonce.r.*)
- .rodata.cst4   0x00015790        0x4 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crt1.o
-                0x00015790                _IO_stdin_used
- .rodata        0x00015794      0x1a8 ./src/games/games.o
- .rodata        0x0001593c      0x4e8 ./src/MCNEW_POS.o
- .rodata        0x00015e24       0xb0 ./src/cJSON.o
- .rodata        0x00015ed4      0x104 ./src/helpers.o
- .rodata        0x00015fd8       0xa0 ./src/lkd.o
- .rodata        0x00016078      0x120 ./src/print.o
+ .rodata.cst4   0x00018748        0x4 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crt1.o
+                0x00018748                _IO_stdin_used
+ .rodata        0x0001874c      0x1a8 ./src/games/games.o
+ .rodata        0x000188f4      0x4e8 ./src/MCNEW_POS.o
+ .rodata        0x00018ddc      0x124 ./src/auth.o
+ .rodata        0x00018f00       0xb0 ./src/cJSON.o
+ .rodata        0x00018fb0      0x1c0 ./src/helpers.o
+ .rodata        0x00019170       0xa0 ./src/lkd.o
+ .rodata        0x00019210      0x120 ./src/print.o
 
 .rodata1
  *(.rodata1)
@@ -619,14 +671,14 @@ LOAD /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-roo
 .eh_frame_hdr
  *(.eh_frame_hdr)
 
-.eh_frame       0x00016198        0x4
+.eh_frame       0x00019330        0x4
  *(.eh_frame)
- .eh_frame      0x00016198        0x4 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
+ .eh_frame      0x00019330        0x4 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
 
 .gcc_except_table
  *(.gcc_except_table .gcc_except_table.*)
-                0x0001619c                . = (ALIGN (0x8000) - ((0x8000 - .) & 0x7fff))
-                0x0001eeac                . = (0x8000 DATA_SEGMENT_ALIGN 0x1000)
+                0x00019334                . = (ALIGN (0x8000) - ((0x8000 - .) & 0x7fff))
+                0x00021eac                . = (0x8000 DATA_SEGMENT_ALIGN 0x1000)
 
 .eh_frame
  *(.eh_frame)
@@ -641,142 +693,148 @@ LOAD /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-roo
  *(.tbss .tbss.* .gnu.linkonce.tb.*)
  *(.tcommon)
 
-.preinit_array  0x0001eeac        0x0
-                0x0001eeac                PROVIDE (__preinit_array_start, .)
+.preinit_array  0x00021eac        0x0
+                0x00021eac                PROVIDE (__preinit_array_start, .)
  *(.preinit_array)
-                0x0001eeac                PROVIDE (__preinit_array_end, .)
+                0x00021eac                PROVIDE (__preinit_array_end, .)
 
-.init_array     0x0001eeac        0x0
-                0x0001eeac                PROVIDE (__init_array_start, .)
+.init_array     0x00021eac        0x0
+                0x00021eac                PROVIDE (__init_array_start, .)
  *(SORT(.init_array.*))
  *(.init_array)
-                0x0001eeac                PROVIDE (__init_array_end, .)
+                0x00021eac                PROVIDE (__init_array_end, .)
 
-.fini_array     0x0001eeac        0x0
-                0x0001eeac                PROVIDE (__fini_array_start, .)
+.fini_array     0x00021eac        0x0
+                0x00021eac                PROVIDE (__fini_array_start, .)
  *(.fini_array)
  *(SORT(.fini_array.*))
-                0x0001eeac                PROVIDE (__fini_array_end, .)
+                0x00021eac                PROVIDE (__fini_array_end, .)
 
-.ctors          0x0001eeac        0x8
+.ctors          0x00021eac        0x8
  *crtbegin.o(.ctors)
- .ctors         0x0001eeac        0x4 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
+ .ctors         0x00021eac        0x4 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
  *crtbegin?.o(.ctors)
  *(EXCLUDE_FILE(*crtend?.o *crtend.o) .ctors)
  *(SORT(.ctors.*))
  *(.ctors)
- .ctors         0x0001eeb0        0x4 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
+ .ctors         0x00021eb0        0x4 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
 
-.dtors          0x0001eeb4        0x8
+.dtors          0x00021eb4        0x8
  *crtbegin.o(.dtors)
- .dtors         0x0001eeb4        0x4 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
+ .dtors         0x00021eb4        0x4 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
  *crtbegin?.o(.dtors)
  *(EXCLUDE_FILE(*crtend?.o *crtend.o) .dtors)
  *(SORT(.dtors.*))
  *(.dtors)
- .dtors         0x0001eeb8        0x4 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
-                0x0001eeb8                __DTOR_END__
+ .dtors         0x00021eb8        0x4 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
+                0x00021eb8                __DTOR_END__
 
-.jcr            0x0001eebc        0x4
+.jcr            0x00021ebc        0x4
  *(.jcr)
- .jcr           0x0001eebc        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
- .jcr           0x0001eebc        0x4 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
+ .jcr           0x00021ebc        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
+ .jcr           0x00021ebc        0x4 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
 
 .data.rel.ro
  *(.data.rel.ro.local* .gnu.linkonce.d.rel.ro.local.*)
  *(.data.rel.ro* .gnu.linkonce.d.rel.ro.*)
 
-.dynamic        0x0001eec0      0x140
+.dynamic        0x00021ec0      0x140
  *(.dynamic)
- .dynamic       0x0001eec0      0x140 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
-                0x0001eec0                _DYNAMIC
-                0x0001f000                . = (. DATA_SEGMENT_RELRO_END 0x0)
+ .dynamic       0x00021ec0      0x140 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
+                0x00021ec0                _DYNAMIC
+                0x00022000                . = (. DATA_SEGMENT_RELRO_END 0x0)
 
-.got            0x0001f000      0x104
+.got            0x00022000      0x140
  *(.got.plt)
- .got.plt       0x0001f000      0x100 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
-                0x0001f000                _GLOBAL_OFFSET_TABLE_
+ .got.plt       0x00022000      0x13c /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
+                0x00022000                _GLOBAL_OFFSET_TABLE_
  *(.got)
- .got           0x0001f100        0x4 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
+ .got           0x0002213c        0x4 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
 
-.data           0x0001f104       0x4c
-                0x0001f104                __data_start = .
+.data           0x00022140       0x4c
+                0x00022140                __data_start = .
  *(.data .data.* .gnu.linkonce.d.*)
- .data          0x0001f104        0x4 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crt1.o
-                0x0001f104                data_start
- .data          0x0001f108        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
- .data          0x0001f108        0x8 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
-                0x0001f10c                __dso_handle
- .data          0x0001f110        0x0 ./src/games/games.o
- .data          0x0001f110        0x0 ./src/MCNEW_POS.o
- .data          0x0001f110        0xc ./src/cJSON.o
- .data          0x0001f11c       0x2c ./src/constants.o
-                0x0001f120                colorWhite
-                0x0001f138                colorWarning
-                0x0001f140                colorSuccess
-                0x0001f12c                colorSecondary
-                0x0001f144                colorGrey
-                0x0001f134                colorInfo
-                0x0001f130                colorLight
-                0x0001f13c                colorDanger
-                0x0001f128                colorPrimary
-                0x0001f124                colorBlack
-                0x0001f11c                SIZE_WIDGET
- .data          0x0001f148        0x4 ./src/helpers.o
- .data          0x0001f14c        0x0 ./src/lkd.o
- .data          0x0001f14c        0x0 ./src/print.o
- .data          0x0001f14c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
- .data          0x0001f14c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
- .data          0x0001f14c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
- .data          0x0001f14c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_addsubdf3.o)
- .data          0x0001f14c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_muldivdf3.o)
- .data          0x0001f14c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_cmpdf2.o)
- .data          0x0001f14c        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_fixdfsi.o)
- .data          0x0001f14c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/libc_nonshared.a(elf-init.oS)
- .data          0x0001f14c        0x4 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
- .data          0x0001f150        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
+ .data          0x00022140        0x4 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crt1.o
+                0x00022140                data_start
+ .data          0x00022144        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
+ .data          0x00022144        0x8 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
+                0x00022148                __dso_handle
+ .data          0x0002214c        0x0 ./src/games/games.o
+ .data          0x0002214c        0x0 ./src/MCNEW_POS.o
+ .data          0x0002214c        0x0 ./src/auth.o
+ .data          0x0002214c        0xc ./src/cJSON.o
+ .data          0x00022158       0x2c ./src/constants.o
+                0x0002215c                colorWhite
+                0x00022174                colorWarning
+                0x0002217c                colorSuccess
+                0x00022168                colorSecondary
+                0x00022180                colorGrey
+                0x00022170                colorInfo
+                0x0002216c                colorLight
+                0x00022178                colorDanger
+                0x00022164                colorPrimary
+                0x00022160                colorBlack
+                0x00022158                SIZE_WIDGET
+ .data          0x00022184        0x0 ./src/gui.o
+ .data          0x00022184        0x4 ./src/helpers.o
+ .data          0x00022188        0x0 ./src/lkd.o
+ .data          0x00022188        0x0 ./src/print.o
+ .data          0x00022188        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
+ .data          0x00022188        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
+ .data          0x00022188        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_modsi3.o)
+ .data          0x00022188        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
+ .data          0x00022188        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_addsubdf3.o)
+ .data          0x00022188        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_muldivdf3.o)
+ .data          0x00022188        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_cmpdf2.o)
+ .data          0x00022188        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_fixdfsi.o)
+ .data          0x00022188        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/libc_nonshared.a(elf-init.oS)
+ .data          0x00022188        0x4 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
+ .data          0x0002218c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
 
 .data1
  *(.data1)
-                0x0001f150                _edata = .
-                0x0001f150                PROVIDE (edata, .)
-                0x0001f150                __bss_start = .
-                0x0001f150                __bss_start__ = .
+                0x0002218c                _edata = .
+                0x0002218c                PROVIDE (edata, .)
+                0x0002218c                __bss_start = .
+                0x0002218c                __bss_start__ = .
 
-.bss            0x0001f150       0x24
+.bss            0x0002218c       0x2c
  *(.dynbss)
  .dynbss        0x00000000        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
  *(.bss .bss.* .gnu.linkonce.b.*)
- .bss           0x0001f150        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crt1.o
- .bss           0x0001f150        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
- .bss           0x0001f150        0x8 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
- .bss           0x0001f158        0x0 ./src/games/games.o
- .bss           0x0001f158        0x0 ./src/MCNEW_POS.o
- .bss           0x0001f158       0x18 ./src/cJSON.o
- .bss           0x0001f170        0x0 ./src/constants.o
- .bss           0x0001f170        0x4 ./src/helpers.o
- .bss           0x0001f174        0x0 ./src/lkd.o
- .bss           0x0001f174        0x0 ./src/print.o
- .bss           0x0001f174        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
- .bss           0x0001f174        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
- .bss           0x0001f174        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
- .bss           0x0001f174        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_addsubdf3.o)
- .bss           0x0001f174        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_muldivdf3.o)
- .bss           0x0001f174        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_cmpdf2.o)
- .bss           0x0001f174        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_fixdfsi.o)
- .bss           0x0001f174        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/libc_nonshared.a(elf-init.oS)
- .bss           0x0001f174        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
- .bss           0x0001f174        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
+ .bss           0x0002218c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crt1.o
+ .bss           0x0002218c        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
+ .bss           0x0002218c        0x8 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
+ .bss           0x00022194        0x0 ./src/games/games.o
+ .bss           0x00022194        0x0 ./src/MCNEW_POS.o
+ .bss           0x00022194        0x0 ./src/auth.o
+ .bss           0x00022194       0x18 ./src/cJSON.o
+ .bss           0x000221ac        0x0 ./src/constants.o
+ .bss           0x000221ac        0x8 ./src/gui.o
+ .bss           0x000221b4        0x4 ./src/helpers.o
+ .bss           0x000221b8        0x0 ./src/lkd.o
+ .bss           0x000221b8        0x0 ./src/print.o
+ .bss           0x000221b8        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
+ .bss           0x000221b8        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
+ .bss           0x000221b8        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_modsi3.o)
+ .bss           0x000221b8        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
+ .bss           0x000221b8        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_addsubdf3.o)
+ .bss           0x000221b8        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_muldivdf3.o)
+ .bss           0x000221b8        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_cmpdf2.o)
+ .bss           0x000221b8        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_fixdfsi.o)
+ .bss           0x000221b8        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/libc_nonshared.a(elf-init.oS)
+ .bss           0x000221b8        0x0 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
+ .bss           0x000221b8        0x0 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
  *(COMMON)
-                0x0001f174                . = ALIGN ((. != 0x0)?0x4:0x1)
-                0x0001f174                _bss_end__ = .
-                0x0001f174                __bss_end__ = .
-                0x0001f174                . = ALIGN (0x4)
-                0x0001f174                . = ALIGN (0x4)
-                0x0001f174                __end__ = .
-                0x0001f174                _end = .
-                0x0001f174                PROVIDE (end, .)
-                0x0001f174                . = DATA_SEGMENT_END (.)
+                0x000221b8                . = ALIGN ((. != 0x0)?0x4:0x1)
+                0x000221b8                _bss_end__ = .
+                0x000221b8                __bss_end__ = .
+                0x000221b8                . = ALIGN (0x4)
+                0x000221b8                . = ALIGN (0x4)
+                0x000221b8                __end__ = .
+                0x000221b8                _end = .
+                0x000221b8                PROVIDE (end, .)
+                0x000221b8                . = DATA_SEGMENT_END (.)
 
 .stab
  *(.stab)
@@ -796,21 +854,23 @@ LOAD /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-roo
 .stab.indexstr
  *(.stab.indexstr)
 
-.comment        0x00000000      0x1a0
+.comment        0x00000000      0x1e0
  *(.comment)
  .comment       0x00000000       0x20 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crt1.o
  .comment       0x00000020       0x20 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
  .comment       0x00000040       0x20 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtbegin.o
  .comment       0x00000060       0x20 ./src/games/games.o
  .comment       0x00000080       0x20 ./src/MCNEW_POS.o
- .comment       0x000000a0       0x20 ./src/cJSON.o
- .comment       0x000000c0       0x20 ./src/constants.o
- .comment       0x000000e0       0x20 ./src/helpers.o
- .comment       0x00000100       0x20 ./src/lkd.o
- .comment       0x00000120       0x20 ./src/print.o
- .comment       0x00000140       0x20 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/libc_nonshared.a(elf-init.oS)
- .comment       0x00000160       0x20 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
- .comment       0x00000180       0x20 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
+ .comment       0x000000a0       0x20 ./src/auth.o
+ .comment       0x000000c0       0x20 ./src/cJSON.o
+ .comment       0x000000e0       0x20 ./src/constants.o
+ .comment       0x00000100       0x20 ./src/gui.o
+ .comment       0x00000120       0x20 ./src/helpers.o
+ .comment       0x00000140       0x20 ./src/lkd.o
+ .comment       0x00000160       0x20 ./src/print.o
+ .comment       0x00000180       0x20 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/libc_nonshared.a(elf-init.oS)
+ .comment       0x000001a0       0x20 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
+ .comment       0x000001c0       0x20 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
 
 .debug
  *(.debug)
@@ -824,7 +884,7 @@ LOAD /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-roo
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x1f8
+.debug_aranges  0x00000000      0x258
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x30 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
@@ -833,158 +893,190 @@ LOAD /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-roo
  .debug_aranges
                 0x00000050       0x20 ./src/MCNEW_POS.o
  .debug_aranges
-                0x00000070       0x20 ./src/cJSON.o
+                0x00000070       0x20 ./src/auth.o
  .debug_aranges
-                0x00000090       0x20 ./src/helpers.o
+                0x00000090       0x20 ./src/cJSON.o
  .debug_aranges
-                0x000000b0       0x20 ./src/lkd.o
+                0x000000b0       0x20 ./src/gui.o
  .debug_aranges
-                0x000000d0       0x20 ./src/print.o
+                0x000000d0       0x20 ./src/helpers.o
  .debug_aranges
-                0x000000f0       0x20 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
+                0x000000f0       0x20 ./src/lkd.o
  .debug_aranges
-                0x00000110       0x20 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
+                0x00000110       0x20 ./src/print.o
  .debug_aranges
-                0x00000130       0x20 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
+                0x00000130       0x20 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
  .debug_aranges
-                0x00000150       0x20 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_addsubdf3.o)
+                0x00000150       0x20 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
  .debug_aranges
-                0x00000170       0x20 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_muldivdf3.o)
+                0x00000170       0x20 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_modsi3.o)
  .debug_aranges
-                0x00000190       0x20 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_cmpdf2.o)
+                0x00000190       0x20 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
  .debug_aranges
-                0x000001b0       0x20 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_fixdfsi.o)
+                0x000001b0       0x20 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_addsubdf3.o)
  .debug_aranges
-                0x000001d0       0x28 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
+                0x000001d0       0x20 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_muldivdf3.o)
+ .debug_aranges
+                0x000001f0       0x20 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_cmpdf2.o)
+ .debug_aranges
+                0x00000210       0x20 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_fixdfsi.o)
+ .debug_aranges
+                0x00000230       0x28 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
 
 .debug_pubnames
-                0x00000000      0xa86
+                0x00000000      0xb6d
  *(.debug_pubnames)
  .debug_pubnames
                 0x00000000       0x48 ./src/games/games.o
  .debug_pubnames
                 0x00000048       0x1b ./src/MCNEW_POS.o
  .debug_pubnames
-                0x00000063      0x74e ./src/cJSON.o
+                0x00000063       0x26 ./src/auth.o
  .debug_pubnames
-                0x000007b1       0xc1 ./src/constants.o
+                0x00000089      0x74e ./src/cJSON.o
  .debug_pubnames
-                0x00000872      0x191 ./src/helpers.o
+                0x000007d7       0xc1 ./src/constants.o
  .debug_pubnames
-                0x00000a03       0x61 ./src/lkd.o
+                0x00000898       0x5c ./src/gui.o
  .debug_pubnames
-                0x00000a64       0x22 ./src/print.o
+                0x000008f4      0x1f6 ./src/helpers.o
+ .debug_pubnames
+                0x00000aea       0x61 ./src/lkd.o
+ .debug_pubnames
+                0x00000b4b       0x22 ./src/print.o
 
-.debug_info     0x00000000    0x14e25
+.debug_info     0x00000000    0x213e0
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000       0xb8 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
  .debug_info    0x000000b8     0x84da ./src/games/games.o
  .debug_info    0x00008592      0x39b ./src/MCNEW_POS.o
- .debug_info    0x0000892d     0x22e6 ./src/cJSON.o
- .debug_info    0x0000ac13      0x1b4 ./src/constants.o
- .debug_info    0x0000adc7     0x91f9 ./src/helpers.o
- .debug_info    0x00013fc0      0x47a ./src/lkd.o
- .debug_info    0x0001443a      0x2ae ./src/print.o
- .debug_info    0x000146e8       0xef /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
- .debug_info    0x000147d7       0xef /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
- .debug_info    0x000148c6       0xef /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
- .debug_info    0x000149b5       0xee /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_addsubdf3.o)
- .debug_info    0x00014aa3       0xee /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_muldivdf3.o)
- .debug_info    0x00014b91       0xee /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_cmpdf2.o)
- .debug_info    0x00014c7f       0xee /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_fixdfsi.o)
- .debug_info    0x00014d6d       0xb8 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
+ .debug_info    0x0000892d     0x825d ./src/auth.o
+ .debug_info    0x00010b8a     0x22e6 ./src/cJSON.o
+ .debug_info    0x00012e70      0x1b4 ./src/constants.o
+ .debug_info    0x00013024     0x3095 ./src/gui.o
+ .debug_info    0x000160b9     0xa3d3 ./src/helpers.o
+ .debug_info    0x0002048c      0x47a ./src/lkd.o
+ .debug_info    0x00020906      0x2ae ./src/print.o
+ .debug_info    0x00020bb4       0xef /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
+ .debug_info    0x00020ca3       0xef /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
+ .debug_info    0x00020d92       0xef /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_modsi3.o)
+ .debug_info    0x00020e81       0xef /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
+ .debug_info    0x00020f70       0xee /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_addsubdf3.o)
+ .debug_info    0x0002105e       0xee /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_muldivdf3.o)
+ .debug_info    0x0002114c       0xee /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_cmpdf2.o)
+ .debug_info    0x0002123a       0xee /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_fixdfsi.o)
+ .debug_info    0x00021328       0xb8 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
 
-.debug_abbrev   0x00000000      0xaf3
+.debug_abbrev   0x00000000      0xea0
  *(.debug_abbrev)
  .debug_abbrev  0x00000000       0x12 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
  .debug_abbrev  0x00000012      0x1f6 ./src/games/games.o
  .debug_abbrev  0x00000208      0x11a ./src/MCNEW_POS.o
- .debug_abbrev  0x00000322      0x229 ./src/cJSON.o
- .debug_abbrev  0x0000054b       0x89 ./src/constants.o
- .debug_abbrev  0x000005d4      0x2f2 ./src/helpers.o
- .debug_abbrev  0x000008c6      0x10d ./src/lkd.o
- .debug_abbrev  0x000009d3       0x82 ./src/print.o
- .debug_abbrev  0x00000a55       0x14 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
- .debug_abbrev  0x00000a69       0x14 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
- .debug_abbrev  0x00000a7d       0x14 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
- .debug_abbrev  0x00000a91       0x14 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_addsubdf3.o)
- .debug_abbrev  0x00000aa5       0x14 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_muldivdf3.o)
- .debug_abbrev  0x00000ab9       0x14 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_cmpdf2.o)
- .debug_abbrev  0x00000acd       0x14 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_fixdfsi.o)
- .debug_abbrev  0x00000ae1       0x12 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
+ .debug_abbrev  0x00000322      0x1d4 ./src/auth.o
+ .debug_abbrev  0x000004f6      0x229 ./src/cJSON.o
+ .debug_abbrev  0x0000071f       0x89 ./src/constants.o
+ .debug_abbrev  0x000007a8      0x1ba ./src/gui.o
+ .debug_abbrev  0x00000962      0x2fd ./src/helpers.o
+ .debug_abbrev  0x00000c5f      0x10d ./src/lkd.o
+ .debug_abbrev  0x00000d6c       0x82 ./src/print.o
+ .debug_abbrev  0x00000dee       0x14 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
+ .debug_abbrev  0x00000e02       0x14 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
+ .debug_abbrev  0x00000e16       0x14 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_modsi3.o)
+ .debug_abbrev  0x00000e2a       0x14 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
+ .debug_abbrev  0x00000e3e       0x14 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_addsubdf3.o)
+ .debug_abbrev  0x00000e52       0x14 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_muldivdf3.o)
+ .debug_abbrev  0x00000e66       0x14 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_cmpdf2.o)
+ .debug_abbrev  0x00000e7a       0x14 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_fixdfsi.o)
+ .debug_abbrev  0x00000e8e       0x12 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
 
-.debug_line     0x00000000     0x4fcb
+.debug_line     0x00000000     0x6673
  *(.debug_line)
  .debug_line    0x00000000       0xae /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crti.o
  .debug_line    0x000000ae      0xa93 ./src/games/games.o
- .debug_line    0x00000b41      0xa63 ./src/MCNEW_POS.o
- .debug_line    0x000015a4      0xa77 ./src/cJSON.o
- .debug_line    0x0000201b      0x62d ./src/constants.o
- .debug_line    0x00002648      0xc9f ./src/helpers.o
- .debug_line    0x000032e7      0x9f7 ./src/lkd.o
- .debug_line    0x00003cde      0xa1a ./src/print.o
- .debug_line    0x000046f8       0xb9 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
- .debug_line    0x000047b1       0xc5 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
- .debug_line    0x00004876       0x8d /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
- .debug_line    0x00004903      0x218 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_addsubdf3.o)
- .debug_line    0x00004b1b      0x257 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_muldivdf3.o)
- .debug_line    0x00004d72      0x11f /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_cmpdf2.o)
- .debug_line    0x00004e91       0xa2 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_fixdfsi.o)
- .debug_line    0x00004f33       0x98 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
+ .debug_line    0x00000b41      0xa77 ./src/MCNEW_POS.o
+ .debug_line    0x000015b8      0xa5b ./src/auth.o
+ .debug_line    0x00002013      0xa77 ./src/cJSON.o
+ .debug_line    0x00002a8a      0x62d ./src/constants.o
+ .debug_line    0x000030b7      0xad6 ./src/gui.o
+ .debug_line    0x00003b8d      0xd5a ./src/helpers.o
+ .debug_line    0x000048e7      0x9f7 ./src/lkd.o
+ .debug_line    0x000052de      0xa1a ./src/print.o
+ .debug_line    0x00005cf8       0xb9 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
+ .debug_line    0x00005db1       0xc5 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
+ .debug_line    0x00005e76       0xa8 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_modsi3.o)
+ .debug_line    0x00005f1e       0x8d /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
+ .debug_line    0x00005fab      0x218 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_addsubdf3.o)
+ .debug_line    0x000061c3      0x257 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_muldivdf3.o)
+ .debug_line    0x0000641a      0x11f /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_cmpdf2.o)
+ .debug_line    0x00006539       0xa2 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_fixdfsi.o)
+ .debug_line    0x000065db       0x98 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
 
-.debug_frame    0x00000000     0x20ec
+.debug_frame    0x00000000     0x2894
  *(.debug_frame)
  .debug_frame   0x00000000      0x374 ./src/games/games.o
  .debug_frame   0x00000374      0x330 ./src/MCNEW_POS.o
- .debug_frame   0x000006a4      0xd10 ./src/cJSON.o
- .debug_frame   0x000013b4      0x608 ./src/helpers.o
- .debug_frame   0x000019bc      0x3b0 ./src/lkd.o
- .debug_frame   0x00001d6c      0x330 ./src/print.o
- .debug_frame   0x0000209c       0x28 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
- .debug_frame   0x000020c4       0x28 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
+ .debug_frame   0x000006a4      0x330 ./src/auth.o
+ .debug_frame   0x000009d4      0xd10 ./src/cJSON.o
+ .debug_frame   0x000016e4      0x390 ./src/gui.o
+ .debug_frame   0x00001a74      0x6c8 ./src/helpers.o
+ .debug_frame   0x0000213c      0x3b0 ./src/lkd.o
+ .debug_frame   0x000024ec      0x330 ./src/print.o
+ .debug_frame   0x0000281c       0x28 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
+ .debug_frame   0x00002844       0x28 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
+ .debug_frame   0x0000286c       0x28 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_modsi3.o)
 
-.debug_str      0x00000000     0x7df4
+.debug_str      0x00000000     0x9db3
  *(.debug_str)
  .debug_str     0x00000000     0x6c10 ./src/games/games.o
                                0x6e24 (size before relaxing)
  .debug_str     0x00006c10       0x4a ./src/MCNEW_POS.o
                                 0x457 (size before relaxing)
- .debug_str     0x00006c5a      0xb87 ./src/cJSON.o
+ .debug_str     0x00006c5a       0xd3 ./src/auth.o
+                               0x6d58 (size before relaxing)
+ .debug_str     0x00006d2d      0xb87 ./src/cJSON.o
                                 0xd4a (size before relaxing)
- .debug_str     0x000077e1       0x80 ./src/constants.o
+ .debug_str     0x000078b4       0x74 ./src/constants.o
                                 0x189 (size before relaxing)
- .debug_str     0x00007861      0x524 ./src/helpers.o
-                               0x725c (size before relaxing)
- .debug_str     0x00007d85       0x54 ./src/lkd.o
+ .debug_str     0x00007928       0x77 ./src/gui.o
+                               0x33de (size before relaxing)
+ .debug_str     0x0000799f     0x23a5 ./src/helpers.o
+                               0x9126 (size before relaxing)
+ .debug_str     0x00009d44       0x54 ./src/lkd.o
                                 0x479 (size before relaxing)
- .debug_str     0x00007dd9       0x1b ./src/print.o
+ .debug_str     0x00009d98       0x1b ./src/print.o
                                 0x418 (size before relaxing)
 
-.debug_loc      0x00000000     0x2a2a
+.debug_loc      0x00000000     0x33d8
  *(.debug_loc)
  .debug_loc     0x00000000      0x46e ./src/games/games.o
  .debug_loc     0x0000046e      0x41a ./src/MCNEW_POS.o
- .debug_loc     0x00000888     0x1110 ./src/cJSON.o
- .debug_loc     0x00001998      0x7b6 ./src/helpers.o
- .debug_loc     0x0000214e      0x4c2 ./src/lkd.o
- .debug_loc     0x00002610      0x41a ./src/print.o
+ .debug_loc     0x00000888      0x41a ./src/auth.o
+ .debug_loc     0x00000ca2     0x1110 ./src/cJSON.o
+ .debug_loc     0x00001db2      0x498 ./src/gui.o
+ .debug_loc     0x0000224a      0x8b2 ./src/helpers.o
+ .debug_loc     0x00002afc      0x4c2 ./src/lkd.o
+ .debug_loc     0x00002fbe      0x41a ./src/print.o
 
-.debug_macinfo  0x00000000    0x94aee
+.debug_macinfo  0x00000000    0xc9719
  *(.debug_macinfo)
  .debug_macinfo
-                0x00000000    0x1a80e ./src/games/games.o
+                0x00000000    0x1a83b ./src/games/games.o
  .debug_macinfo
-                0x0001a80e    0x1ae46 ./src/MCNEW_POS.o
+                0x0001a83b    0x1ae90 ./src/MCNEW_POS.o
  .debug_macinfo
-                0x00035654     0x6947 ./src/cJSON.o
+                0x000356cb    0x1a460 ./src/auth.o
  .debug_macinfo
-                0x0003bf9b     0x91f6 ./src/constants.o
+                0x0004fb2b     0x6947 ./src/cJSON.o
  .debug_macinfo
-                0x00045191    0x1a511 ./src/helpers.o
+                0x00056472     0x91f6 ./src/constants.o
  .debug_macinfo
-                0x0005f6a2    0x1a511 ./src/lkd.o
+                0x0005f668    0x1a6cd ./src/gui.o
  .debug_macinfo
-                0x00079bb3    0x1af3b ./src/print.o
+                0x00079d35    0x1a53e ./src/helpers.o
+ .debug_macinfo
+                0x00094273    0x1a53e ./src/lkd.o
+ .debug_macinfo
+                0x000ae7b1    0x1af68 ./src/print.o
 
 .debug_weaknames
  *(.debug_weaknames)
@@ -1030,32 +1122,38 @@ OUTPUT(MCNEW_POS elf32-littlearm)
  .ARM.attributes
                 0x00000040       0x10 ./src/MCNEW_POS.o
  .ARM.attributes
-                0x00000050       0x10 ./src/cJSON.o
+                0x00000050       0x10 ./src/auth.o
  .ARM.attributes
-                0x00000060       0x10 ./src/constants.o
+                0x00000060       0x10 ./src/cJSON.o
  .ARM.attributes
-                0x00000070       0x10 ./src/helpers.o
+                0x00000070       0x10 ./src/constants.o
  .ARM.attributes
-                0x00000080       0x10 ./src/lkd.o
+                0x00000080       0x10 ./src/gui.o
  .ARM.attributes
-                0x00000090       0x10 ./src/print.o
+                0x00000090       0x10 ./src/helpers.o
  .ARM.attributes
-                0x000000a0       0x10 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
+                0x000000a0       0x10 ./src/lkd.o
  .ARM.attributes
-                0x000000b0       0x10 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
+                0x000000b0       0x10 ./src/print.o
  .ARM.attributes
-                0x000000c0       0x10 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
+                0x000000c0       0x10 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_udivsi3.o)
  .ARM.attributes
-                0x000000d0       0x10 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_addsubdf3.o)
+                0x000000d0       0x10 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_divsi3.o)
  .ARM.attributes
-                0x000000e0       0x10 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_muldivdf3.o)
+                0x000000e0       0x10 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_modsi3.o)
  .ARM.attributes
-                0x000000f0       0x10 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_cmpdf2.o)
+                0x000000f0       0x10 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_dvmd_tls.o)
  .ARM.attributes
-                0x00000100       0x10 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_fixdfsi.o)
+                0x00000100       0x10 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_addsubdf3.o)
  .ARM.attributes
-                0x00000110       0x10 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/libc_nonshared.a(elf-init.oS)
+                0x00000110       0x10 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_muldivdf3.o)
  .ARM.attributes
-                0x00000120       0x10 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
+                0x00000120       0x10 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_cmpdf2.o)
  .ARM.attributes
-                0x00000130       0x10 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o
+                0x00000130       0x10 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/libgcc.a(_fixdfsi.o)
+ .ARM.attributes
+                0x00000140       0x10 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/libc_nonshared.a(elf-init.oS)
+ .ARM.attributes
+                0x00000150       0x10 /usr/bin/../lib/gcc/arm-unknown-linux-gnu/4.3.4/crtend.o
+ .ARM.attributes
+                0x00000160       0x10 /cygdrive/C/glibc-oabi-toolchain-arm-generic/arm-unknown-linux-gnu//sys-root/usr/lib/crtn.o

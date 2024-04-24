@@ -35,6 +35,16 @@
 #define USERNAME_FILE "user.jd"
 #define TIRAGES_FILE "tirages.jd"
 
+
+#define SERVER_FILE "/home/user0/mgnco/server.txt"
+
+typedef struct
+{
+	char *response;
+	size_t size;
+} Memory;
+
+
 typedef enum
 {
 	ALG_CENTER, ALG_LEFT, ALG_RIGHT
@@ -46,6 +56,10 @@ typedef struct
 	int id;
 } Tirage;
 
+int check_connection(void);
+int make_get_request(const char *url, long *status_code, char **buffer, const char *token);
+int make_post_request(const char *url, const char *data, long *status_code, char **buffer, const char *token);
+int make_http_request(const char *url, const char *data, long *status_code, char **buffer, const char *token, const char *verb);
 int write_to_file(const char* file, const char* contents);
 int read_from_file(const char* file, char** buffer);
 
@@ -76,5 +90,5 @@ int drawpicture(int x, int y, int w, int h, const char *filename, IDirectFBSurfa
 void Beep(unsigned int frequency, unsigned int keepms);
 void bouleItemPrintf(const BouleItem *item, const char *tip, int icount);
 int editableList(const BouleItem items[], unsigned int count, int select, const char *tip, int *s, Tirage *tirages, int sizeTirage);
-
+int readServer(char ** data);
 #endif /* HELPERS_H_ */
