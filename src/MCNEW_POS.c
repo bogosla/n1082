@@ -31,11 +31,10 @@ int main(int argc, char *argv[])
 		"1. NOUVELLE FICHE",
 		"2. MES FICHES",
 		"3. RAPPORTS",
-		"4. TIRAGES DISPONIBLE",
-		"5. NUMEROS GAGNANTS",
-		"6. FICHES GAGNANTES",
-		"7. CONFIGURATION",
-		"8. TEST IMPRIMANTE"
+		"4. NUMEROS GAGNANTS",
+		"5. FICHES GAGNANTES",
+		"6. CONFIGURATION",
+		"7. TEST IMPRIMANTE"
 	};
 
     application_init(&argc, &argv);
@@ -54,52 +53,6 @@ int main(int argc, char *argv[])
 	
 	selected = postHandleLogin();
 
-	const char *C = "[\n"
-		"    {\n"
-		"        \"code\": \"GG_MD\",\n"
-		"        \"name\": \"Georgia Soir\",\n"
-		"        \"status\": true,\n"
-		"        \"start_time\": \"05:00:00\",\n"
-		"        \"end_time\": \"18:45:00\"\n"
-		"    },\n"
-		"    {\n"
-		"        \"code\": \"GG_MT\",\n"
-		"        \"name\": \"Georgia Matin\",\n"
-		"        \"status\": false,\n"
-		"        \"start_time\": \"05:00:00\",\n"
-		"        \"end_time\": \"12:25:00\"\n"
-		"    },\n"
-		"    {\n"
-		"        \"code\": \"FL_S\",\n"
-		"        \"name\": \"Florida Soir\",\n"
-		"        \"status\": true,\n"
-		"        \"start_time\": \"05:00:00\",\n"
-		"        \"end_time\": \"21:25:00\"\n"
-		"    },\n"
-		"    {\n"
-		"        \"code\": \"FL_M\",\n"
-		"        \"name\": \"Florida Midi\",\n"
-		"        \"status\": false,\n"
-		"        \"start_time\": \"05:00:00\",\n"
-		"        \"end_time\": \"13:25:00\"\n"
-		"    },\n"
-		"    {\n"
-		"        \"code\": \"NY_S\",\n"
-		"        \"name\": \"New York Soir\",\n"
-		"        \"status\": true,\n"
-		"        \"start_time\": \"05:00:00\",\n"
-		"        \"end_time\": \"22:25:00\"\n"
-		"    },\n"
-		"    {\n"
-		"        \"code\": \"NY_M\",\n"
-		"        \"name\": \"New York Midi\",\n"
-		"        \"status\": false,\n"
-		"        \"start_time\": \"05:00:00\",\n"
-		"        \"end_time\": \"14:25:00\"\n"
-		"    }\n"
-		"]";
-	write_to_file(TIRAGES_FILE, C);
-
 
 	while (selected >= 0)
 	{
@@ -112,17 +65,17 @@ int main(int argc, char *argv[])
 			case 1:
 				break;
 			case 2:
+				getReports();
 				break;
 			case 3:
+				getLotsByDate();
 				break;
 			case 4:
 				break;
 			case 5:
-				break;
-			case 6:
 				getConfiguration();
 				break;
-			case 7:
+			case 6:
 				TestPrinter();
 				break;
 			default:

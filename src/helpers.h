@@ -53,7 +53,7 @@ typedef enum
 typedef struct
 {
 	char *name;
-	int id;
+	char id[32];
 } Tirage;
 
 int check_connection(void);
@@ -66,7 +66,7 @@ int read_from_file(const char* file, char** buffer);
 int string_len(const char *text);
 const char *string_covert( const char *text, int textlen);
 
-void addItem(Tirage** array, int* size, int id, const char* name);
+void addItem(Tirage** array, int* size, char *id, const char* name);
 int deleteInfoTirageByIndex(Tirage* list, int index, int size) ;
 void freeItems(Tirage* array, int size);
 int deleteInfoTirageByName(Tirage *array, int size, const char *name);
@@ -91,4 +91,12 @@ void Beep(unsigned int frequency, unsigned int keepms);
 void bouleItemPrintf(const BouleItem *item, const char *tip, int icount);
 int editableList(const BouleItem items[], unsigned int count, int select, const char *tip, int *s, Tirage *tirages, int sizeTirage);
 int readServer(char ** data);
+
+void removeCharAtIndex(char* str, const int index);
+void setOptionBouleItem(BouleItem *item);
+
+
+void setPrnY(int _y);
+int getPrnY();
+void printerprintf(LCD_ALG alg, IDirectFBSurface *surface, const char * pszFmt,...);
 #endif /* HELPERS_H_ */

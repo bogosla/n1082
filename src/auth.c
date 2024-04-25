@@ -133,6 +133,12 @@ int postHandleLogin(void)
 							if (strcmp(role->valuestring, "vendor") == 0 && strcmp(imei->valuestring, imeiStr) == 0)
 							{
 								state = 0;
+                                if (buffer != NULL) {
+									free(buffer);
+								    buffer = NULL;
+                                }
+                                buffer = cJSON_Print(user);
+
 								write_to_file(TOKEN_FILE, accessToken->valuestring);
 								write_to_file(USERNAME_FILE, buffer);
 

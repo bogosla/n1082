@@ -23,6 +23,7 @@
 #include "helpers.h"
 
 void TestPrinter(void);
-
+int print_fiche(const char *buffer, int hasMultiple);
+int print_rapport(const char *buffer);
 
 #endif /* PRINT_H_ */

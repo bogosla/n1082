@@ -44,7 +44,7 @@ int getElement(List *list, BouleItem item)
     int i = 0;
     while (i < list->size)
     {
-        if (strcmp(list->items[i].boul, item.boul) == 0 && strcmp(list->items[i].lotto, item.lotto) == 0)
+        if (strcmp(list->items[i].boul, item.boul) == 0 && strcmp(list->items[i].lotto, item.lotto) == 0 && strcmp(list->items[i].option, item.option) == 0)
             return 0;
         i++;
     }

@@ -1151,7 +1151,7 @@ int hasInfoTirageByName(Tirage *array, int size, const char *name)
 }
 
 
-void addItem(Tirage** array, int* size, int id, const char* name)
+void addItem(Tirage** array, int* size, char *id, const char* name)
 {
     Tirage* newArray = NULL;
     *size += 1;
@@ -1163,7 +1163,8 @@ void addItem(Tirage** array, int* size, int id, const char* name)
     {
         *array = newArray;
         // Initialize the new item
-        (*array)[*size - 1].id = id;
+//        (*array)[*size - 1].id = id;
+        strcpy((*array)[*size - 1].id, id);
         (*array)[*size - 1].name = malloc(strlen(name) + 1);
         strcpy((*array)[*size - 1].name, name);
     }
@@ -1208,3 +1209,90 @@ int readServer(char ** data)
 	}
 	return ret;
 }
+
+
+void removeCharAtIndex(char* str, const int index) 
+{
+    int len = string_len(str);
+
+    // Check if the index is valid
+    if (index >= 0 && index < len) {
+		int i = index;
+        // Shift the characters to the left starting from the index
+        while (i < len - 1) 
+		{
+            str[i] = str[i + 1];
+			i++;
+        }
+        str[len - 1] = '\0';  // Null-terminate the string
+    }
+}
+
+
+void setOptionBouleItem(BouleItem *item)
+{
+	int size = strlen(item->boul);
+	if (size == 3)
+		sprintf(&item->lotto, "L3");
+	else if (size == 2)
+		sprintf(&item->lotto, "BO");
+	else if (size == 5)
+	{
+		sprintf(&item->lotto, "L5");
+	}
+	return;
+}
+
+
+
+int prn_current_y = 1;
+
+
+void setPrnY(int _y)
+{
+	prn_current_y = _y;
+}
+
+
+int getPrnY()
+{
+	return prn_current_y;
+}
+
+
+void printerprintf(LCD_ALG alg, IDirectFBSurface *surface, const char * pszFmt,...)
+{
+	int width, height;
+	int font_height;
+	IDirectFBFont *font = NULL;
+
+	char textbuf[4096];
+	const char *utf8text;
+	const char *pnewline = NULL;
+	int str_length, temp_width;
+	
+	va_list arg;
+	va_start(arg, pszFmt);
+	vsnprintf(textbuf, sizeof(textbuf), pszFmt, arg);	
+	va_end (arg);
+	
+	surface->GetFont(surface, &font);
+	font->GetHeight(font, &font_height);	
+	surface->GetSize(surface, &width, &height);
+
+	font->GetStringBreak(font, textbuf, strlen(textbuf), width - 3, &temp_width, &str_length, &pnewline);
+	utf8text = string_covert(textbuf, str_length);
+
+	if (ALG_CENTER == alg)
+		surface->DrawString(surface, utf8text, string_len(utf8text), width / 2 - (string_len(utf8text) / 2), prn_current_y, DSTF_TOPCENTER);
+	else if (ALG_LEFT == alg)
+		surface->DrawString(surface, utf8text, string_len(utf8text), 3, prn_current_y, DSTF_TOPLEFT);
+	else 
+		surface->DrawString(surface, utf8text, string_len(utf8text), width - 5, prn_current_y, DSTF_TOPRIGHT);		
+		
+	prn_current_y = prn_current_y + font_height + 1;
+
+	if (NULL != pnewline)
+		printerprintf(alg, surface, pnewline);
+}
+
