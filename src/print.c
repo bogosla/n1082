@@ -606,7 +606,7 @@ int print_rapport(const char *buffer)
 				printerprintf(ALG_LEFT, surface, "Commissions    : %.2f", commission->valuedouble);
 				y = getPrnY();
                 setPrnY(y);
-				printerprintf(ALG_LEFT, surface, "Commissions Sans Vendeurs : %.2f", withoutCommission->valuedouble);
+				printerprintf(ALG_LEFT, surface, "Comm Sans Vendeurs : %.2f", withoutCommission->valuedouble);
 				y = getPrnY();
 				setPrnY(y);
 				printerprintf(ALG_LEFT, surface, "Ventes         : %.2f", vente->valuedouble);
@@ -623,11 +623,11 @@ int print_rapport(const char *buffer)
 			{
 				lcdclean();
 				lcd_header(ALG_CENTER, "RAPPORTS");
-				// lcdprintf(ALG_LEFT, "Tiraj      : %s", tirage->valuestring);
+				lcdprintf(ALG_LEFT, "Start Date   : %s", start->valuestring);
+				lcdprintf(ALG_LEFT, "End   Date   : %s", end->valuestring);
+				lcdprintf(ALG_LEFT, "Num Fiches   : %d", quantite->valueint);
+				lcdprintf(ALG_LEFT, "Ventes       : %.2f", vente->valuedouble);
 				lcdprintf(ALG_LEFT, "Commissions  : %.2f", commission->valuedouble);
-				// lcdprintf(ALG_LEFT, "Vant       : %.2f", vente->valuedouble);
-				// lcdprintf(ALG_LEFT, "Total Pou Peye  : %.2f", perte->valuedouble);
-				// lcdprintf(ALG_LEFT, "Total Ki Rete   : %.2f", gain->valuedouble);
 				height = lcdGetFontHeight();
 				lcdSetFont(FONT_ROBOTO, "UTF-8", 0,  15, 0);
 				lcdprintfex(ALG_LEFT, screen_height - height , "CANCEL=Retour, FUNC=Imprimer");

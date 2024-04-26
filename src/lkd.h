@@ -36,5 +36,10 @@ void deleteByIndex(List* list, int index);
 int getElement(List *list, BouleItem item);
 
 
-
+void addBoulePaire(List *list, char *pri);
+void addBouleTriple(List *list, char *pri);
+void addBouleRevers(List *list, char *pri);
+void addBouleMarriage(List *list, char *pri);
+void addBouleL4(List *list, char *pri);
+void addPwent(List *list, char *pri, unsigned int pwent);
 #endif /* LKD_H_ */

@@ -71,6 +71,7 @@ int main(int argc, char *argv[])
 				getLotsByDate();
 				break;
 			case 4:
+				getTicketsWon();
 				break;
 			case 5:
 				getConfiguration();

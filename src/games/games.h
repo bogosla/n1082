@@ -22,4 +22,5 @@ void postFiches(const char *buffBoules);
 void getLotsGagnants(void);
 void getLotsByDate(void);
 void getReports(void);
+void getTicketsWon(void);
 #endif /* GAMES_H_ */

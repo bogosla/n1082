@@ -93,3 +93,152 @@ void deleteByIndex(List* list, int index)
     list->size--; // Decrement the size to reflect the deleted element
 }
 
+
+static int getRevers(int boul)
+{
+	int r = 0;
+	int _boul = boul;
+	while (_boul > 0)
+	{
+		r = r*10 + _boul % 10;
+		_boul /= 10;
+	}
+	return r;
+}
+
+
+void addBoulePaire(List *list, char *pri)
+{
+	int i = 0;
+	while (i < 10)
+	{
+		BouleItem item = {0, "", "", "10", "1"};
+		sprintf(&item.boul, "%d%d", i, i);
+		sprintf(&item.pri, "%s", pri);
+		setOptionBouleItem(&item);
+		addElement(list, item);
+		i++;
+	}
+    return;
+}
+
+
+void addBouleTriple(List *list, char *pri)
+{
+	int i = 0;
+	while (i < 10)
+	{
+		BouleItem item = {0, "", "", "10", "1"};
+		sprintf(&item.boul, "%d%d%d", i, i, i);
+		sprintf(&item.pri, "%s", pri);
+		setOptionBouleItem(&item);
+		addElement(list, item);
+		i++;
+	}
+    return;
+}
+
+
+void addBouleRevers(List *list, char *pri)
+{
+	int i = 0, i2 = 0;
+	int size = list->size;
+	while (i < size)
+	{
+		BouleItem item = list->items[i];
+		if (strcmp(item.lotto, "BO") == 0)
+		{
+			int r = getRevers(atoi(item.boul));
+			i2 = i;
+			while (i2 < size)
+			{
+				BouleItem item2 = list->items[i2];
+				if ((atoi(item2.boul) - r) != 0 && r > 0)
+				{
+					BouleItem nitem = {0, "", "", "10", "1"};
+					sprintf(&nitem.boul, "%02d", r);
+					sprintf(&nitem.pri, "%s", pri);
+					setOptionBouleItem(&nitem);
+					addElement(list, nitem);
+				}
+				i2++;
+			}
+		}
+		i++;
+	}
+    return;
+}
+
+
+void addBouleMarriage(List *list, char *pri)
+{
+	int i = 0, y = 0;
+	while (i < list->size - 1)
+	{
+		y = i;
+		while (y < list->size)
+		{
+			// Only reverse number of two digits
+			if (strcmp(list->items[i].lotto, "BO") == 0 && strcmp(list->items[y + 1].lotto, "BO") == 0)
+			{
+				BouleItem nitem = {0, "", "", "10", ""};
+				sprintf(&nitem.boul, "%s%s", list->items[i].boul, list->items[y + 1].boul);
+				sprintf(&nitem.pri, "%s", pri);
+				sprintf(&nitem.lotto, "%s", "MA");
+				setOptionBouleItem(&nitem);
+				addElement(list, nitem);
+			}
+			y++;
+		}
+		i++;
+	}
+	return;
+}
+
+
+void addBouleL4(List *list, char *pri)
+{
+	int i = 0, y = 0;
+	while (i < list->size - 1)
+	{
+		y = i;
+		while (y < list->size)
+		{
+			// Only add number of two digits
+			if (strcmp(list->items[i].lotto, "BO") == 0 && strcmp(list->items[y + 1].lotto, "BO") == 0)
+			{
+				BouleItem nitem = {0, "", "", "10", ""};
+				sprintf(&nitem.boul, "%s%s", list->items[i].boul, list->items[y + 1].boul);
+				sprintf(&nitem.pri, "%s", pri);
+				sprintf(&nitem.lotto, "%s", "L4");
+				sprintf(&nitem.option, "%s", "1");
+				setOptionBouleItem(&nitem);
+				addElement(list, nitem);
+				sprintf(&nitem.boul, "%s%s", list->items[y+1].boul, list->items[i].boul);
+				addElement(list, nitem);
+
+
+			}
+			y++;
+		}
+		i++;
+	}
+	return;
+}
+
+
+void addPwent(List *list, char *pri, unsigned int pwent)
+{
+	int i = 0;
+	while (i < 10)
+	{
+		BouleItem item = {0, "", "", "10", ""};
+		sprintf(&item.boul, "%d%d", i, pwent);
+		sprintf(&item.pri, "%s", pri);
+		setOptionBouleItem(&item);
+		addElement(list, item);
+		i++;
+	}
+    return;
+}
+

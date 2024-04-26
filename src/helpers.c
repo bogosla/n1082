@@ -757,12 +757,13 @@ int lcdmenu_tirage(const char *pszTitle, const Tirage *menu, unsigned int count,
 					
 					if (istart + i == select)
 					{
-						main_surface->SetColor(main_surface, colorLight.r, colorLight.g, colorLight.b, colorLight.a);
-						lcd_draw_rectangle(1, current_y -1, screen_width -1, font_height +1, 1);
+						main_surface->SetColor(main_surface, colorPrimary.r, colorPrimary.g, colorPrimary.b, colorPrimary.a);
+						lcd_draw_rectangle(0, current_y - 1, screen_width - 44, font_height + 1, 1);
+						
 						if (beenSelect >= 0)
 							main_surface->SetColor(main_surface, colorWarning.r, colorWarning.g, colorWarning.b, colorWarning.a);
 						else
-							main_surface->SetColor(main_surface, colorBlack.r, colorBlack.g, colorBlack.b, colorBlack.a);
+							main_surface->SetColor(main_surface, colorWhite.r, colorWhite.g, colorWhite.b, colorWhite.a);
 					
 						lcdprintf(ALG_LEFT, "%d. %s", istart + i + 1,  menu[istart + i].name);		
 						main_surface->SetColor(main_surface, colorBlack.r, colorBlack.g, colorBlack.b, colorBlack.a);	
@@ -1296,3 +1297,72 @@ void printerprintf(LCD_ALG alg, IDirectFBSurface *surface, const char * pszFmt,.
 		printerprintf(alg, surface, pnewline);
 }
 
+
+
+
+// void addTirageItem(Tirage** array, int* size, char *id, const char* boules, const char *tirage_name, const char *montant, int _id, const char* created)
+// {
+//     Tirage* newArray = NULL;
+//     *size += 1;
+//     // Reallocate memory for the array of structures
+//     newArray = realloc(*array, *size * sizeof(Tirage));
+
+//     if (newArray != NULL)
+//     {
+//         *array = newArray;
+//         // Initialize the new item
+//         // (*array)[*size - 1].id = id;
+// 		sprintf((*array)[*size - 1].id, id);
+// 		(*array)[*size - 1]._id =  _id;
+
+//         (*array)[*size - 1].boules = malloc(strlen(boules) + 1);
+//         strcpy((*array)[*size - 1].boules, boules);
+// 		(*array)[*size - 1].created = malloc(strlen(created) + 1);
+//         strcpy((*array)[*size - 1].created, created);
+
+//         (*array)[*size - 1].tirage_name = malloc(strlen(tirage_name) + 1);
+//         strcpy((*array)[*size - 1].tirage_name, tirage_name);
+// 		sprintf((*array)[*size - 1].montant, montant);
+//     }
+//     else
+//     {
+//         printf("Memory allocation failed.\n");
+//     }
+// }
+
+
+// void freeTirageItems(Tirage* array, int size)
+// {
+// 	int i = 0;
+//     if (array == NULL)
+//         return;
+//     while (i < size)
+//     {
+//         free(array[i].boules);
+//         free(array[i].tirage_name);
+//         free(array[i].created);
+
+// 		i++;
+//     }
+//     free(array);
+// 	array = NULL;
+// }
+
+
+// int deleteTirageByIndex(Tirage* list, int index, int size) 
+// {
+// 	int i = 0;
+//     if (index < 0 || index >= size) {
+//         printf("Invalid index.\n");
+//         return -1;
+//     }
+//     i = (int)index;
+//     free(list[i].boules);
+// 	free(list[i].tirage_name);
+// 	free(list[i].created);
+//     while (i < size - 1) {
+//         list[i] = list[i + 1];
+//         i++;
+//     }
+//     return size - 1;// Decrement the size to reflect the deleted element
+// }
