@@ -23,4 +23,5 @@ void getLotsGagnants(void);
 void getLotsByDate(void);
 void getReports(void);
 void getTicketsWon(void);
+void getFiches(void);
 #endif /* GAMES_H_ */

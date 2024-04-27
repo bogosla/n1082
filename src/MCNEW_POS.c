@@ -63,6 +63,7 @@ int main(int argc, char *argv[])
 				postFiches(NULL);
 				break;
 			case 1:
+				getFiches();
 				break;
 			case 2:
 				getReports();

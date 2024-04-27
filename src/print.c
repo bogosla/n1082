@@ -339,11 +339,11 @@ int print_fiche(const char *buffer, int hasMultiple)
 			printerprintf(ALG_CENTER, surface, "-----------------------------------------------");
 			y = getPrnY() + 12;
 
-		// 	surface->DrawString(surface, "Jwet", -1, 3, y,  DSTF_LEFT);
-		// 	surface->DrawString(surface, "Boul", -1, width*0.3, y,  DSTF_CENTER);
-		// 	surface->DrawString(surface, "Opsyon", -1, width*0.6, y,  DSTF_CENTER);
-		// 	surface->DrawString(surface, "Pri", -1, width*0.9 - 5, y,  DSTF_RIGHT);
-		// 	y+= height + 3;
+			surface->DrawString(surface, "Jeu", -1, 3, y,  DSTF_LEFT);
+			surface->DrawString(surface, "Boule", -1, width*0.3, y,  DSTF_CENTER);
+			surface->DrawString(surface, "Option", -1, width*0.6, y,  DSTF_CENTER);
+			surface->DrawString(surface, "Mise", -1, width*0.9 - 5, y,  DSTF_RIGHT);
+			y+= height + 3;
 
 		// 	if (cJSON_IsArray(bouleList))
 		// 	{
@@ -363,16 +363,16 @@ int print_fiche(const char *buffer, int hasMultiple)
 		// 			y+= height + 12;
 		// 		}
 		// 	}
-		// 	surface->SetFont(surface, font_32);
-		// 	font_32->GetHeight(font_32, &height);	
-		// 	surface->DrawString(surface, "TOTAL: ", -1, 3, y,  DSTF_LEFT);
-		// 	sprintf(str, "%.2f HTG", total->valuedouble);
-		// 	surface->DrawString(surface, str, -1, width - 12, y,  DSTF_RIGHT);
-		// 	surface->SetFont(surface, font_24);
-		// 	font_24->GetHeight(font_24, &height);		
-		// 	y+= height + 1;
-		// 	surface->DrawString(surface, "---------------------------------------------", -1, 0, y,  DSTF_LEFT);
-		// 	y+= height + 1;
+			surface->SetFont(surface, font_32);
+			font_32->GetHeight(font_32, &height);	
+			surface->DrawString(surface, "TOTAL: ", -1, 3, y,  DSTF_LEFT);
+			sprintf(str, "%.2f HTG", total->valuedouble);
+			surface->DrawString(surface, str, -1, width - 12, y,  DSTF_RIGHT);
+			surface->SetFont(surface, font_24);
+			font_24->GetHeight(font_24, &height);		
+			y+= height + 1;
+			surface->DrawString(surface, "---------------------------------------------", -1, 0, y,  DSTF_LEFT);
+			y+= height + 1;
 		// 	setPrnY(y);
 		// 	printerprintf(ALG_LEFT, surface, "%s", company_desc->valuestring);
 		// 	y = getPrnY();

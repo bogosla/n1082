@@ -530,7 +530,7 @@ void postFiches(const char *buffBoules)
 								while (running3 == 1)
 								{
 									lcdclean();
-									lcd_header(ALG_CENTER, "Mise");
+									lcd_header(ALG_CENTER, "MISE");
 									current_y = get_current_y();
 									lcdprintfex(ALG_LEFT, current_y + 7, "Mise  :");
 									ppri_entry.y = current_y + 7;
@@ -566,7 +566,7 @@ void postFiches(const char *buffBoules)
 								while (running3 == 1)
 								{
 									lcdclean();
-									lcd_header(ALG_CENTER, "Mise");
+									lcd_header(ALG_CENTER, "MISE");
 									current_y = get_current_y();
 									lcdprintfex(ALG_LEFT, current_y + 7, "Mise   :");
 									ppri_entry.y = current_y + 7;
@@ -595,151 +595,151 @@ void postFiches(const char *buffBoules)
 								selected2 = -1;
 							}
 							break;
-						// case 3:
-						// 	while (running3 == 1)
-						// 	{
-						// 		lcdclean();
-						// 		printHeader(ALG_CENTER, "Mete Pri");
-						// 		current_y = get_current_y();
-						// 		lcdprintfex(ALG_LEFT, current_y + 7, "Pri   :");
-						// 		ppri_entry.y = current_y + 7;
-						// 		renderEntry(main_surface, &ppri_entry);
-						// 		lcdFlip();
-						// 		key3 = kbGetKey();
-						// 		handleEntryInput(key3, &ppri_entry);
+						case 3:
+							while (running3 == 1)
+							{
+								lcdclean();
+								lcd_header(ALG_CENTER, "MISE");
+								current_y = get_current_y();
+								lcdprintfex(ALG_LEFT, current_y + 7, "Mise  :");
+								ppri_entry.y = current_y + 7;
+								renderEntry(main_surface, &ppri_entry);
+								lcdFlip();
+								key3 = kbGetKey();
+								handleEntryInput(key3, &ppri_entry);
 
-						// 		switch (key3)
-						// 		{
-						// 		case KEY_CANCEL:
-						// 			running3 = 0;
-						// 			break;
-						// 		case KEY_ENTER:
-						// 			if (ppri_entry.cursor_pos > 0)
-						// 			{
-						// 				addBouleRevers(list, ppri_entry.text);
-						// 				running3 = 0;
-						// 			}
-						// 			break;
-						// 		default:
-						// 			break;
-						// 		}		
-						// 	}
-						// 	selected2 = -1;
-						// 	break;
-						// case 4:
-						// 	while (running3 == 1)
-						// 	{
-						// 		lcdclean();
-						// 		printHeader(ALG_CENTER, "Mete Pri");
-						// 		current_y = get_current_y();
-						// 		lcdprintfex(ALG_LEFT, current_y + 7, "Pri   :");
-						// 		ppri_entry.y = current_y + 7;
-						// 		renderEntry(main_surface, &ppri_entry);
-						// 		lcdFlip();
-						// 		key3 = kbGetKey();
-						// 		handleEntryInput(key3, &ppri_entry);
+								switch (key3)
+								{
+								case KEY_CANCEL:
+									running3 = 0;
+									break;
+								case KEY_ENTER:
+									if (ppri_entry.cursor_pos > 0)
+									{
+										addBouleRevers(list, ppri_entry.text);
+										running3 = 0;
+									}
+									break;
+								default:
+									break;
+								}		
+							}
+							selected2 = -1;
+							break;
+						case 4:
+							while (running3 == 1)
+							{
+								lcdclean();
+								lcd_header(ALG_CENTER, "MISE");
+								current_y = get_current_y();
+								lcdprintfex(ALG_LEFT, current_y + 7, "Mise  :");
+								ppri_entry.y = current_y + 7;
+								renderEntry(main_surface, &ppri_entry);
+								lcdFlip();
+								key3 = kbGetKey();
+								handleEntryInput(key3, &ppri_entry);
 
-						// 		switch (key3)
-						// 		{
-						// 		case KEY_CANCEL:
-						// 			running3 = 0;
-						// 			break;
-						// 		case KEY_ENTER:
-						// 			if (ppri_entry.cursor_pos > 0)
-						// 			{
-						// 				addBouleMarriage(list, ppri_entry.text);
-						// 				running3 = 0;
-						// 			}
-						// 			break;
-						// 		default:
-						// 			break;
-						// 		}		
-						// 	}
-						// 	selected2 = -1;
-						// 	break;
-						// case 5: // lotto 4
-						// 	while (running3 == 1)
-						// 	{
-						// 		lcdclean();
-						// 		printHeader(ALG_CENTER, "Mete Pri");
-						// 		current_y = get_current_y();
-						// 		lcdprintfex(ALG_LEFT, current_y + 7, "Pri   :");
-						// 		ppri_entry.y = current_y + 7;
-						// 		renderEntry(main_surface, &ppri_entry);
-						// 		lcdFlip();
-						// 		key3 = kbGetKey();
-						// 		handleEntryInput(key3, &ppri_entry);
+								switch (key3)
+								{
+								case KEY_CANCEL:
+									running3 = 0;
+									break;
+								case KEY_ENTER:
+									if (ppri_entry.cursor_pos > 0)
+									{
+										addBouleMarriage(list, ppri_entry.text);
+										running3 = 0;
+									}
+									break;
+								default:
+									break;
+								}		
+							}
+							selected2 = -1;
+							break;
+						case 5: // lotto 4
+							while (running3 == 1)
+							{
+								lcdclean();
+								lcd_header(ALG_CENTER, "MISE");
+								current_y = get_current_y();
+								lcdprintfex(ALG_LEFT, current_y + 7, "Mise  :");
+								ppri_entry.y = current_y + 7;
+								renderEntry(main_surface, &ppri_entry);
+								lcdFlip();
+								key3 = kbGetKey();
+								handleEntryInput(key3, &ppri_entry);
 
-						// 		switch (key3)
-						// 		{
-						// 		case KEY_CANCEL:
-						// 			running3 = 0;
-						// 			break;
-						// 		case KEY_ENTER:
-						// 			if (ppri_entry.cursor_pos > 0)
-						// 			{
-						// 				addBouleL4(list, ppri_entry.text);
-						// 				running3 = 0;
-						// 			}
-						// 			break;
-						// 		default:
-						// 			break;
-						// 		}		
-						// 	}
-						// 	selected2 = -1;
-						// 	break;
-						// case 6: // pwent
-						// 	running3 = 1;
-						// 	// Pwent, pri
-						// 	Entry bboul_entry = {screen_width / 2 - 90, 0, 210, SIZE_WIDGET, "", 0, 1, 1, 'A'};
-						// 	Entry ppri_entry = {screen_width / 2 - 90, 0, 210, SIZE_WIDGET, "", 0, 0, 6, 'A'};
+								switch (key3)
+								{
+								case KEY_CANCEL:
+									running3 = 0;
+									break;
+								case KEY_ENTER:
+									if (ppri_entry.cursor_pos > 0)
+									{
+										addBouleL4(list, ppri_entry.text);
+										running3 = 0;
+									}
+									break;
+								default:
+									break;
+								}		
+							}
+							selected2 = -1;
+							break;
+						case 6: // pwent
+							running3 = 1;
+							// Pwent, pri
+							Entry bboul_entry = {screen_width / 2 - 90, 0, 210, SIZE_WIDGET, "", 0, 1, 1, 'A'};
+							Entry ppri_entry = {screen_width / 2 - 90, 0, 210, SIZE_WIDGET, "", 0, 0, 6, 'A'};
 							
-						// 	while (running3 == 1)
-						// 	{
-						// 		lcdclean();
-						// 		printHeader(ALG_CENTER, "Pwent Yo");
-						// 		current_y = get_current_y();
-						// 		entry = bboul_entry.active ? &bboul_entry : &ppri_entry;
+							while (running3 == 1)
+							{
+								lcdclean();
+								lcd_header(ALG_CENTER, "POINTE");
+								current_y = get_current_y();
+								entry = bboul_entry.active ? &bboul_entry : &ppri_entry;
 
-						// 		lcdprintfex(ALG_LEFT, current_y + 7, "Pwent :");
-						// 		bboul_entry.y = current_y + 7;
-						// 		renderEntry(main_surface, &bboul_entry);
-						// 		current_y = get_current_y();
+								lcdprintfex(ALG_LEFT, current_y + 7, "Pointe :");
+								bboul_entry.y = current_y + 7;
+								renderEntry(main_surface, &bboul_entry);
+								current_y = get_current_y();
 
-						// 		lcdprintfex(ALG_LEFT, current_y + (font_height), "Pri    :");
-						// 		ppri_entry.y = current_y + font_height;
-						// 		renderEntry(main_surface, &ppri_entry);
-						// 		lcdFlip();
-						// 		key3 = kbGetKey();
-						// 		handleEntryInput(key3, entry);
+								lcdprintfex(ALG_LEFT, current_y + (font_height), "Mise   :");
+								ppri_entry.y = current_y + font_height;
+								renderEntry(main_surface, &ppri_entry);
+								lcdFlip();
+								key3 = kbGetKey();
+								handleEntryInput(key3, entry);
 
-						// 		switch (key3)
-						// 		{
-						// 			case KEY_UP: // KEY_UP
-						// 				bboul_entry.active = !bboul_entry.active;
-						// 				ppri_entry.active = !ppri_entry.active;
-						// 				break;
-						// 			case KEY_DOWN: // KEY_DOWN
-						// 				bboul_entry.active = !bboul_entry.active;
-						// 				ppri_entry.active = !ppri_entry.active;
-						// 				break;
-						// 			case KEY_CANCEL:
-						// 				running3 = 0;
-						// 				break;
-						// 			case KEY_ENTER:
-						// 				if (ppri_entry.cursor_pos > 0 && bboul_entry.cursor_pos > 0)
-						// 				{
-						// 					// addBouleL4(list, ppri_entry.text);
-						// 					addPwent(list, ppri_entry.text, atoi(bboul_entry.text));
-						// 					running3 = 0;
-						// 				}
-						// 				break;
-						// 			default:
-						// 				break;
-						// 		}		
-						// 	}
-						// 	selected2 = -1;
-						// 	break;
+								switch (key3)
+								{
+									case KEY_UP: // KEY_UP
+										bboul_entry.active = !bboul_entry.active;
+										ppri_entry.active = !ppri_entry.active;
+										break;
+									case KEY_DOWN: // KEY_DOWN
+										bboul_entry.active = !bboul_entry.active;
+										ppri_entry.active = !ppri_entry.active;
+										break;
+									case KEY_CANCEL:
+										running3 = 0;
+										break;
+									case KEY_ENTER:
+										if (ppri_entry.cursor_pos > 0 && bboul_entry.cursor_pos > 0)
+										{
+											// addBouleL4(list, ppri_entry.text);
+											addPwent(list, ppri_entry.text, atoi(bboul_entry.text));
+											running3 = 0;
+										}
+										break;
+									default:
+										break;
+								}		
+							}
+							selected2 = -1;
+							break;
 						default:
 							break;
 					}
@@ -1366,17 +1366,19 @@ static void _getWinningFiches(const char *url, int width, int height, int font_h
 	int ppage = 1;
 
 	char htext[16];
+	char str[9];
 
 	memset(htext, 0x00, sizeof(htext));
 
 
-	char str[5];
 
 	dfb = dfb_get_directfb();
 	main_surface = lcdGetSurface();
 	
 	read_from_file(TOKEN_FILE, &bufferToken);
 	lcdclean(); // clean main surface
+	memset(str, 0x00, sizeof(str));
+
 
 	if (make_get_request(url, &status_code, &buffer, bufferToken) >= 0)
 	{
@@ -1399,7 +1401,7 @@ static void _getWinningFiches(const char *url, int width, int height, int font_h
 				surfdesc.flags = DSDESC_CAPS | DSDESC_WIDTH | DSDESC_HEIGHT;
 				surfdesc.caps  = DSCAPS_SYSTEMONLY;
 				surfdesc.width = width;
-				surfdesc.height= height / 2 + (12 * (font_height * 3));
+				surfdesc.height = height * 6 + font_height;
 				dfb->CreateSurface(dfb, &surfdesc, &content_surface);
 
 				main_surface->GetFont(main_surface, &font); // Get font from main_surface
@@ -1420,7 +1422,7 @@ static void _getWinningFiches(const char *url, int width, int height, int font_h
 
 						// addTirageItem(&tirages, &size_tirage, ref_code->valuestring, "0", "0", perte->valuestring, "0", created_on->valuestring);
 
-						sprintf(str, "%i", index + 1);
+						sprintf(str, "%.2f", perte->valuedouble);
 
 						content_surface->DrawString(content_surface, "ID: ", -1, 3, yyy + font_height * index, DSTF_TOPLEFT);
 						content_surface->DrawString(content_surface, ref_code->valuestring, -1, 27, yyy + font_height * index, DSTF_TOPLEFT);
@@ -1429,7 +1431,7 @@ static void _getWinningFiches(const char *url, int width, int height, int font_h
 						content_surface->DrawString(content_surface, created_on->valuestring, -1, 40, yyy + font_height * (index + 1), DSTF_TOPLEFT);
 
 						content_surface->DrawString(content_surface, "Gagnée: ", -1, 3, yyy + font_height * (index + 2), DSTF_TOPLEFT);
-						content_surface->DrawString(content_surface, perte->valuestring, -1, 107, yyy + font_height * (index + 2), DSTF_TOPLEFT);
+						content_surface->DrawString(content_surface, str, -1, 107, yyy + font_height * (index + 2), DSTF_TOPLEFT);
 
 						content_surface->SetColor(content_surface, colorGrey.r, colorGrey.g, colorGrey.b, 0xFF);
 						content_surface->DrawLine(content_surface, 3, yyy + font_height * (index + 3), width - 3, yyy + font_height * (index + 3));
@@ -1464,8 +1466,8 @@ static void _getWinningFiches(const char *url, int width, int height, int font_h
 							break;
 						case KEY_DOWN: // KEY_DOWN
 							rect.y = rect.y + speedScroll;
-							if (rect.y > height / 2 + (12 * (font_height * 3)))
-								rect.y = height / 2 + (12 * (font_height * 3));
+							if (rect.y > height * 6 + 3)
+								rect.y = height * 6 + 1;
 							break;
 						case KEY_CANCEL: // KEY_CANCEL
 							running = 0;
@@ -1536,7 +1538,7 @@ void getTicketsWon(void)
 	IDirectFBSurface *main_surface = NULL;
 	int key, running = 1, font_height, width, height, current_y;
 
-	char url[144];
+	char url[200];
 	char* server = NULL;
 
 	struct tm *timeinfo;
@@ -1610,3 +1612,183 @@ void getTicketsWon(void)
 }
 
 
+
+static void getFicheById(void)
+{
+	IDirectFBSurface *main_surface = NULL;
+	int screen_width, screen_height, font_height;	
+
+	cJSON *json = NULL;
+	cJSON *json2 = NULL;
+
+	char url[250];
+	char *buffer = NULL;
+	char *bufferToken = NULL;	
+	long status_code = 0;
+	int size = 0;
+
+	char* server = NULL;
+
+	memset(url, 0x00, sizeof(url));
+// 	Tirage *items = NULL;
+
+	int current_y = 0;
+
+
+	int running = 1, key;
+
+	lcdGetSize(&screen_width, &screen_height);
+	main_surface = lcdGetSurface();
+	font_height = lcdGetFontHeight();
+	readServer(&server);
+	read_from_file(TOKEN_FILE, &bufferToken);
+
+	Entry id_entry = {screen_width / 2 - 90, 0, 230, SIZE_WIDGET, "", 0, 1, 50, ALPHA, NORMAL};
+
+	while (running)
+	{
+		lcdclean();
+		lcd_header(ALG_LEFT, "ID");
+		current_y = get_current_y();
+		lcdprintfex(ALG_LEFT, current_y + 7, "ID   :");
+		id_entry.y = current_y + 7;
+		renderEntry(main_surface, &id_entry);
+		lcdFlip();
+		key = kbGetKey();
+		handleEntryInput(key, &id_entry);
+		switch(key) 
+		{
+			case KEY_CANCEL: // KEY_CANCEL
+				running = 0;
+				break;
+// 			case KEY_ENTER: // KEY_ENTER
+// 				sprintf(url, "%s/api/games/find-fiche?barcode=%s", server, id_entry.text);
+// 				if (make_get_request(url, &status_code, &buffer, bufferToken) < 0)
+// 				{
+// 					while(1)
+// 						if (kbGetKey() == KEY_CANCEL)
+// 							break;
+// 				} else
+// 				{
+// 					if (status_code >= 200 && status_code <= 299) 
+// 					{
+// 						json = cJSON_Parse(buffer);		
+// 						// Have only one items in
+// 						if (json != NULL)
+// 						{
+// 							cJSON *id = cJSON_GetObjectItemCaseSensitive(json, "ref_code");
+// 							cJSON *_id = cJSON_GetObjectItemCaseSensitive(json, "id");
+// 							cJSON *created_on = cJSON_GetObjectItemCaseSensitive(json, "created_on");
+// 							cJSON *boules = cJSON_GetObjectItemCaseSensitive(json, "boules");
+// 							cJSON *tirage_name = cJSON_GetObjectItemCaseSensitive(json, "tirage_name");
+// 							cJSON *montant = cJSON_GetObjectItemCaseSensitive(json, "montant");
+// 							cJSON *is_delete = cJSON_GetObjectItemCaseSensitive(json, "is_delete");
+
+// 							if (!cJSON_IsTrue(is_delete))
+// 							{
+// 								char *bStr = cJSON_Print(boules);
+// 								addTirageItem(&items, &size, id->valuestring, bStr, tirage_name->valuestring, montant->valuestring, _id->valueint, created_on->valuestring);
+// 								displayGrid(items[0], 0);
+// 								freeTirageItems(items, size);
+// 								if (bStr != NULL)
+// 								{
+// 									free(bStr);
+// 									bStr = NULL;
+// 								}
+// 							} else {
+// 								lcdclean();
+// 								lcdprintfex(ALG_CENTER, screen_height / 2 - font_height, "Pa Jwenn Fich Pou ID Sa.");
+// 								lcdSetFont(UBUNTU_FONT, "UTF-8", 0,  15, 0);
+// 								lcdprintfex(ALG_LEFT, screen_height - font_height, "CANCEL=Retounen");
+// 								lcdSetFont(UBUNTU_FONT, "UTF-8", 0,  18, 0);
+
+// 								lcdFlip();
+// 								while(1)
+// 									if (kbGetKey() == KEY_CANCEL)
+// 										break;
+// 							}
+// 						}
+// 					} else {
+// 						lcdclean();
+// 						lcdprintfex(ALG_CENTER, screen_height / 2 - font_height, "Pa Jwenn Fich Pou ID Sa.");
+// 						lcdSetFont(UBUNTU_FONT, "UTF-8", 0,  15, 0);
+// 						lcdprintfex(ALG_LEFT, screen_height - font_height, "CANCEL=Retounen");
+// 						lcdSetFont(UBUNTU_FONT, "UTF-8", 0,  18, 0);
+
+// 						lcdFlip();
+// 						while(1)
+// 							if (kbGetKey() == KEY_CANCEL)
+// 								break;
+// 					}
+// 				}
+// 				break;
+			default:
+				break;
+		}
+	}
+
+	
+	if (json != NULL) {
+		cJSON_Delete(json);
+		json = NULL;
+	}
+
+	if (bufferToken != NULL) {
+		free(bufferToken);
+		bufferToken = NULL;
+	}
+
+	if (buffer != NULL) {
+		free(buffer);
+		buffer = NULL;
+	}
+
+	if (server != NULL) {
+		free(server);
+		server = NULL;
+	}
+
+} 
+
+
+
+// OK
+void getFiches(void)
+{
+	struct tm *timeinfo;
+	time_t rawtime;
+	int screen_width, screen_height, font_height, selected = 0;
+	char start_date[11];
+	char end_date[11];
+	
+	memset(start_date, 0x00, sizeof(start_date));
+	memset(end_date, 0x00, sizeof(end_date));
+
+	const char menu[][25] = {
+		"1. Par ID",
+		"2. Par Date"
+	};
+
+	lcdGetSize(&screen_width, &screen_height);
+	font_height = lcdGetFontHeight();
+	
+	while (selected >= 0)
+	{
+		time(&rawtime);
+		timeinfo = localtime(&rawtime);
+		selected = lcdmenu("RECHERCHE FICHES", menu, sizeof(menu) / 25, selected);
+		switch (selected)
+		{
+			case 0:
+				getFicheById();
+				break;
+			case 1:
+				sprintf(end_date, "%4d-%02d-%02d", timeinfo->tm_year + 1900, timeinfo->tm_mon+1, timeinfo->tm_mday);
+				sprintf(start_date, "%4d-%02d-%02d", timeinfo->tm_year + 1900, timeinfo->tm_mon+1, timeinfo->tm_mday);
+				// make_get_fiches(start_date, end_date);
+				break;
+			default:
+				break;
+		}
+	}
+}

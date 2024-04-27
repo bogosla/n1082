@@ -926,10 +926,10 @@ void bouleItemPrintf(const BouleItem *item, const char *tip, int icount)
 	else
 		sprintf(countStr, "%s", item->boul);
 
-	main_surface->DrawString(main_surface, countStr, -1, 22, current_y, DSTF_TOPLEFT);
-	main_surface->DrawString(main_surface, getFirstTwoChars(tip), -1, 31 + (istart), current_y, DSTF_TOPCENTER );
-	main_surface->DrawString(main_surface, item->pri, -1, 31 + (istart * 2) + 2, current_y, DSTF_TOPLEFT);		
-	main_surface->DrawString(main_surface, item->lotto, -1, 38 + (istart * 3), current_y, DSTF_TOPLEFT);		
+	main_surface->DrawString(main_surface, countStr, -1, 24, current_y, DSTF_TOPLEFT);
+	main_surface->DrawString(main_surface, getFirstTwoChars(tip), -1, 38 + (istart), current_y, DSTF_TOPCENTER );
+	main_surface->DrawString(main_surface, item->pri, -1, 36 + (istart * 2) + 2, current_y, DSTF_TOPLEFT);		
+	main_surface->DrawString(main_surface, item->lotto, -1, 34 + (istart * 3), current_y, DSTF_TOPLEFT);		
 
 	current_y = current_y + font_height;
 }
@@ -986,8 +986,8 @@ int editableList(const BouleItem items[], unsigned int count, int select, const 
 			main_surface->FillRectangle(main_surface, 0, 0, screen_width, status_bar_height);
 			main_surface->SetColor(main_surface, colorWhite.r, colorWhite.g, colorWhite.b, colorWhite.a);
 			main_surface->DrawString(main_surface, "BOULE", -1, 22, (28 - font_height) / 2, DSTF_TOPLEFT);
-			main_surface->DrawString(main_surface, "TIRAGE", -1, 30 + wstart, (28 - font_height) / 2, DSTF_TOPCENTER );
-			main_surface->DrawString(main_surface, "PRIX", -1, 29 + wstart * 2, (28 - font_height) / 2, DSTF_TOPLEFT);
+			main_surface->DrawString(main_surface, "TIRAGE", -1, 37 + wstart, (28 - font_height) / 2, DSTF_TOPCENTER );
+			main_surface->DrawString(main_surface, "PRIX", -1, 22 + wstart * 2, (28 - font_height) / 2, DSTF_TOPLEFT);
 			main_surface->DrawString(main_surface, "JEU", -1, 29 + wstart * 3, (28 - font_height) / 2, DSTF_TOPLEFT);	
 			main_surface->SetColor(main_surface, colorBlack.r, colorBlack.g, colorBlack.b, colorBlack.a);
 			// lcdprintfex(ALG_CENTER, get_current_y() - (font_height / 3), "");
@@ -1038,7 +1038,7 @@ int editableList(const BouleItem items[], unsigned int count, int select, const 
 			sprintf(dateStr, "%02d:%02d:%02d, %02d-%02d-%4d",timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec, timeinfo->tm_mday, timeinfo->tm_mon+1, timeinfo->tm_year+1900);
 			lcdSetFont(FONT_ROBOTO, "UTF-8", 0,  14, 0);
 			lcdprintfex(ALG_LEFT, y_bottom_text, dateStr);
-			main_surface->SetColor(main_surface, colorInfo.r, colorInfo.g, colorInfo.b, colorInfo.a);
+			main_surface->SetColor(main_surface, colorPrimary.r, colorPrimary.g, colorPrimary.b, colorPrimary.a);
 			lcdSetFont(FONT_ROBOTO, "UTF-8", 0,  16, 0);
 			lcdprintfex(ALG_RIGHT, y_bottom_text, "TT: %.2f HT", total);
 			main_surface->SetColor(main_surface, colorBlack.r, colorBlack.g, colorBlack.b, colorBlack.a);
