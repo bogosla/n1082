@@ -232,7 +232,7 @@ void addPwent(List *list, char *pri, unsigned int pwent)
 	int i = 0;
 	while (i < 10)
 	{
-		BouleItem item = {0, "", "", "10", ""};
+		BouleItem item = {0, "", "", "10", "1"};
 		sprintf(&item.boul, "%d%d", i, pwent);
 		sprintf(&item.pri, "%s", pri);
 		setOptionBouleItem(&item);

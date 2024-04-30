@@ -210,6 +210,286 @@ int getTirageType(Tirage **selectedTirage, int *sizeTirage, char *name, char *id
 
 
 
+static int displayGrid(const Ticket item, int selected)
+{
+	char url[192];
+	char *buffer = NULL;
+	char *bufferToken = NULL;
+	char *server = NULL;
+	long status_code = 0;
+
+	char *boules = NULL;
+
+	int screen_width, screen_height, font_height;	
+
+
+	const char menu[][25] = {
+		"1. Reimprimer",
+		"2. Rejouer"
+	};
+
+	int _selected = (int)selected;
+	int selected3 = 0;
+	readServer(&server);
+	lcdGetSize(&screen_width, &screen_height);
+	font_height = lcdGetFontHeight();
+
+	read_from_file(TOKEN_FILE, &bufferToken);
+	sprintf(url, "%s/api/new8210/app/ticket-id?keyId=%s", server, item.id);
+
+
+	if (make_get_request(url, &status_code, &buffer, bufferToken) < 0)
+	{
+		while(1)
+			if (kbGetKey() == KEY_CANCEL)
+				break;
+	} else
+	{
+		if (status_code >= 200 && status_code <= 299) 
+		{
+			while (selected3 >= 0)
+			{
+				selected3 = lcdmenu("PLUS OPTIONS", menu, sizeof(menu) / 25, selected3);
+				switch (selected3)
+				{
+				case 0:
+					reprint_fiche(buffer);
+					break;
+				case 1:
+					postFiches(buffer);
+					selected3 = -1;
+					_selected = -1;
+					break;
+				default:
+					break;
+				}
+			}
+		} else {
+			lcdclean();
+			lcdprintfex(ALG_CENTER, screen_height / 2 - font_height, "Pa Jwenn Fich Pou ID Sa.");
+			lcdSetFont(FONT_ROBOTO, "UTF-8", 0,  15, 0);
+			lcdprintfex(ALG_LEFT, screen_height - font_height, "CANCEL=Retounen");
+			lcdSetFont(FONT_ROBOTO, "UTF-8", 0,  18, 0);
+
+			lcdFlip();
+			while(1)
+				if (kbGetKey() == KEY_CANCEL)
+					break;
+		}
+	}
+	
+	if (buffer != NULL) {
+		free(buffer);
+		buffer = NULL;
+	}
+
+	if (bufferToken != NULL) {
+		free(bufferToken);
+		bufferToken = NULL;
+	}
+
+	if (server != NULL) {
+		free(server);
+		server = NULL;
+	}
+					
+	return _selected;
+}
+
+
+
+static int make_get_fiches(char *start_date, char *end_date)
+{
+	cJSON *json = NULL;
+	cJSON *json2 = NULL;
+	cJSON *tickets = NULL;
+	cJSON *count = NULL;
+	cJSON *page = NULL;
+	cJSON *num_pages = NULL;
+
+	cJSON *data = NULL;
+	char *json_string = NULL;
+	char url[250];
+	char *buffer = NULL;
+	char *bufferToken = NULL;	
+	long status_code = 0;
+	int size = 0;
+
+	int screen_width, screen_height, font_height;	
+	char* server = NULL;
+
+	memset(url, 0x00, sizeof(url));
+	Ticket *items = NULL;
+	BouleItem *boules = NULL;
+	int size2 = 0;
+	int selected = 0;
+	char htext[192];
+
+
+
+	lcdGetSize(&screen_width, &screen_height);
+	font_height = lcdGetFontHeight();
+	readServer(&server);
+	read_from_file(TOKEN_FILE, &bufferToken);
+	sprintf(url, "%s/api/new8210/app/tickets?start_date=%s&end_date=%s&page_size=30", server, start_date, end_date);
+
+	if (make_get_request(url, &status_code, &buffer, bufferToken) < 0)
+	{
+		while(1)
+			if (kbGetKey() == KEY_CANCEL)
+				break;
+	} else
+	{
+		if (status_code >= 200 && status_code <= 299) 
+		{
+			json = cJSON_Parse(buffer);		
+			
+			
+			if (json != NULL)
+			{
+				tickets = cJSON_GetObjectItemCaseSensitive(json, "data");
+				count = cJSON_GetObjectItemCaseSensitive(json, "count");
+				page = cJSON_GetObjectItemCaseSensitive(json, "page");
+				num_pages = cJSON_GetObjectItemCaseSensitive(json, "num_pages");
+
+				if (cJSON_IsArray(tickets))
+				{
+					cJSON *element;
+					cJSON_ArrayForEach(element, tickets) 
+					{
+						int is_delete = 0;
+						cJSON *id = cJSON_GetObjectItemCaseSensitive(element, "ref_code");
+						cJSON *_id = cJSON_GetObjectItemCaseSensitive(element, "id");
+						cJSON *tirage_name = cJSON_GetObjectItemCaseSensitive(element, "tirage_name");
+						cJSON *montant = cJSON_GetObjectItemCaseSensitive(element, "montant");
+						cJSON *delete = cJSON_GetObjectItemCaseSensitive(element, "delete");
+						if (strcmp(delete->valuestring, "DELETE") == 0) {
+							is_delete = 1;
+						}
+						addTirageItem(&items, &size, id->valuestring, NULL, tirage_name->valuestring, montant->valuestring, _id->valueint, is_delete);
+					}
+				}
+			
+			} else
+			{
+				lcdprintf(ALG_LEFT, "JSON error parsing");
+				lcdFlip();
+				kbGetKey();
+			}
+
+			if (json != NULL) {
+				cJSON_Delete(json);
+				json = NULL;
+			}
+			if (buffer != NULL) {
+				free(buffer);
+				buffer = NULL;
+			}
+
+			int id = -1;
+
+			if (size == 0)
+			{
+				lcdclean();
+				lcdprintfex(ALG_CENTER, screen_height / 2 - font_height, "PAS DE TICKETS!!");
+				lcdprintfex(ALG_LEFT, screen_height - font_height, "CANCEL=retour");
+				lcdFlip();
+				while(1)
+					if (kbGetKey() == KEY_CANCEL)
+						break;
+			}
+			memset(url, 0x00, sizeof(url));
+			memset(htext, 0x00, sizeof(htext));
+
+			sprintf(url, "%s/api/new8210/app/ticket-id", server);
+			sprintf(htext, "FICHES (%d) PAGE %d : %d", count->valueint, page->valueint, num_pages->valueint);
+
+			
+			while (selected >= 0 && size > 0)
+			{
+				size2 = 0;
+				selected = lcdmenu_ticket(htext, items, size, selected, &id);
+				if (selected == -8)
+				{
+					// delete tirage 
+					data = cJSON_CreateObject();
+					cJSON_AddStringToObject(data, "keyId", items[id].id);
+					int yn = yesNo("Supprimer Fiche?");
+
+					switch (yn)
+					{
+						case -10:
+							json_string = cJSON_Print(data);
+							status_code = 0;
+							if (make_http_request(url, json_string, &status_code, &buffer, bufferToken, "DELETE") >= 0)
+							{
+								if (status_code >= 200 && status_code <= 299) 
+								{
+									// size = deleteTirageByIndex(items, id, size);
+									// selected = size;
+									items[id].delete = 1;
+								}
+							} else {
+								lcdclean();
+								lcdprintf(ALG_LEFT, "%s", buffer);
+								lcdFlip();
+								while(1)
+									if (kbGetKey() == KEY_CANCEL)
+										break;
+							}
+							if (buffer != NULL) {
+								free(buffer);
+								buffer = NULL;
+							}
+							if (json_string != NULL) {
+								free(json_string);
+								json_string = NULL;
+							}
+							selected = size;			
+							break;
+						default:
+							selected = 0;
+							break;
+					}
+					if (data != NULL) {
+						cJSON_Delete(data);
+						data = NULL;
+					}
+				} else if (selected >= 0)
+				{
+					selected = displayGrid((Ticket)items[selected], selected);
+				}
+			}
+		} else 
+		{
+			lcdclean();
+			lcdprintf(ALG_LEFT, "%s", buffer);
+			lcdFlip();
+			while(1)
+				if (kbGetKey() == KEY_CANCEL)
+					break;
+		}
+	}
+
+	freeTirageItems(items, size);
+	if (buffer != NULL) {
+		free(buffer);
+		buffer = NULL;
+
+	}
+	if (bufferToken != NULL) {
+		free(bufferToken);
+		bufferToken = NULL;
+	}
+	if (server != NULL) {
+		free(server);
+		server = NULL;
+	}
+	items = NULL;
+	return 0;
+}
+
+
 
 
 void postFiches(const char *buffBoules)
@@ -226,6 +506,8 @@ void postFiches(const char *buffBoules)
 
 	Entry *entry = NULL;
 	cJSON *json = NULL;
+	cJSON *json_boules = NULL;
+
 
 	Tirage *tirages = NULL;
 	int sizeTirage = 0;
@@ -244,44 +526,39 @@ void postFiches(const char *buffBoules)
 	memset(id, 0x00, sizeof(id));
 
     list = createList();
-	
 
 	// if buffBoules, there is an initial tirage boules
 	// else, start empty
-	// if (buffBoules != NULL)
-	// {
-	// 	json = cJSON_Parse(buffBoules);
-	// 	if (json != NULL)
-	// 	{
-	// 		if (cJSON_IsArray(json))
-	// 		{
-	// 			cJSON *element;
-	// 			// Iterate over the array elements
-	// 			cJSON_ArrayForEach(element, json) 
-	// 			{
-	// 				cJSON *lotto = cJSON_GetObjectItemCaseSensitive(element, "lotto");
-	// 				cJSON *boule = cJSON_GetObjectItemCaseSensitive(element, "boule");
-	// 				cJSON *montant = cJSON_GetObjectItemCaseSensitive(element, "montant");
-	// 				cJSON *option = cJSON_GetObjectItemCaseSensitive(element, "option");
-	// 				BouleItem _new = {0,"", "", "", ""};
-	// 				sprintf(&_new.pri, "%.2f", montant->valuedouble);
-	// 				strcpy(&_new.boul, boule->valuestring);
-	// 				strcpy(&_new.lotto, lotto->valuestring);
-	// 				strcpy(&_new.option, option->valuestring);
+	if (buffBoules != NULL)
+	{
+		json = cJSON_Parse(buffBoules);
+		if (json != NULL)
+		{
+			json_boules = cJSON_GetObjectItemCaseSensitive(json, "boules");
+			if (cJSON_IsArray(json_boules))
+			{
+				cJSON *element;
+				// Iterate over the array elements
+				cJSON_ArrayForEach(element, json_boules) 
+				{
+					cJSON *lotto = cJSON_GetObjectItemCaseSensitive(element, "lotto");
+					cJSON *boule = cJSON_GetObjectItemCaseSensitive(element, "boule");
+					cJSON *montant = cJSON_GetObjectItemCaseSensitive(element, "montant");
+					cJSON *option = cJSON_GetObjectItemCaseSensitive(element, "option");
+					BouleItem _new = {0,"", "", "", ""};
+					sprintf(&_new.pri, "%.2f", montant->valuedouble);
+					strcpy(&_new.boul, boule->valuestring);
+					strcpy(&_new.lotto, lotto->valuestring);
+					strcpy(&_new.option, option->valuestring);
 
-	// 				addElement(list, _new); // add boule in list boules
-	// 			}
-	// 			cJSON_Delete(json);
-	// 		}
-	// 	}
-
-		// free(boules);
-	// }
-
-
-
-
-	
+					addElement(list, _new); // add boule in list boules
+				}
+				// cJSON_Delete(json);
+			}
+		}
+		cJSON_Delete(json);
+		json = NULL;
+	}
 
     if (list == NULL) {
 		lcdprintf(ALG_CENTER, "Erreur! Creation ticket!");
@@ -848,7 +1125,7 @@ int make_post_fiches(const List *list, const char *id_tirage, Tirage *tirages, i
 		if (status_code >= 200 && status_code <= 299) 
 		{
 			state = 0;
-			print_fiche(buffer, 1);
+			print_fiche(buffer);
 		} else 
 		{
 			lcdprintf(ALG_LEFT, "%s", buffer);
@@ -1442,7 +1719,8 @@ static void _getWinningFiches(const char *url, int width, int height, int font_h
 				}
 
 				lcdclean();
-				sprintf(htext, "Fiches (%d) %d:%d ", count_items, page->valueint, num_pages->valueint);
+				// sprintf(htext, "Fiches (%d) %d:%d ", count_items, page->valueint, num_pages->valueint);
+				sprintf(htext, "FICHES (%d) PAGE %d : %d", count_items, page->valueint, num_pages->valueint);
 
 				lcd_header(ALG_CENTER, htext);
 				currY = get_current_y();
@@ -1644,6 +1922,7 @@ static void getFicheById(void)
 	read_from_file(TOKEN_FILE, &bufferToken);
 
 	Entry id_entry = {screen_width / 2 - 90, 0, 230, SIZE_WIDGET, "", 0, 1, 50, ALPHA, NORMAL};
+	Ticket item = {"", 0, "", "", 0};
 
 	while (running)
 	{
@@ -1661,67 +1940,10 @@ static void getFicheById(void)
 			case KEY_CANCEL: // KEY_CANCEL
 				running = 0;
 				break;
-// 			case KEY_ENTER: // KEY_ENTER
-// 				sprintf(url, "%s/api/games/find-fiche?barcode=%s", server, id_entry.text);
-// 				if (make_get_request(url, &status_code, &buffer, bufferToken) < 0)
-// 				{
-// 					while(1)
-// 						if (kbGetKey() == KEY_CANCEL)
-// 							break;
-// 				} else
-// 				{
-// 					if (status_code >= 200 && status_code <= 299) 
-// 					{
-// 						json = cJSON_Parse(buffer);		
-// 						// Have only one items in
-// 						if (json != NULL)
-// 						{
-// 							cJSON *id = cJSON_GetObjectItemCaseSensitive(json, "ref_code");
-// 							cJSON *_id = cJSON_GetObjectItemCaseSensitive(json, "id");
-// 							cJSON *created_on = cJSON_GetObjectItemCaseSensitive(json, "created_on");
-// 							cJSON *boules = cJSON_GetObjectItemCaseSensitive(json, "boules");
-// 							cJSON *tirage_name = cJSON_GetObjectItemCaseSensitive(json, "tirage_name");
-// 							cJSON *montant = cJSON_GetObjectItemCaseSensitive(json, "montant");
-// 							cJSON *is_delete = cJSON_GetObjectItemCaseSensitive(json, "is_delete");
-
-// 							if (!cJSON_IsTrue(is_delete))
-// 							{
-// 								char *bStr = cJSON_Print(boules);
-// 								addTirageItem(&items, &size, id->valuestring, bStr, tirage_name->valuestring, montant->valuestring, _id->valueint, created_on->valuestring);
-// 								displayGrid(items[0], 0);
-// 								freeTirageItems(items, size);
-// 								if (bStr != NULL)
-// 								{
-// 									free(bStr);
-// 									bStr = NULL;
-// 								}
-// 							} else {
-// 								lcdclean();
-// 								lcdprintfex(ALG_CENTER, screen_height / 2 - font_height, "Pa Jwenn Fich Pou ID Sa.");
-// 								lcdSetFont(UBUNTU_FONT, "UTF-8", 0,  15, 0);
-// 								lcdprintfex(ALG_LEFT, screen_height - font_height, "CANCEL=Retounen");
-// 								lcdSetFont(UBUNTU_FONT, "UTF-8", 0,  18, 0);
-
-// 								lcdFlip();
-// 								while(1)
-// 									if (kbGetKey() == KEY_CANCEL)
-// 										break;
-// 							}
-// 						}
-// 					} else {
-// 						lcdclean();
-// 						lcdprintfex(ALG_CENTER, screen_height / 2 - font_height, "Pa Jwenn Fich Pou ID Sa.");
-// 						lcdSetFont(UBUNTU_FONT, "UTF-8", 0,  15, 0);
-// 						lcdprintfex(ALG_LEFT, screen_height - font_height, "CANCEL=Retounen");
-// 						lcdSetFont(UBUNTU_FONT, "UTF-8", 0,  18, 0);
-
-// 						lcdFlip();
-// 						while(1)
-// 							if (kbGetKey() == KEY_CANCEL)
-// 								break;
-// 					}
-// 				}
-// 				break;
+			case KEY_ENTER: // KEY_ENTER
+				sprintf(item.id, id_entry.text);
+				displayGrid(item, 0);
+				break;
 			default:
 				break;
 		}
@@ -1765,8 +1987,8 @@ void getFiches(void)
 	memset(end_date, 0x00, sizeof(end_date));
 
 	const char menu[][25] = {
-		"1. Par ID",
-		"2. Par Date"
+		"1. PAR ID",
+		"2. AUJOURD'HUI"
 	};
 
 	lcdGetSize(&screen_width, &screen_height);
@@ -1776,7 +1998,7 @@ void getFiches(void)
 	{
 		time(&rawtime);
 		timeinfo = localtime(&rawtime);
-		selected = lcdmenu("RECHERCHE FICHES", menu, sizeof(menu) / 25, selected);
+		selected = lcdmenu("RECHERCHE FICHE", menu, sizeof(menu) / 25, selected);
 		switch (selected)
 		{
 			case 0:
@@ -1785,7 +2007,7 @@ void getFiches(void)
 			case 1:
 				sprintf(end_date, "%4d-%02d-%02d", timeinfo->tm_year + 1900, timeinfo->tm_mon+1, timeinfo->tm_mday);
 				sprintf(start_date, "%4d-%02d-%02d", timeinfo->tm_year + 1900, timeinfo->tm_mon+1, timeinfo->tm_mday);
-				// make_get_fiches(start_date, end_date);
+				make_get_fiches(start_date, end_date);
 				break;
 			default:
 				break;

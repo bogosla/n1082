@@ -35,7 +35,8 @@ src/MCNEW_POS.d src/MCNEW_POS.o: ../src/MCNEW_POS.c \
   ../src/lkd.h ../src/auth.h ../src/gui.h ../src/games/games.h \
   ../src/games/../cJSON.h ../src/games/../helpers.h ../src/games/../gui.h \
   ../src/games/../print.h C:/src/NEW8210/sdk8210/include/printer.h \
-  ../src/games/../helpers.h ../src/games/../constants.h ../src/print.h
+  ../src/games/../helpers.h ../src/games/../constants.h \
+  ../src/games/../modalYesNo.h ../src/print.h
 
 C:/src/NEW8210/seos/include/seos.h:
 
@@ -136,5 +137,7 @@ C:/src/NEW8210/sdk8210/include/printer.h:
 ../src/games/../helpers.h:
 
 ../src/games/../constants.h:
+
+../src/games/../modalYesNo.h:
 
 ../src/print.h:

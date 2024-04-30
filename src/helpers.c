@@ -634,7 +634,6 @@ void lcdprintfex(LCD_ALG alg, unsigned y, const char * pszFmt,...)
 }
 
 
-
 // Menu
 int lcdmenu(const char *pszTitle, const char menu[][25], unsigned int count, int select)
 {
@@ -672,7 +671,7 @@ int lcdmenu(const char *pszTitle, const char menu[][25], unsigned int count, int
 					if (istart + i == select)
 					{
 						main_surface->SetColor(main_surface, colorPrimary.r, colorPrimary.g, colorPrimary.b, colorPrimary.a);
-						lcd_draw_rectangle(0, current_y - 1, screen_width - 44, font_height + 1, 1);
+						lcd_draw_rectangle(0, current_y - 1, screen_width, font_height + 1, 1);
 						main_surface->SetColor(main_surface, colorWhite.r, colorWhite.g, colorWhite.b, colorWhite.a);
 						lcdprintf(ALG_LEFT, menu[istart + i]);
 						main_surface->SetColor(main_surface, colorBlack.r, colorBlack.g, colorBlack.b, colorBlack.a);
@@ -758,7 +757,7 @@ int lcdmenu_tirage(const char *pszTitle, const Tirage *menu, unsigned int count,
 					if (istart + i == select)
 					{
 						main_surface->SetColor(main_surface, colorPrimary.r, colorPrimary.g, colorPrimary.b, colorPrimary.a);
-						lcd_draw_rectangle(0, current_y - 1, screen_width - 44, font_height + 1, 1);
+						lcd_draw_rectangle(0, current_y - 1, screen_width, font_height + 1, 1);
 						
 						if (beenSelect >= 0)
 							main_surface->SetColor(main_surface, colorWarning.r, colorWarning.g, colorWarning.b, colorWarning.a);
@@ -818,6 +817,101 @@ int lcdmenu_tirage(const char *pszTitle, const Tirage *menu, unsigned int count,
 	lcdclean();
 	return retval;
 }
+
+
+
+int lcdmenu_ticket(const char *pszTitle, const Ticket *menu, unsigned int count, int select, int *id)
+{	
+	IDirectFBSurface *main_surface = NULL;
+	int running, key, retval = -1;
+	int screen_width, screen_height, font_height;
+	unsigned int i;
+	unsigned int max_lines = 0;
+	unsigned int istart = 0;
+	main_surface = lcdGetSurface();
+	font_height = lcdGetFontHeight();
+	lcdGetSize(&screen_width, &screen_height);
+
+	if (select < 0)
+		select = 0;
+	if (count <= 0)
+		select = -1;
+	else
+	{
+		running = 1;
+		while (running == 1)
+		{
+			lcdclean();
+			lcd_header(ALG_CENTER, pszTitle);
+			max_lines = 6; // (screen_height - current_y - 1) / font_height;
+			istart = (select / max_lines) * max_lines; 
+
+			for (i = 0;  i < max_lines; i++)
+			{
+				if (istart + i < count)
+				{
+					if (menu[istart + i].delete == 1)
+						main_surface->SetColor(main_surface, colorDanger.r, colorDanger.g, colorDanger.b, colorDanger.a);
+					else
+						main_surface->SetColor(main_surface, colorBlack.r, colorBlack.g, colorBlack.b, colorBlack.a);
+					
+					if (istart + i == select)
+					{
+						main_surface->SetColor(main_surface, colorPrimary.r, colorPrimary.g, colorPrimary.b, colorPrimary.a);
+						lcd_draw_rectangle(0, current_y -1, screen_width, font_height +1, 1);
+						main_surface->SetColor(main_surface, colorWhite.r, colorWhite.g, colorWhite.b, colorWhite.a);	
+						lcdprintf(ALG_LEFT, "%d. %s (%s)", istart + i + 1, menu[istart + i].id, menu[istart + i].tirage_name);		
+						main_surface->SetColor(main_surface, colorBlack.r, colorBlack.g, colorBlack.b, colorBlack.a);	
+						
+						*id = istart + i;			
+					}
+					else {
+						lcdprintf(ALG_LEFT, "%d. %s (%s)", istart + i + 1, menu[istart + i].id, menu[istart + i].tirage_name);			
+					}
+				}
+				else
+					break;
+			}
+			lcdFlip();	
+	LOOP:
+			key = kbGetKeyMs(10 * 1000);
+			switch(key)
+			{
+				case KEY_UP:
+					select--;
+					if (select < 0)
+					{
+						select = count -1;
+					}
+					break;
+				case KEY_DOWN:
+					select++;
+					if (select >= count)
+					{
+						select = 0;
+					}
+					break;
+				case KEY_CANCEL:
+					select = -1;
+					running = 0;
+					break;
+				case 0x08:
+					select = -8;
+					running = 0;
+					break;
+				case KEY_ENTER:
+					running = 0;
+					break;
+				default:
+					goto LOOP;
+			}
+		}
+	}
+	retval = select;
+	lcdclean();
+	return retval;
+}
+
 
 
 
@@ -1300,69 +1394,81 @@ void printerprintf(LCD_ALG alg, IDirectFBSurface *surface, const char * pszFmt,.
 
 
 
-// void addTirageItem(Tirage** array, int* size, char *id, const char* boules, const char *tirage_name, const char *montant, int _id, const char* created)
-// {
-//     Tirage* newArray = NULL;
-//     *size += 1;
-//     // Reallocate memory for the array of structures
-//     newArray = realloc(*array, *size * sizeof(Tirage));
+void addTirageItem(Ticket** array, int* size, char *id, const char* boules, const char *tirage_name, const char *montant, int _id, int delete)
+{
+    Ticket* newArray = NULL;
+    *size += 1;
+    // Reallocate memory for the array of structures
+    newArray = realloc(*array, *size * sizeof(Ticket));
 
-//     if (newArray != NULL)
-//     {
-//         *array = newArray;
-//         // Initialize the new item
-//         // (*array)[*size - 1].id = id;
-// 		sprintf((*array)[*size - 1].id, id);
-// 		(*array)[*size - 1]._id =  _id;
+    if (newArray != NULL)
+    {
+        *array = newArray;
+        // Initialize the new item
+        // (*array)[*size - 1].id = id;
+		sprintf((*array)[*size - 1].id, id);
+		(*array)[*size - 1]._id =  _id;
+		(*array)[*size - 1].delete =  delete;
 
-//         (*array)[*size - 1].boules = malloc(strlen(boules) + 1);
-//         strcpy((*array)[*size - 1].boules, boules);
-// 		(*array)[*size - 1].created = malloc(strlen(created) + 1);
-//         strcpy((*array)[*size - 1].created, created);
-
-//         (*array)[*size - 1].tirage_name = malloc(strlen(tirage_name) + 1);
-//         strcpy((*array)[*size - 1].tirage_name, tirage_name);
-// 		sprintf((*array)[*size - 1].montant, montant);
-//     }
-//     else
-//     {
-//         printf("Memory allocation failed.\n");
-//     }
-// }
+        (*array)[*size - 1].tirage_name = malloc(strlen(tirage_name) + 1);
+        strcpy((*array)[*size - 1].tirage_name, tirage_name);
+		sprintf((*array)[*size - 1].montant, montant);
+    }
+    else
+    {
+        printf("Memory allocation failed.\n");
+    }
+}
 
 
-// void freeTirageItems(Tirage* array, int size)
-// {
-// 	int i = 0;
-//     if (array == NULL)
-//         return;
-//     while (i < size)
-//     {
-//         free(array[i].boules);
-//         free(array[i].tirage_name);
-//         free(array[i].created);
+void freeTirageItems(Ticket* array, int size)
+{
+	int i = 0;
+    if (array == NULL)
+        return;
+    while (i < size)
+    {
+   
+        free(array[i].tirage_name);
+    
 
-// 		i++;
-//     }
-//     free(array);
-// 	array = NULL;
-// }
+		i++;
+    }
+    free(array);
+	array = NULL;
+}
 
 
-// int deleteTirageByIndex(Tirage* list, int index, int size) 
-// {
-// 	int i = 0;
-//     if (index < 0 || index >= size) {
-//         printf("Invalid index.\n");
-//         return -1;
-//     }
-//     i = (int)index;
-//     free(list[i].boules);
-// 	free(list[i].tirage_name);
-// 	free(list[i].created);
-//     while (i < size - 1) {
-//         list[i] = list[i + 1];
-//         i++;
-//     }
-//     return size - 1;// Decrement the size to reflect the deleted element
-// }
+int deleteTirageByIndex(Ticket* list, int index, int size) 
+{
+	int i = 0;
+    if (index < 0 || index >= size) {
+        printf("Invalid index.\n");
+        return -1;
+    }
+    i = (int)index;
+	free(list[i].tirage_name);
+    while (i < size - 1) {
+        list[i] = list[i + 1];
+        i++;
+    }
+    return size - 1;// Decrement the size to reflect the deleted element
+}
+
+
+
+int kb_getkey(IDirectFBEventBuffer *events)
+{
+	DFBWindowEvent windowEvent;
+	DFBResult ret;
+	while (1){
+		events->WaitForEvent(events);
+		if ((ret = events->GetEvent(events, DFB_EVENT(&windowEvent))) == DFB_OK) {
+			if (windowEvent.type == DWET_KEYUP)
+					return windowEvent.key_symbol;
+		} else {
+			break;
+		}
+	}
+	return 0;
+}

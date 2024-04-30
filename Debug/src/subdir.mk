@@ -11,6 +11,7 @@ C_SRCS += \
 ../src/gui.c \
 ../src/helpers.c \
 ../src/lkd.c \
+../src/modalYesNo.c \
 ../src/print.c 
 
 OBJS += \
@@ -21,6 +22,7 @@ OBJS += \
 ./src/gui.o \
 ./src/helpers.o \
 ./src/lkd.o \
+./src/modalYesNo.o \
 ./src/print.o 
 
 C_DEPS += \
@@ -31,6 +33,7 @@ C_DEPS += \
 ./src/gui.d \
 ./src/helpers.d \
 ./src/lkd.d \
+./src/modalYesNo.d \
 ./src/print.d 
 
 

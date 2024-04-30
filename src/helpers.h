@@ -56,6 +56,15 @@ typedef struct
 	char id[32];
 } Tirage;
 
+typedef struct
+{
+	char id[25];
+	int _id;
+	char *tirage_name;
+	char montant[12];
+	int delete;
+} Ticket;
+
 int check_connection(void);
 int make_get_request(const char *url, long *status_code, char **buffer, const char *token);
 int make_post_request(const char *url, const char *data, long *status_code, char **buffer, const char *token);
@@ -84,7 +93,15 @@ int lcdprintfon(LCD_ALG alg, IDirectFBSurface *main_surface, int width, int heig
 int lcdmenu(const char *pszTitle, const char menu[][25], unsigned int count, int select);
 
 int lcdmenu_tirage(const char *pszTitle, const Tirage *menu, unsigned int count, int select, int *id, const Tirage *selectedTirage, int sizeSelected);
+int lcdmenu_ticket(const char *pszTitle, const Ticket *menu, unsigned int count, int select, int *id);
 int drawpicture(int x, int y, int w, int h, const char *filename, IDirectFBSurface *target);
+
+
+void addTirageItem(Ticket** array, int* size, char *id, const char* boules, const char *tirage_name, const char *montant, int _id, int delete);
+
+// void addTirageItem(Ticket** array, int* size, char *id, const char* boules, const char *tirage_name, const char *montant, int _id, const char* created);
+void freeTirageItems(Ticket* array, int size);
+int deleteTirageByIndex(Ticket* list, int index, int size);
 
 
 void Beep(unsigned int frequency, unsigned int keepms);
@@ -99,4 +116,6 @@ void setOptionBouleItem(BouleItem *item);
 void setPrnY(int _y);
 int getPrnY();
 void printerprintf(LCD_ALG alg, IDirectFBSurface *surface, const char * pszFmt,...);
+
+int kb_getkey(IDirectFBEventBuffer *events);
 #endif /* HELPERS_H_ */
