@@ -4,7 +4,6 @@
  *  Created on: Apr 22, 2024
  *      Author: James DESTINE
  */
-
 #include "games.h"
 
 
@@ -222,7 +221,6 @@ static int displayGrid(const Ticket item, int selected)
 
 	int screen_width, screen_height, font_height;	
 
-
 	const char menu[][25] = {
 		"1. Reimprimer",
 		"2. Rejouer"
@@ -253,12 +251,15 @@ static int displayGrid(const Ticket item, int selected)
 				switch (selected3)
 				{
 				case 0:
-					reprint_fiche(buffer);
+					if (item.delete == 0)
+						reprint_fiche(buffer);
 					break;
 				case 1:
-					postFiches(buffer);
-					selected3 = -1;
-					_selected = -1;
+					if (item.delete == 0) {
+						postFiches(buffer);
+						selected3 = -1;
+						_selected = -1;
+					}
 					break;
 				default:
 					break;
@@ -322,155 +323,169 @@ static int make_get_fiches(char *start_date, char *end_date)
 	Ticket *items = NULL;
 	BouleItem *boules = NULL;
 	int size2 = 0;
-	int selected = 0;
+	int selected = 0, paginate = 0, tpage = 1;
 	char htext[192];
-
 
 
 	lcdGetSize(&screen_width, &screen_height);
 	font_height = lcdGetFontHeight();
 	readServer(&server);
 	read_from_file(TOKEN_FILE, &bufferToken);
-	sprintf(url, "%s/api/new8210/app/tickets?start_date=%s&end_date=%s&page_size=30", server, start_date, end_date);
 
-	if (make_get_request(url, &status_code, &buffer, bufferToken) < 0)
-	{
-		while(1)
-			if (kbGetKey() == KEY_CANCEL)
-				break;
-	} else
-	{
-		if (status_code >= 200 && status_code <= 299) 
+	while (paginate == 0) {
+		selected = 0;
+		size = 0;
+		sprintf(url, "%s/api/new8210/app/tickets?start_date=%s&end_date=%s&page_size=30&page=%d", server, start_date, end_date, tpage);
+		paginate = 1;
+		if (make_get_request(url, &status_code, &buffer, bufferToken) < 0)
 		{
-			json = cJSON_Parse(buffer);		
-			
-			
-			if (json != NULL)
+			while(1)
+				if (kbGetKey() == KEY_CANCEL)
+					break;
+			paginate = 1;
+		} else
+		{
+			if (status_code >= 200 && status_code <= 299) 
 			{
-				tickets = cJSON_GetObjectItemCaseSensitive(json, "data");
-				count = cJSON_GetObjectItemCaseSensitive(json, "count");
-				page = cJSON_GetObjectItemCaseSensitive(json, "page");
-				num_pages = cJSON_GetObjectItemCaseSensitive(json, "num_pages");
-
-				if (cJSON_IsArray(tickets))
+				json = cJSON_Parse(buffer);		
+				
+				if (json != NULL)
 				{
-					cJSON *element;
-					cJSON_ArrayForEach(element, tickets) 
+					tickets = cJSON_GetObjectItemCaseSensitive(json, "data");
+					count = cJSON_GetObjectItemCaseSensitive(json, "count");
+					page = cJSON_GetObjectItemCaseSensitive(json, "page");
+					num_pages = cJSON_GetObjectItemCaseSensitive(json, "num_pages");
+
+					if (cJSON_IsArray(tickets))
 					{
-						int is_delete = 0;
-						cJSON *id = cJSON_GetObjectItemCaseSensitive(element, "ref_code");
-						cJSON *_id = cJSON_GetObjectItemCaseSensitive(element, "id");
-						cJSON *tirage_name = cJSON_GetObjectItemCaseSensitive(element, "tirage_name");
-						cJSON *montant = cJSON_GetObjectItemCaseSensitive(element, "montant");
-						cJSON *delete = cJSON_GetObjectItemCaseSensitive(element, "delete");
-						if (strcmp(delete->valuestring, "DELETE") == 0) {
-							is_delete = 1;
+						cJSON *element;
+						cJSON_ArrayForEach(element, tickets) 
+						{
+							int is_delete = 0;
+							cJSON *id = cJSON_GetObjectItemCaseSensitive(element, "ref_code");
+							cJSON *_id = cJSON_GetObjectItemCaseSensitive(element, "id");
+							cJSON *tirage_name = cJSON_GetObjectItemCaseSensitive(element, "tirage_name");
+							cJSON *montant = cJSON_GetObjectItemCaseSensitive(element, "montant");
+							cJSON *delete = cJSON_GetObjectItemCaseSensitive(element, "delete");
+							if (strcmp(delete->valuestring, "DELETE") == 0) {
+								is_delete = 1;
+							}
+							addTirageItem(&items, &size, id->valuestring, NULL, tirage_name->valuestring, montant->valuestring, _id->valueint, is_delete);
 						}
-						addTirageItem(&items, &size, id->valuestring, NULL, tirage_name->valuestring, montant->valuestring, _id->valueint, is_delete);
+					}
+				} else
+				{
+					lcdprintf(ALG_LEFT, "JSON error parsing");
+					lcdFlip();
+					kbGetKey();
+					paginate = 1;
+				}
+
+				if (json != NULL) {
+					cJSON_Delete(json);
+					json = NULL;
+				}
+				if (buffer != NULL) {
+					free(buffer);
+					buffer = NULL;
+				}
+
+				int id = -1;
+
+				if (size == 0)
+				{
+					lcdclean();
+					lcdprintfex(ALG_CENTER, screen_height / 2 - font_height, "PAS DE TICKETS!!");
+					lcdprintfex(ALG_LEFT, screen_height - font_height, "CANCEL=retour");
+					lcdFlip();
+					while(1)
+						if (kbGetKey() == KEY_CANCEL)
+							break;
+				}
+				memset(url, 0x00, sizeof(url));
+				memset(htext, 0x00, sizeof(htext));
+
+				sprintf(url, "%s/api/new8210/app/ticket-id", server);
+				sprintf(htext, "FICHES (%d) PAGE %d : %d", count->valueint, page->valueint, num_pages->valueint);
+
+				
+				while (selected >= 0 && size > 0)
+				{
+					size2 = 0;
+					selected = lcdmenu_ticket(htext, items, size, selected, &id);
+					if (selected == -7) {
+						// TODO
+						int _page = askPage("Entrer Page");
+						if (_page > 0) {
+							paginate = 0;
+							tpage = _page;
+							selected = -1;
+						} else 
+							selected = id;
+					}
+					else if (selected == -8)
+					{
+						// delete tirage 
+						data = cJSON_CreateObject();
+						cJSON_AddStringToObject(data, "keyId", items[id].id);
+						int yn = yesNo("Supprimer Fiche?");
+
+						switch (yn)
+						{
+							case -10:
+								json_string = cJSON_Print(data);
+								status_code = 0;
+								if (make_http_request(url, json_string, &status_code, &buffer, bufferToken, "DELETE") >= 0)
+								{
+									if (status_code >= 200 && status_code <= 299) 
+									{
+										// size = id; // deleteTirageByIndex(items, id, size);
+										// selected = size;
+										items[id].delete = 1;
+									}
+								} else {
+									lcdclean();
+									lcdprintf(ALG_LEFT, "%s", buffer);
+									lcdFlip();
+									while(1)
+										if (kbGetKey() == KEY_CANCEL)
+											break;
+								}
+								if (buffer != NULL) {
+									free(buffer);
+									buffer = NULL;
+								}
+								if (json_string != NULL) {
+									free(json_string);
+									json_string = NULL;
+								}
+								selected = id;			
+								break;
+							default:
+								selected = 0;
+								break;
+						}
+						if (data != NULL) {
+							cJSON_Delete(data);
+							data = NULL;
+						}
+					} else if (selected >= 0)
+					{
+						selected = displayGrid((Ticket)items[selected], selected);
 					}
 				}
-			
-			} else
-			{
-				lcdprintf(ALG_LEFT, "JSON error parsing");
-				lcdFlip();
-				kbGetKey();
-			}
-
-			if (json != NULL) {
-				cJSON_Delete(json);
-				json = NULL;
-			}
-			if (buffer != NULL) {
-				free(buffer);
-				buffer = NULL;
-			}
-
-			int id = -1;
-
-			if (size == 0)
+			} else 
 			{
 				lcdclean();
-				lcdprintfex(ALG_CENTER, screen_height / 2 - font_height, "PAS DE TICKETS!!");
-				lcdprintfex(ALG_LEFT, screen_height - font_height, "CANCEL=retour");
+				lcdprintf(ALG_LEFT, "%s", buffer);
 				lcdFlip();
 				while(1)
 					if (kbGetKey() == KEY_CANCEL)
 						break;
+				paginate = 1;
 			}
-			memset(url, 0x00, sizeof(url));
-			memset(htext, 0x00, sizeof(htext));
-
-			sprintf(url, "%s/api/new8210/app/ticket-id", server);
-			sprintf(htext, "FICHES (%d) PAGE %d : %d", count->valueint, page->valueint, num_pages->valueint);
-
-			
-			while (selected >= 0 && size > 0)
-			{
-				size2 = 0;
-				selected = lcdmenu_ticket(htext, items, size, selected, &id);
-				if (selected == -8)
-				{
-					// delete tirage 
-					data = cJSON_CreateObject();
-					cJSON_AddStringToObject(data, "keyId", items[id].id);
-					int yn = yesNo("Supprimer Fiche?");
-
-					switch (yn)
-					{
-						case -10:
-							json_string = cJSON_Print(data);
-							status_code = 0;
-							if (make_http_request(url, json_string, &status_code, &buffer, bufferToken, "DELETE") >= 0)
-							{
-								if (status_code >= 200 && status_code <= 299) 
-								{
-									// size = deleteTirageByIndex(items, id, size);
-									// selected = size;
-									items[id].delete = 1;
-								}
-							} else {
-								lcdclean();
-								lcdprintf(ALG_LEFT, "%s", buffer);
-								lcdFlip();
-								while(1)
-									if (kbGetKey() == KEY_CANCEL)
-										break;
-							}
-							if (buffer != NULL) {
-								free(buffer);
-								buffer = NULL;
-							}
-							if (json_string != NULL) {
-								free(json_string);
-								json_string = NULL;
-							}
-							selected = size;			
-							break;
-						default:
-							selected = 0;
-							break;
-					}
-					if (data != NULL) {
-						cJSON_Delete(data);
-						data = NULL;
-					}
-				} else if (selected >= 0)
-				{
-					selected = displayGrid((Ticket)items[selected], selected);
-				}
-			}
-		} else 
-		{
-			lcdclean();
-			lcdprintf(ALG_LEFT, "%s", buffer);
-			lcdFlip();
-			while(1)
-				if (kbGetKey() == KEY_CANCEL)
-					break;
 		}
 	}
-
 	freeTirageItems(items, size);
 	if (buffer != NULL) {
 		free(buffer);
@@ -488,7 +503,6 @@ static int make_get_fiches(char *start_date, char *end_date)
 	items = NULL;
 	return 0;
 }
-
 
 
 
@@ -1176,7 +1190,6 @@ int make_post_fiches(const List *list, const char *id_tirage, Tirage *tirages, i
 
 
 
-
 void getLotsGagnants(void)
 {
 	long status_code = 0;
@@ -1504,7 +1517,6 @@ void getLotsByDate(void)
 
 
 
-
 // OK
 void getReports(void)
 {	
@@ -1644,10 +1656,7 @@ static void _getWinningFiches(const char *url, int width, int height, int font_h
 
 	char htext[16];
 	char str[9];
-
 	memset(htext, 0x00, sizeof(htext));
-
-
 
 	dfb = dfb_get_directfb();
 	main_surface = lcdGetSurface();
@@ -1753,6 +1762,9 @@ static void _getWinningFiches(const char *url, int width, int height, int font_h
 						case KEY_FN:
 							// print_winnings_fiche(tirages, size_tirage); // Print list of winning tickets
 							break;
+						case KEY_MENU:
+							askPage("Entrer Page");
+							break;
 						default:
 							break;
 					}
@@ -1783,6 +1795,7 @@ static void _getWinningFiches(const char *url, int width, int height, int font_h
 				break;
 	}
 
+
 	if (tirages != NULL)
 	{
 		// freeTirageItems(tirages, size_tirage);
@@ -1806,7 +1819,6 @@ static void _getWinningFiches(const char *url, int width, int height, int font_h
 	}
 	return;
 }
-
 
 
 // OK
@@ -1890,7 +1902,6 @@ void getTicketsWon(void)
 }
 
 
-
 static void getFicheById(void)
 {
 	IDirectFBSurface *main_surface = NULL;
@@ -1971,7 +1982,6 @@ static void getFicheById(void)
 	}
 
 } 
-
 
 
 // OK

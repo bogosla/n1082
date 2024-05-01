@@ -902,6 +902,10 @@ int lcdmenu_ticket(const char *pszTitle, const Ticket *menu, unsigned int count,
 				case KEY_ENTER:
 					running = 0;
 					break;
+				case KEY_MENU:
+					select = -7;
+					running = 0;
+					break;
 				default:
 					goto LOOP;
 			}
@@ -1464,7 +1468,7 @@ int kb_getkey(IDirectFBEventBuffer *events)
 	while (1){
 		events->WaitForEvent(events);
 		if ((ret = events->GetEvent(events, DFB_EVENT(&windowEvent))) == DFB_OK) {
-			if (windowEvent.type == DWET_KEYUP)
+			if (windowEvent.type == DWET_KEYDOWN)
 					return windowEvent.key_symbol;
 		} else {
 			break;

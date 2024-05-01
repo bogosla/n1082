@@ -94,6 +94,8 @@ int postHandleLogin(void)
 				// must be 'username' for the '.net'
 				cJSON_AddStringToObject(data, "phone_or_email_or_username", phone_entry.text);
 				cJSON_AddStringToObject(data, "password", password_entry.text);
+				cJSON_AddStringToObject(data, "serie", imeiStr);
+
 				// Convert the JSON object to a string
 				json_string = cJSON_Print(data);
 				lcdclean();

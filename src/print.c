@@ -4,11 +4,8 @@
  *  Created on: Apr 22, 2024
  *      Author: James DESTINE
  */
-
 #include "print.h"
 #include <seos.h>
-
-
 
 
 
@@ -514,8 +511,12 @@ int print_rapport(const char *buffer)
 			cJSON *commission = cJSON_GetObjectItemCaseSensitive(json, "gain_with_percent_vendor");
 			cJSON *withoutCommission = cJSON_GetObjectItemCaseSensitive(json, "gain_without_percent_vendor");
 			cJSON *fGagant = cJSON_GetObjectItemCaseSensitive(json, "wins");
+			cJSON *percent = cJSON_GetObjectItemCaseSensitive(json, "percents");
+
 			cJSON *vente = cJSON_GetObjectItemCaseSensitive(json, "montants");
 			cJSON *perte = cJSON_GetObjectItemCaseSensitive(json, "pertes");
+			double commisVen = vente->valuedouble * (percent->valuedouble / 100);
+			double balance = vente->valuedouble - perte->valuedouble - commisVen;
 
 			if (cJSON_IsNumber(quantite) && cJSON_IsNumber(commission) && cJSON_IsNumber(perte)) {
 			
@@ -531,17 +532,23 @@ int print_rapport(const char *buffer)
 				setPrnY(y);
 				printerprintf(ALG_LEFT, surface, "Fiches Gagnants: %d", fGagant->valueint);
 				y = getPrnY();
-				setPrnY(y);
-				printerprintf(ALG_LEFT, surface, "Commissions    : %.2f", commission->valuedouble);
-				y = getPrnY();
+				
                 setPrnY(y);
-				printerprintf(ALG_LEFT, surface, "Comm Sans Vendeurs : %.2f", withoutCommission->valuedouble);
+				printerprintf(ALG_LEFT, surface, "Gain Sans Vendeurs : %.2f", withoutCommission->valuedouble);
 				y = getPrnY();
 				setPrnY(y);
 				printerprintf(ALG_LEFT, surface, "Ventes         : %.2f", vente->valuedouble);
 				y = getPrnY();
 				setPrnY(y);
-				printerprintf(ALG_LEFT, surface, "Pertes         : %.2f", perte->valuedouble);
+				printerprintf(ALG_LEFT, surface, "A Payer        : %.2f", perte->valuedouble);
+
+				y = getPrnY();
+				setPrnY(y);
+				printerprintf(ALG_LEFT, surface, "Commissions       : %.2f", commisVen);
+
+				y = getPrnY();
+				setPrnY(y);
+				printerprintf(ALG_LEFT, surface, "Balance        : %.2f", balance);
 				
 				y = getPrnY() + 14;
 				surface->DrawString(surface, "---------------------------------------------", -1, 0, y,  DSTF_LEFT);
@@ -554,9 +561,9 @@ int print_rapport(const char *buffer)
 				lcd_header(ALG_CENTER, "RAPPORTS");
 				lcdprintf(ALG_LEFT, "Start Date   : %s", start->valuestring);
 				lcdprintf(ALG_LEFT, "End   Date   : %s", end->valuestring);
-				lcdprintf(ALG_LEFT, "Num Fiches   : %d", quantite->valueint);
 				lcdprintf(ALG_LEFT, "Ventes       : %.2f", vente->valuedouble);
-				lcdprintf(ALG_LEFT, "Commissions  : %.2f", commission->valuedouble);
+				lcdprintf(ALG_LEFT, "A Payer      : %.2f", commisVen);
+				lcdprintf(ALG_LEFT, "Balance      : %.2f", balance);
 				height = lcdGetFontHeight();
 				lcdSetFont(FONT_ROBOTO, "UTF-8", 0,  15, 0);
 				lcdprintfex(ALG_LEFT, screen_height - height , "CANCEL=Retour, FUNC=Imprimer");
@@ -642,7 +649,6 @@ int print_rapport(const char *buffer)
 	userData = NULL;
 	return ifd;
 }
-
 
 
 int reprint_fiche(const char *buffer)

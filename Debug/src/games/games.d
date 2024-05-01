@@ -36,7 +36,7 @@ src/games/games.d src/games/games.o: ../src/games/games.c \
   ../src/games/../cJSON.h ../src/games/../constants.h \
   ../src/games/../lkd.h ../src/games/../gui.h ../src/games/../helpers.h \
   ../src/games/../print.h C:/src/NEW8210/sdk8210/include/printer.h \
-  ../src/games/../modalYesNo.h
+  ../src/games/../modalYesNo.h ../src/games/../gui.h
 
 ../src/games/games.h:
 
@@ -131,3 +131,5 @@ C:/src/NEW8210/sdk8210/include/curl/typecheck-gcc.h:
 C:/src/NEW8210/sdk8210/include/printer.h:
 
 ../src/games/../modalYesNo.h:
+
+../src/games/../gui.h:

@@ -181,7 +181,7 @@ void addBouleMarriage(List *list, char *pri)
 			// Only reverse number of two digits
 			if (strcmp(list->items[i].lotto, "BO") == 0 && strcmp(list->items[y + 1].lotto, "BO") == 0)
 			{
-				BouleItem nitem = {0, "", "", "10", ""};
+				BouleItem nitem = {0, "", "", "10", "1"};
 				sprintf(&nitem.boul, "%s%s", list->items[i].boul, list->items[y + 1].boul);
 				sprintf(&nitem.pri, "%s", pri);
 				sprintf(&nitem.lotto, "%s", "MA");
@@ -216,8 +216,6 @@ void addBouleL4(List *list, char *pri)
 				addElement(list, nitem);
 				sprintf(&nitem.boul, "%s%s", list->items[y+1].boul, list->items[i].boul);
 				addElement(list, nitem);
-
-
 			}
 			y++;
 		}
