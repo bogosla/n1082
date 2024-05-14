@@ -182,8 +182,8 @@ int postHandleLogin(void)
 			case KEY_CANCEL: // KEY_CANCEL
 				running = 0;
 				// for testing, dont need to authenticate
-				state = 0;
-				// state = -1;
+				 state = 0;
+//				state = -1;
 				break;
 			default:
 				break;

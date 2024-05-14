@@ -1340,7 +1340,7 @@ void getLotsByDate(void)
 	surfdesc.flags = DSDESC_CAPS | DSDESC_WIDTH | DSDESC_HEIGHT;
 	surfdesc.caps  = DSCAPS_SYSTEMONLY;
 	surfdesc.width = screen_width;
-	surfdesc.height = screen_height + screen_height;
+	surfdesc.height = screen_height * 4 + font_height;
 
 	dfb->CreateSurface(dfb, &surfdesc, &content_surface);
 
@@ -1381,7 +1381,7 @@ void getLotsByDate(void)
 				running = 0;
 				break;
 			case KEY_ENTER: // KEY_ENTER
-				sprintf(url, "%s/api/mobile/app/lot-gagnant?date=%s", server, id_entry.text);
+				sprintf(url, "%s/api/new8210/app/lot-gagnant?date=%s", server, id_entry.text);
 
 				if (make_get_request(url, &status_code, &buffer, bufferToken) < 0)
 				{
@@ -1413,6 +1413,7 @@ void getLotsByDate(void)
 									if (cJSON_IsArray(list)) 
 									{
 										cJSON *itemList;
+										
 										cJSON_ArrayForEach(itemList, list) 
 										{
 											cJSON *name = cJSON_GetObjectItemCaseSensitive(itemList, "id");
@@ -1425,16 +1426,16 @@ void getLotsByDate(void)
 												cJSON *t1 = cJSON_GetArrayItem(lots, 0);
 												cJSON *t2 = cJSON_GetArrayItem(lots, 1);
 												cJSON *t3 = cJSON_GetArrayItem(lots, 2);
-
-												lcdprintfon(ALG_LEFT, content_surface, screen_width, screen_height,  font_height * (i + 1), "%s, %s, %s", t1->valuestring, t2->valuestring, t3->valuestring);
+												if (!(font_height * (i + 1) > screen_height * 4 - font_height))
+													lcdprintfon(ALG_LEFT, content_surface, screen_width, screen_height,  font_height * (i + 1), "%s, %s, %s", t1->valuestring, t2->valuestring, t3->valuestring);
 
 											} else if (lotsSize == 4) {
 												cJSON *t1 = cJSON_GetArrayItem(lots, 0);
 												cJSON *t2 = cJSON_GetArrayItem(lots, 1);
 												cJSON *t3 = cJSON_GetArrayItem(lots, 2);
 												cJSON *t4 = cJSON_GetArrayItem(lots, 3);
-												lcdprintfon(ALG_LEFT, content_surface, screen_width, screen_height,  font_height * (i + 1), "%s :: %s, %s, %s", t4->valuestring, t1->valuestring, t2->valuestring, t3->valuestring);
-
+												if (!(font_height * (i + 1) > screen_height * 4 - font_height))
+													lcdprintfon(ALG_LEFT, content_surface, screen_width, screen_height,  font_height * (i + 1), "%s :: %s, %s, %s", t4->valuestring, t1->valuestring, t2->valuestring, t3->valuestring);
 											}
 											i += 2;
 										}
@@ -1452,10 +1453,12 @@ void getLotsByDate(void)
 						{
 							lcdprintf(ALG_LEFT, "Json GT NULL.");
 							lcdFlip();
+							kbGetKey();
 						}
 					} else {
 						lcdprintf(ALG_LEFT, "%s", buffer);
 						lcdFlip();
+						kbGetKey();
 					}
 					// Here
 					while (running3 == 1)
@@ -1470,8 +1473,8 @@ void getLotsByDate(void)
 								break;
 							case KEY_DOWN: // KEY_DOWN
 								rect.y = rect.y + speedScroll;
-								if (rect.y >  screen_height * 2)
-									rect.y =  screen_height * 2;
+								if (rect.y >  screen_height * 4)
+									rect.y =  screen_height * 4;
 								break;
 							case KEY_CANCEL: // KEY_CANCEL
 								running3 = 0;
@@ -1528,7 +1531,7 @@ void getReports(void)
 	long status_code = 0;
 	char url[144];
 	char *buffer = NULL;
-	char *bufferToken = NULL;	
+	char *bufferToken = NULL;
 	char* server = NULL;
 
 	struct tm *timeinfo;
@@ -1631,7 +1634,7 @@ void getReports(void)
 
 
 
-static void _getWinningFiches(const char *url, int width, int height, int font_height) 
+static void _getWinningFiches(const char *server, const char *start_date, const char *end_date, int width, int height, int font_height)
 {
 	IDirectFB *dfb = NULL;
 	IDirectFBSurface *main_surface = NULL;
@@ -1639,12 +1642,14 @@ static void _getWinningFiches(const char *url, int width, int height, int font_h
 	DFBSurfaceDescription surfdesc;
 	IDirectFBFont *font = NULL;
 	DFBRectangle rect;
+	char url[250];
 
-	char *buffer = NULL;
+
 	char *bufferToken = NULL;
+	char *buffer = NULL;
 
 	long status_code = 0;
-	cJSON *root = NULL, *count = NULL, *data = NULL;
+	cJSON *root = NULL, *count = NULL, *data22 = NULL;
 
 	int running = 1, currY = 1, index = 0, speedScroll = 12, count_items = 0, count_current_page = 0;
 	int key = -1;
@@ -1652,10 +1657,10 @@ static void _getWinningFiches(const char *url, int width, int height, int font_h
 
 	Tirage *tirages = NULL;
 	cJSON *page = NULL, *num_pages = NULL;
-	int ppage = 1;
+	int ppage = 1, paginate = 1, _page = 0;
 
-	char htext[16];
-	char str[9];
+	char htext[20];
+	char str[12];
 	memset(htext, 0x00, sizeof(htext));
 
 	dfb = dfb_get_directfb();
@@ -1664,144 +1669,148 @@ static void _getWinningFiches(const char *url, int width, int height, int font_h
 	read_from_file(TOKEN_FILE, &bufferToken);
 	lcdclean(); // clean main surface
 	memset(str, 0x00, sizeof(str));
+	memset(url, 0x00, sizeof(url));
 
+	while(paginate == 1) {
+		sprintf(url, "%s/api/new8210/app/tickets-won?start_date=%s&end_date=%s&page_size=12&page=%d", server, start_date, end_date, ppage);
+		running = 1;
+		paginate = 0;
+		yyy = 0;
 
-	if (make_get_request(url, &status_code, &buffer, bufferToken) >= 0)
-	{
-		if (status_code >= 200 && status_code <= 299)
-        {
-			root = cJSON_Parse(buffer);
-			if (root != NULL)
+		if (make_get_request(url, &status_code, &buffer, bufferToken) >= 0)
+		{
+			if (status_code >= 200 && status_code <= 299)
 			{
-				count = cJSON_GetObjectItemCaseSensitive(root, "count");
-				data = cJSON_GetObjectItemCaseSensitive(root, "data");
-				page = cJSON_GetObjectItemCaseSensitive(root, "page");
-				num_pages = cJSON_GetObjectItemCaseSensitive(root, "num_pages");
-				
-				if (buffer != NULL) {
-					free(buffer);
-					buffer = NULL;
-				}
-
-				count_items = (int)(count->valueint);
-				surfdesc.flags = DSDESC_CAPS | DSDESC_WIDTH | DSDESC_HEIGHT;
-				surfdesc.caps  = DSCAPS_SYSTEMONLY;
-				surfdesc.width = width;
-				surfdesc.height = height * 6 + font_height;
-				dfb->CreateSurface(dfb, &surfdesc, &content_surface);
-
-				main_surface->GetFont(main_surface, &font); // Get font from main_surface
-
-				content_surface->SetFont(content_surface, font);
-				content_surface->Clear(content_surface, colorWhite.r, colorWhite.g, colorWhite.b, 0xFF);
-				content_surface->SetColor(content_surface, colorBlack.r, colorBlack.g, colorBlack.b, 0xFF);
-
-				if (cJSON_IsArray(data)) {
-					index = 0;
-					count_current_page = cJSON_GetArraySize(data);
-					while (index < count_current_page)
-					{
-						cJSON *element = cJSON_GetArrayItem(data, index);
-						cJSON *created_on = cJSON_GetObjectItemCaseSensitive(element, "created_on");
-						cJSON *ref_code = cJSON_GetObjectItemCaseSensitive(element, "ref_code");
-						cJSON *perte = cJSON_GetObjectItemCaseSensitive(element, "perte");
-
-						// addTirageItem(&tirages, &size_tirage, ref_code->valuestring, "0", "0", perte->valuestring, "0", created_on->valuestring);
-
-						sprintf(str, "%.2f", perte->valuedouble);
-
-						content_surface->DrawString(content_surface, "ID: ", -1, 3, yyy + font_height * index, DSTF_TOPLEFT);
-						content_surface->DrawString(content_surface, ref_code->valuestring, -1, 27, yyy + font_height * index, DSTF_TOPLEFT);
-						
-						content_surface->DrawString(content_surface, "Date: ", -1, 3, yyy + font_height * (index + 1), DSTF_TOPLEFT);
-						content_surface->DrawString(content_surface, created_on->valuestring, -1, 40, yyy + font_height * (index + 1), DSTF_TOPLEFT);
-
-						content_surface->DrawString(content_surface, "Gagnée: ", -1, 3, yyy + font_height * (index + 2), DSTF_TOPLEFT);
-						content_surface->DrawString(content_surface, str, -1, 107, yyy + font_height * (index + 2), DSTF_TOPLEFT);
-
-						content_surface->SetColor(content_surface, colorGrey.r, colorGrey.g, colorGrey.b, 0xFF);
-						content_surface->DrawLine(content_surface, 3, yyy + font_height * (index + 3), width - 3, yyy + font_height * (index + 3));
-						content_surface->SetColor(content_surface, colorBlack.r, colorBlack.g, colorBlack.b, 0xFF);
-						yyy = yyy + font_height * 2 + 4;
-						index ++;	
-					}
-				}
-
-				lcdclean();
-				// sprintf(htext, "Fiches (%d) %d:%d ", count_items, page->valueint, num_pages->valueint);
-				sprintf(htext, "FICHES (%d) PAGE %d : %d", count_items, page->valueint, num_pages->valueint);
-
-				lcd_header(ALG_CENTER, htext);
-				currY = get_current_y();
-				
-				rect.x = 0;
-				rect.y = 1;
-				rect.w = width;
-				rect.h = height;
-				main_surface->Blit(main_surface, content_surface, &rect, 0, currY);
-				lcdFlip();
-
-				while (running == 1)
+				root = cJSON_Parse(buffer);
+				if (root != NULL)
 				{
-					key = kbGetKey();
-					switch (key)
-					{
-						case KEY_UP: // KEY_UP
-							rect.y = rect.y - speedScroll;
-							if (rect.y <= 0)
-								rect.y = 1;
-							break;
-						case KEY_DOWN: // KEY_DOWN
-							rect.y = rect.y + speedScroll;
-							if (rect.y > height * 6 + 3)
-								rect.y = height * 6 + 1;
-							break;
-						case KEY_CANCEL: // KEY_CANCEL
-							running = 0;
-							break;
-						case KEY_FN:
-							// print_winnings_fiche(tirages, size_tirage); // Print list of winning tickets
-							break;
-						case KEY_MENU:
-							askPage("Entrer Page");
-							break;
-						default:
-							break;
+					cJSON *data = cJSON_GetObjectItemCaseSensitive(root, "data");
+					count = cJSON_GetObjectItemCaseSensitive(root, "count");
+					page = cJSON_GetObjectItemCaseSensitive(root, "page");
+					num_pages = cJSON_GetObjectItemCaseSensitive(root, "num_pages");
+					
+					if (buffer != NULL) {
+						free(buffer);
+						buffer = NULL;
 					}
-					usleep(10000);
-					lcdclean();
-					lcd_header(ALG_CENTER, htext);
 
+					count_items = (int)(count->valueint);
+					surfdesc.flags = DSDESC_CAPS | DSDESC_WIDTH | DSDESC_HEIGHT;
+					surfdesc.caps  = DSCAPS_SYSTEMONLY;
+					surfdesc.width = width;
+					surfdesc.height = height * 6 + font_height;
+					dfb->CreateSurface(dfb, &surfdesc, &content_surface);
+
+					main_surface->GetFont(main_surface, &font); // Get font from main_surface
+
+					content_surface->SetFont(content_surface, font);
+					content_surface->Clear(content_surface, colorWhite.r, colorWhite.g, colorWhite.b, 0xFF);
+					content_surface->SetColor(content_surface, colorBlack.r, colorBlack.g, colorBlack.b, 0xFF);
+
+					if (cJSON_IsArray(data)) {
+						index = 0;
+						count_current_page = cJSON_GetArraySize(data);
+		
+						while (index < count_current_page)
+						{
+							cJSON *element = cJSON_GetArrayItem(data, index);
+							cJSON *created_on = cJSON_GetObjectItemCaseSensitive(element, "created_on");
+							cJSON *ref_code = cJSON_GetObjectItemCaseSensitive(element, "ref_code");
+							cJSON *perte = cJSON_GetObjectItemCaseSensitive(element, "perte");
+
+							// addTirageItem(&tirages, &size_tirage, ref_code->valuestring, "0", "0", perte->valuestring, "0", created_on->valuestring);
+
+							sprintf(str, "%.2f", perte->valuedouble);
+
+							content_surface->DrawString(content_surface, "ID: ", -1, 3, yyy + font_height * index, DSTF_TOPLEFT);
+							content_surface->DrawString(content_surface, ref_code->valuestring, -1, 27, yyy + font_height * index, DSTF_TOPLEFT);
+							
+							content_surface->DrawString(content_surface, "Date: ", -1, 3, yyy + font_height * (index + 1), DSTF_TOPLEFT);
+							content_surface->DrawString(content_surface, created_on->valuestring, -1, 40, yyy + font_height * (index + 1), DSTF_TOPLEFT);
+
+							content_surface->DrawString(content_surface, "Gagnée: ", -1, 3, yyy + font_height * (index + 2), DSTF_TOPLEFT);
+							content_surface->DrawString(content_surface, str, -1, 107, yyy + font_height * (index + 2), DSTF_TOPLEFT);
+
+							content_surface->SetColor(content_surface, colorGrey.r, colorGrey.g, colorGrey.b, 0xFF);
+							content_surface->DrawLine(content_surface, 3, yyy + font_height * (index + 3), width - 3, yyy + font_height * (index + 3));
+							content_surface->SetColor(content_surface, colorBlack.r, colorBlack.g, colorBlack.b, 0xFF);
+							yyy = yyy + font_height * 2 + 4;
+							index ++;	
+						}
+					}
+
+					lcdclean();
+					// sprintf(htext, "Fiches (%d) %d:%d ", count_items, page->valueint, num_pages->valueint);
+					sprintf(htext, "FICHES (%d) PAGE %d : %d", count_items, page->valueint, num_pages->valueint);
+
+					lcd_header(ALG_CENTER, htext);
+					currY = get_current_y();
+					
+					rect.x = 0;
+					rect.y = 1;
+					rect.w = width;
+					rect.h = height;
 					main_surface->Blit(main_surface, content_surface, &rect, 0, currY);
 					lcdFlip();
-				}
-			} 
-			else 
-			{
-            	// TODO, display errors
-				lcdprintf(ALG_LEFT, "Error Parsing");
-				lcdFlip();
-				kbGetKey();
-			}            
-        } else {
-            // TODO, display errors
-				lcdprintf(ALG_LEFT, "Status:%lg", status_code);
-				lcdFlip();
-				kbGetKey();
-        }
-	} else {
-		while (1)
-			if (kbGetKey() == KEY_CANCEL)
-				break;
-	}
 
-
-	if (tirages != NULL)
-	{
-		// freeTirageItems(tirages, size_tirage);
-		tirages = NULL;
+					while (running == 1)
+					{
+						key = kbGetKey();
+						switch (key)
+						{
+							case KEY_UP: // KEY_UP
+								rect.y = rect.y - speedScroll;
+								if (rect.y <= 0)
+									rect.y = 1;
+								break;
+							case KEY_DOWN: // KEY_DOWN
+								rect.y = rect.y + speedScroll;
+								if (rect.y > height * 6 + 3)
+									rect.y = height * 6 + 1;
+								break;
+							case KEY_CANCEL: // KEY_CANCEL
+								running = 0;
+								break;
+							case KEY_FN:
+								// print_winnings_fiche(tirages, size_tirage); // Print list of winning tickets
+								break;
+							case KEY_MENU:
+								_page = askPage("Entrer Page");
+								if (_page > 0) {
+									ppage = _page;
+									paginate = 1;
+									running = 0;
+								}
+								break;
+							default:
+								break;
+						}
+						usleep(10000);
+						lcdclean();
+						lcd_header(ALG_CENTER, htext);
+						main_surface->Blit(main_surface, content_surface, &rect, 0, currY);
+						lcdFlip();
+					}
+				} 
+				else 
+				{
+					// TODO, display errors
+					lcdprintf(ALG_LEFT, "Error Parsing");
+					lcdFlip();
+					kbGetKey();
+				}            
+			} else {
+				// TODO, display errors
+					lcdprintf(ALG_LEFT, "Status:%lg", status_code);
+					lcdFlip();
+					kbGetKey();
+			}
+		} else {
+			while (1)
+				if (kbGetKey() == KEY_CANCEL)
+					break;
+		}
 	}
-	
 
 	if (buffer != NULL) {
 		free(buffer);
@@ -1811,6 +1820,11 @@ static void _getWinningFiches(const char *url, int width, int height, int font_h
 	if (root != NULL) {
 		cJSON_Delete(root);
 		root = NULL;
+	}
+
+	if (bufferToken != NULL) {
+		free(bufferToken);
+		bufferToken = NULL;
 	}
 
 	if (content_surface != NULL) {
@@ -1886,8 +1900,7 @@ void getTicketsWon(void)
 				break;
 			case KEY_ENTER: // KEY_ENTER
 				lcdclean();
-				sprintf(url, "%s/api/new8210/app/tickets-won?start_date=%s&end_date=%s&page_size=12", server, start_date.text, end_date.text);
-				_getWinningFiches(url, width, height, font_height);
+				_getWinningFiches(server, start_date.text, end_date.text, width, height, font_height);
 				break;
 			default:
 				break;

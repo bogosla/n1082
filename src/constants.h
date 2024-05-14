@@ -21,4 +21,5 @@ extern DFBColor colorDanger;
 extern DFBColor colorSuccess;
 extern DFBColor colorGrey;
 
+
 #endif /* CONSTANTS_H_ */

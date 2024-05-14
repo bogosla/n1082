@@ -6,10 +6,21 @@
  */
 
 #include "helpers.h"
+#include <posapi.h>
+#include <wnet.h>
+#include <ppp.h>
+#include <sys/time.h>
+#include <seos.h>
+#include <sys/types.h>        /*  socket types              */
+#include <sys/socket.h>       /*  socket definitions        */
+#include <netinet/in.h>
+#include <arpa/inet.h>        /*  inet (3) functions         */
+#include <unistd.h> 
+#include <stdio.h>
+
 
 
 static int current_y = 1; // Global position y
-
 
 
 int check_connection(void)
@@ -84,8 +95,9 @@ static size_t write_function_callback(void *data, size_t size, size_t nmemb, voi
 	return realsize;
 }
 
+
 // Make a GET request and return JSON data
-int make_get_request(const char *url, long *status_code, char **buffer, const char *token)
+int make_get_request(char *url, long *status_code, char **buffer, const char *token)
 {
 	CURL *curl_handle;
 	CURLcode res;
@@ -100,6 +112,7 @@ int make_get_request(const char *url, long *status_code, char **buffer, const ch
 
 	curl_handle = curl_easy_init();
 	check_connection();
+
 	/* init the curl session */
 	headers = curl_slist_append(headers, "Content-Type: application/json");
 	// Set token
@@ -109,15 +122,22 @@ int make_get_request(const char *url, long *status_code, char **buffer, const ch
 		headers = curl_slist_append(headers, ttk);
 	}
 	curl_easy_setopt(curl_handle, CURLOPT_HTTPHEADER, headers);
+//	curl_easy_setopt(curl_handle, CURLOPT_OPENSOCKETFUNCTION, opensocket_callback);
 	/* specify URL to get */
 	curl_easy_setopt(curl_handle, CURLOPT_URL, url);
+	curl_easy_setopt(curl_handle, CURLOPT_DNS_USE_GLOBAL_CACHE, 0);
+
 	/* send all data to this function  */
 	curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, write_function_callback);
 	/* we pass our 'chunk' struct to the callback function */
 	curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&memory);
-	curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "new8210/1.0");
+	// curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "new8210/1.0");
 	curl_easy_setopt(curl_handle, CURLOPT_VERBOSE, 1L);
+	// curl_easy_setopt(curl_handle, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
 	curl_easy_setopt(curl_handle, CURLOPT_SSL_VERIFYPEER, 0);
+	// curl_easy_setopt(curl_handle, CURLOPT_SSL_VERIFYHOST, 0);
+
+	
 	/* get it! */
 	res = curl_easy_perform(curl_handle);
 	curl_easy_getinfo(curl_handle, CURLINFO_RESPONSE_CODE, status_code);
@@ -162,6 +182,7 @@ int make_post_request(const char *url, const char *data, long *status_code, char
 	curl_handle = curl_easy_init();
 
 	check_connection();
+
 	/* init the curl session */
 	headers = curl_slist_append(headers, "Content-Type: application/json");
 	if (token != NULL) {
@@ -179,7 +200,7 @@ int make_post_request(const char *url, const char *data, long *status_code, char
 	curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, write_function_callback);
 	/* we pass our 'chunk' struct to the callback function */
 	curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&memory);
-	// curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "new8210/1.0");
+	curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "new8210/1.0");
 	curl_easy_setopt(curl_handle, CURLOPT_VERBOSE, 1L);
 	curl_easy_setopt(curl_handle, CURLOPT_SSL_VERIFYPEER, 0);
 	/* get it! */
@@ -1108,7 +1129,7 @@ int editableList(const BouleItem items[], unsigned int count, int select, const 
 				{
 					if (istart + i == select)
 					{
-						main_surface->SetColor(main_surface, colorLight.r, colorLight.g, colorLight.b, colorLight.a);
+						main_surface->SetColor(main_surface, colorPrimary.r, colorPrimary.g, colorPrimary.b, colorPrimary.a);
 						lcd_draw_rectangle(1, current_y - 1, screen_width - 1, font_height + 1, 1);
 						main_surface->SetColor(main_surface, colorBlack.r, colorBlack.g, colorBlack.b, colorBlack.a);
 						bouleItemPrintf(&items[istart + i], tip, istart + i + 1);

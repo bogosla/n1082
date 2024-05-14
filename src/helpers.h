@@ -66,7 +66,7 @@ typedef struct
 } Ticket;
 
 int check_connection(void);
-int make_get_request(const char *url, long *status_code, char **buffer, const char *token);
+int make_get_request(char *url, long *status_code, char **buffer, const char *token);
 int make_post_request(const char *url, const char *data, long *status_code, char **buffer, const char *token);
 int make_http_request(const char *url, const char *data, long *status_code, char **buffer, const char *token, const char *verb);
 int write_to_file(const char* file, const char* contents);
@@ -118,4 +118,7 @@ int getPrnY();
 void printerprintf(LCD_ALG alg, IDirectFBSurface *surface, const char * pszFmt,...);
 
 int kb_getkey(IDirectFBEventBuffer *events);
+
+void gprs_demo2(void);
+void gprs_demo3(void);
 #endif /* HELPERS_H_ */

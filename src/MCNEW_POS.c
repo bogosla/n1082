@@ -17,6 +17,7 @@
 #include <seos.h>
 #include <curl/curl.h>
 #include "helpers.h"
+#include "constants.h"
 
 #include "auth.h"
 #include "games/games.h"
@@ -25,7 +26,7 @@
 
 int main(int argc, char *argv[])
 {
-    int selected = 0;
+    int selected = 0, yn = 0;
 
 	const char menu[][25] = {
 		"1. NOUVELLE FICHE",
@@ -34,7 +35,8 @@ int main(int argc, char *argv[])
 		"4. NUMEROS GAGNANTS",
 		"5. FICHES GAGNANTES",
 		"6. CONFIGURATION",
-		"7. TEST IMPRIMANTE"
+		"7. TEST IMPRIMANTE",
+		"8. DECONNECTION"
 	};
 
     application_init(&argc, &argv);
@@ -80,6 +82,18 @@ int main(int argc, char *argv[])
 			case 6:
 				TestPrinter();
 				break;
+			case -1:	
+				yn = yesNo("Quitter?");
+				switch (yn)
+				{
+					case -10:
+						selected = -1;
+						break;
+					default:
+						selected = 0;
+						break;
+				}
+				break;
 			default:
 				break;
 		}
@@ -87,9 +101,8 @@ int main(int argc, char *argv[])
 
 
     // Clean up stuffs
+	PPPLogout(PPP_DEV_GPRS);
 	curl_global_cleanup();
 	application_exit();
-	PPPLogout(PPP_DEV_GPRS);
-//
 	return EXIT_SUCCESS;
 }

@@ -8,6 +8,8 @@
 
 #include <directfb.h>
 
+
+
 int SIZE_WIDGET = 27;
 
 
@@ -23,3 +25,6 @@ DFBColor colorSuccess	=	{0xFF, 0x14, 0xA4, 0xB2};
 DFBColor colorGrey	=	{0xFF, 0xFF, 0xE5, 0xB4};
 
 //fcabab, FFE5B4
+
+
+
