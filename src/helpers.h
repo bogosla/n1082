@@ -105,7 +105,9 @@ int deleteTirageByIndex(Ticket* list, int index, int size);
 
 
 void Beep(unsigned int frequency, unsigned int keepms);
-void bouleItemPrintf(const BouleItem *item, const char *tip, int icount);
+void bouleItemPrintf(const BouleItem *item, const char *tip, int icount, int iselect);
+
+// void bouleItemPrintf(const BouleItem *item, const char *tip, int icount);
 int editableList(const BouleItem items[], unsigned int count, int select, const char *tip, int *s, Tirage *tirages, int sizeTirage);
 int readServer(char ** data);
 

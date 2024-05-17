@@ -32,9 +32,9 @@ int postHandleLogin(void)
 	cJSON *imei = NULL;
 	cJSON *tirages = NULL;
 
-    cJSON *data;
+    cJSON *data = NULL;
 
-	char *json_string;
+	char *json_string = NULL;
 	char *buffer = NULL;
 	Entry *entry = NULL;
 
@@ -54,7 +54,6 @@ int postHandleLogin(void)
 	phone_entry.width = width - 24 * 2;
 	password_entry.width = width - 24 * 2;
     data = cJSON_CreateObject();
-
 
 	readServer(&server_url);
 	
@@ -117,8 +116,8 @@ int postHandleLogin(void)
 						lcdclean();
 						lcdprintf(ALG_LEFT, "Erreur %s", "Parsing JSON error");
 						lcdFlip();
-						state = -1;
 						kbGetKey();
+						state = -1;
 						continue;
 					}
 					else
@@ -130,7 +129,6 @@ int postHandleLogin(void)
 							user = cJSON_GetObjectItemCaseSensitive(json, "user");
 							imei = cJSON_GetObjectItemCaseSensitive(user, "serie");
 							role = cJSON_GetObjectItemCaseSensitive(user, "role");
-
 
 							if (strcmp(role->valuestring, "vendor") == 0 && strcmp(imei->valuestring, imeiStr) == 0)
 							{
@@ -157,22 +155,21 @@ int postHandleLogin(void)
 									free(buffer);
 								    buffer = NULL;
                                 }
-								
 							} else
 							{
 								state = -1;
 								lcdclean();
-								lcdprintfex(ALG_CENTER, height / 2 - font_height, "Vous n'êtes pas autorisé!");
+								lcdprintfex(ALG_CENTER, height / 2 - font_height, "Pas autorise!");
 								lcdFlip();
 								kbGetKey();
 							}
 						} else 
 						{
-							state = -1;
 							lcdclean();
 							lcdprintf(ALG_LEFT, "%s", buffer);
 							lcdFlip();
 							kbGetKey();
+							state = -1;
 							continue;
 						}
 					}
@@ -182,8 +179,8 @@ int postHandleLogin(void)
 			case KEY_CANCEL: // KEY_CANCEL
 				running = 0;
 				// for testing, dont need to authenticate
-				 state = 0;
-//				state = -1;
+//				 state = 0;
+				state = -1;
 				break;
 			default:
 				break;

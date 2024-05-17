@@ -83,16 +83,28 @@ int main(int argc, char *argv[])
 				TestPrinter();
 				break;
 			case 7:
-				// Reset contents in those files 
-				write_to_file(TOKEN_FILE, "");
-				write_to_file(TIRAGES_FILE, "");
-				selected = -1;
+				yn = yesNo("Quitter?");
+				switch (yn)
+				{
+					case -10:
+						// Reset contents in those files 
+						write_to_file(TOKEN_FILE, "");
+						write_to_file(TIRAGES_FILE, "");
+						selected = -1;
+						break;
+					default:
+						selected = 0;
+						break;
+				}
 				break;
 			case -1:	
 				yn = yesNo("Quitter?");
 				switch (yn)
 				{
 					case -10:
+						// Reset contents in those files 
+						write_to_file(TOKEN_FILE, "");
+						write_to_file(TIRAGES_FILE, "");
 						selected = -1;
 						break;
 					default:

@@ -766,7 +766,6 @@ int lcdmenu_tirage(const char *pszTitle, const Tirage *menu, unsigned int count,
 
 			for (i = 0;  i < max_lines; i++)
 			{
-				
 				if (istart + i < count)
 				{
 					beenSelect = hasInfoTirageByName(selectedTirage, sizeSelected, menu[istart + i].name);
@@ -986,7 +985,7 @@ static char* getFirstTwoChars(const char* string)
 
 
 
-void bouleItemPrintf(const BouleItem *item, const char *tip, int icount)
+void bouleItemPrintf(const BouleItem *item, const char *tip, int icount, int iselect)
 {
 	int width, height;
 	int font_height;
@@ -1036,19 +1035,25 @@ void bouleItemPrintf(const BouleItem *item, const char *tip, int icount)
 
 	istart = (width - 12) / 4;
 	sprintf(countStr, "%d", icount);
+	lcdSetFont(FONT_ROBOTO, "UTF-8", 0,  14, 0);
 	main_surface->SetColor(main_surface, colorGrey.r, colorGrey.g, colorGrey.b, colorGrey.a);
 	main_surface->DrawString(main_surface, countStr, -1, 1, current_y, DSTF_TOPLEFT);
-	main_surface->SetColor(main_surface, colorBlack.r, colorBlack.g, colorBlack.b, colorBlack.a);
+	if (iselect)
+		main_surface->SetColor(main_surface, colorWhite.r, colorWhite.g, colorWhite.b, colorWhite.a);
+	else 
+		main_surface->SetColor(main_surface, colorBlack.r, colorBlack.g, colorBlack.b, colorBlack.a);
+
+	lcdSetFont(FONT_ROBOTO, "UTF-8", 0,  16, 0);
 
 	if (strlen(item->boul) >= 4 && strcmp(item->lotto, "MA") != 0)
 		sprintf(countStr, "%s(%s)", item->boul, item->option);
 	else
 		sprintf(countStr, "%s", item->boul);
 
-	main_surface->DrawString(main_surface, countStr, -1, 24, current_y, DSTF_TOPLEFT);
-	main_surface->DrawString(main_surface, getFirstTwoChars(tip), -1, 38 + (istart), current_y, DSTF_TOPCENTER );
-	main_surface->DrawString(main_surface, item->pri, -1, 36 + (istart * 2) + 2, current_y, DSTF_TOPLEFT);		
-	main_surface->DrawString(main_surface, item->lotto, -1, 34 + (istart * 3), current_y, DSTF_TOPLEFT);		
+	main_surface->DrawString(main_surface, countStr, -1, 30, current_y, DSTF_TOPLEFT);
+	main_surface->DrawString(main_surface, getFirstTwoChars(tip), -1, 35 + (istart), current_y, DSTF_TOPCENTER );
+	main_surface->DrawString(main_surface, item->pri, -1, 34 + (istart * 2) + 2, current_y, DSTF_TOPLEFT);		
+	main_surface->DrawString(main_surface, item->lotto, -1, 32 + (istart * 3), current_y, DSTF_TOPLEFT);		
 
 	current_y = current_y + font_height;
 }
@@ -1131,11 +1136,11 @@ int editableList(const BouleItem items[], unsigned int count, int select, const 
 					{
 						main_surface->SetColor(main_surface, colorPrimary.r, colorPrimary.g, colorPrimary.b, colorPrimary.a);
 						lcd_draw_rectangle(1, current_y - 1, screen_width - 1, font_height + 1, 1);
-						main_surface->SetColor(main_surface, colorBlack.r, colorBlack.g, colorBlack.b, colorBlack.a);
-						bouleItemPrintf(&items[istart + i], tip, istart + i + 1);
+						bouleItemPrintf(&items[istart + i], tip, istart + i + 1, 1);
+
 					}
 					else {
-						bouleItemPrintf(&items[istart + i], tip, istart + i + 1);
+						bouleItemPrintf(&items[istart + i], tip, istart + i + 1, 0);
 					}
 				}
 				else
